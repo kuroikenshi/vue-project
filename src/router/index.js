@@ -35,7 +35,7 @@ export default new Router({
       path: '/',
       name: 'Tabbar',
       component: Tabbar,
-      redirect: '/class/classList', // 默认首页
+      redirect: '/user/userInfo', // 默认首页
 
       children: [{
         path: 'class/classList',

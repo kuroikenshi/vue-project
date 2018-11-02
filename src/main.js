@@ -7,6 +7,12 @@ import router from './router'
 import 'weui/dist/style/weui.min.css'
 import '@/../static/css/app.css'
 
+// f7-css
+// import '@/../static/vendor/framework7/css/framework7.ios.css'
+
+// f7-icons-css
+import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

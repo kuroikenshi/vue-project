@@ -10,12 +10,22 @@ export default {
   name: 'MyComp',
   data () {
     return {
+      navbarTitle: '班级列表'
     }
   },
+  created () {
+    this.updateNavbarTitle()
+  },
+  // $emit: {
+  //   navbarTitle: this.navbarTitle
+  // },
   methods: {
     goback: function (event) {
       console.log(this.$router)
       this.$router.back()
+    },
+    updateNavbarTitle () {
+      this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
     }
   }
 }
