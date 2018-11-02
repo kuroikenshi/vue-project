@@ -4,10 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import 'weui/dist/style/weui.min.css'
+import '@/../static/css/app.css'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+window.vue = new Vue({
   el: '#app',
   router,
   components: { App },

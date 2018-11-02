@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>{{ msg }} - <router-link to="/my-comp">Go to my-comp</router-link></h1>
+    <router-link to="/my-comp" class="weui-btn weui-btn_primary">Go to my-comp</router-link>
+    <router-link to="/ctn-tabbar/home" class="weui-btn weui-btn_primary">Go to HOME</router-link>
     <h2>Essential Links</h2>
     <ul>
       <li>
@@ -80,6 +82,12 @@
         </a>
       </li>
     </ul>
+
+    <!--
+    <router-view></router-view>
+    <router-link to="/a">Go to a</router-link>
+    <router-link to="/b">Go to b</router-link>
+    <router-link to="/c">Go to c</router-link>-->
   </div>
 </template>
 
@@ -92,6 +100,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
