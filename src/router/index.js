@@ -3,6 +3,8 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 // import MyComp from '@/components/MyComp'
 
+import Login from '@/components/Login'
+
 import Chating from '@/components/Chating'
 
 import Tabbar from '@/components/Tabbar'
@@ -24,6 +26,13 @@ export default new Router({
     //   name: 'MyComp',
     //   component: MyComp
     // },
+
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+
     {
       path: '/chating',
       name: 'Chating',
@@ -48,7 +57,10 @@ export default new Router({
       }, {
         path: 'user/userInfo',
         name: 'UserInfo',
-        component: UserInfo
+        component: UserInfo,
+        meta: {
+          requireAuth: true
+        }
       }]
     }
   ]
