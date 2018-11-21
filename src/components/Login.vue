@@ -1,81 +1,95 @@
 <template>
-  <div class="ctn">
-    <h1>Login Page</h1>
+  <div class="page">
+    <div class="page__hd">
+      <h1 class="page__title login-title-row">
+        <span>登录</span>
+        <img src="/static/imgs/user-photo.png" class="pull-right login-user-img"/>
+      </h1>
+    </div>
+    <div class="page__bd">
+      <div class="weui-cells no-line no-margin-top">
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <input type="text" class="weui-input" name="username" v-model="username" placeholder="请输入用户名" />
+          </div>
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <input type="password" class="weui-input" name="password" v-model="password" placeholder="请输入密码" />
+          </div>
+        </div>
 
-    <input type="text" name="username" v-model="username" />
-    <input type="text" name="password" v-model="password" />
-    {{ username }}
-    {{ password }}
-
-    <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">login</a>
-
-    <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="goback">goback</a>
+        <div class="weui-btn-area">
+          <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
+        </div>
+      </div>
+    </div><!-- end of .page__bd -->
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-console.log(axios)
-
 export default {
   name: 'Login',
   data () {
     return {
-      username: 'admin',
-      password: '123'
+      username: '',
+      password: ''
     }
   },
   methods: {
-    goback: function (event) {
-      console.log(this.$router)
-      this.$router.back()
-    },
+    // 登陆方法
     login: function (event) {
-      this.$store.commit('login', {
+      this.username = 'admin'
+      this.password = '123'
+      // 使用qs解决
+      let postData = this.$qs.stringify({
         username: this.username,
         password: this.password
       })
 
-      console.log(this.$store)
-      /*
-      axios({
-        method: 'post',
-        url: 'api/login',
-        dataType: 'json',
-        params: {
-          username: this.username,
-          password: this.password
-        }
-      }).then(res => {
-        console.log('a1>>>', res)
-      })
+      this.$axios.post('api/login', postData).then(res => {
+        // 登陆成功
+        if (res.status === 200 && res.data.status === 'success') {
+          // 保存用户信息状态
+          this.$cookie.set('user', this.$qs.stringify(res.data.msg), {
+            expires: 'session'
+          })
 
-      axios({
-        method: 'post',
-        url: 'api/login',
-        dataType: 'json',
-        data: {
-          username: this.username,
-          password: this.password
-        }
-      }).then(res => {
-        console.log('a2>>>', res)
-      })
+          console.log('get cookie:', this.$cookie.get('JSESSIONID'))
 
-      axios.post('api/login', {
-        username: this.username,
-        password: this.password
-      }).then(res => {
-        console.log('a3>>>', res)
+          // 跳转
+          this.$router.push(this.$route.query.redirect)
+        } else {
+          alert(res.data.status + ': ' + res.data.msg)
+        }
       })
-      */
     }
   }
 }
 </script>
 
-<style>
-  .ctn {
-    padding: 20px;
+<style scoped>
+  .page__title {
+    padding: 40px 25px 20px 25px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 400;
+  }
+  .login-title-row {
+    line-height: 60px;
+    vertical-align: middle;
+  }
+  .login-user-img {
+    height: 60px;
+    border-radius: 60px;
+  }
+  .weui-cell {
+    padding: 10px 25px;
+  }
+  .weui-input {
+    font-size: 15px;
+  }
+  .weui-btn-area {
+    margin: 1.17647059em 25px .3em;
   }
 </style>

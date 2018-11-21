@@ -1,61 +1,33 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 import VueCookie from 'vue-cookie'
-import axios from 'axios'
 Vue.use(VueCookie)
 
 // 用户信息储存模块
-const state = {
+let state = {
   username: VueCookie.get('username'),
-  cn: VueCookie.get('usernameCN'),
-  uuid: VueCookie.get('uuid')
+  userInfo: VueCookie.get('userInfo')
 }
 
 const getters = {
   isLogined: function (state) {
-    return !!state.uuid
+    return !!state.username
   }
 }
 
 const mutations = {
-  login: function (state, loginData) {
-    console.log('login')
-    axios({
-      method: 'post',
-      url: 'api/newLogin',
-      dataType: 'json',
-      params: {
-        username: loginData.username,
-        password: loginData.password
-      }
-    }).then(res => {
-      console.log('1>>>', res)
-    })
-
-    axios({
-      method: 'post',
-      url: 'api/newLogin',
-      dataType: 'json',
-      data: {
-        username: loginData.username,
-        password: loginData.password
-      }
-    }).then(res => {
-      console.log('2>>>', res)
-    })
-
-    axios.post('api/newLogin', {
-      username: loginData.username,
-      password: loginData.password
-    }).then(res => {
-      console.log('3>>>', res)
-    })
+  updateUserInfo: function (state, userInfo) {
+    console.log('store.UserInfo.updateUserInfo', userInfo)
+    VueCookie.set('username', userInfo.username)
+    VueCookie.set('userInfo', userInfo)
+    state.username = userInfo.username
+    state.userInfo = userInfo
   }
 }
 
-const UserInfo = {
+let UserInfo = {
   state,
   getters,
   mutations
 }
 
-export default UserInfo
+export default UserInfo */

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 import Vuex from 'vuex'
 import UserInfo from './modules/UserInfo'
 
@@ -7,4 +7,4 @@ export default new Vuex.Store({
   modules: {
     UserInfo
   }
-})
+}) */

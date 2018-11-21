@@ -3,11 +3,45 @@ body, html {
 	-webkit-tap-highlight-color: transparent;
 }
 
+/* === 通用 === */
+.pull-right {
+	float: right;
+}
 .page {
 	height: 100%;
 	overflow-y: auto;
-	padding-top: 20px;
 }
+.page__title {
+    padding: 40px 15px 20px 15px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 400;
+}
+/* weui-cells容器上方去掉画线 */
+.weui-cells.no-line:after,
+.weui-cells.no-line:before {
+	height: 0px;
+    content: "";
+    position: initial;
+}
+/* weui-cells容器上方去掉margin */
+.weui-cells.no-margin-top {
+	margin-top: 0px;
+}
+/* weui-cell 每个右侧不顶头 */
+.weui-cell:before {
+	right: 15px;
+}
+/* 按钮颜色 */
+.weui-btn_primary {
+    background-color: #09b78d;
+}
+.weui-btn_primary:not(.weui-btn_disabled):active {
+    color: hsla(0,0%,100%,.6);
+    background-color: #00ad85;
+}
+
+/* === 底部工具条-图标 === */
 .my-icon {
 	background-size: 100%!important;
 }
@@ -36,7 +70,7 @@ body, html {
 	color: #09b78d;
 }
 
-/* === navbar === */
+/* === 底部工具条 === */
 .weui-navbar+.weui-tab__panel {
 	padding-top: 44px;
 }
@@ -80,7 +114,7 @@ body, html {
 	display: none;
 }
 
-/* === f7-icons extra === */
+/* === f7-icons 额外配置 === */
 .f7-icons {
 	margin: 1px 5px;
 }
