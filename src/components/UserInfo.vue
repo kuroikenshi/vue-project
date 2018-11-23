@@ -21,7 +21,7 @@
     </div>
     <div class="weui-cells__title">带图标、说明的列表项</div> -->
     <div class="weui-cells no-line">
-      <div class="weui-cell">
+      <div class="weui-cell weui-cell-taller">
         <div class="weui-cell__hd">
           <i class="icon icon-gender"></i>
         </div>
@@ -31,7 +31,7 @@
         <div class="weui-cell__ft">男</div>
       </div>
 
-      <div class="weui-cell">
+      <div class="weui-cell weui-cell-taller">
         <div class="weui-cell__hd">
           <i class="icon icon-smart-phone"></i>
         </div>
@@ -41,7 +41,7 @@
         <div class="weui-cell__ft">13800138000</div>
       </div>
 
-      <a class="weui-cell weui-cell_access" href="javascript: void(0);">
+      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
         <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
         </div>
@@ -51,7 +51,7 @@
         <div class="weui-cell__ft"></div>
       </a>
 
-      <a class="weui-cell weui-cell_access" href="javascript: void(0);">
+      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
         <div class="weui-cell__hd">
           <i class="icon icon-book"></i>
         </div>
@@ -61,7 +61,7 @@
         <div class="weui-cell__ft"></div>
       </a>
 
-      <a class="weui-cell weui-cell_access" href="javascript: void(0);">
+      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
         <div class="weui-cell__hd">
           <i class="icon icon-schedule"></i>
         </div>
@@ -169,14 +169,6 @@ i.edit-icon {
     -webkit-transform: scaleY(.5);
     transform: scaleY(.5);
     z-index: 2;
-}
-
-.weui-cell__hd,
-.weui-cell__hd .icon,
-.weui-cell__bd,
-.weui-cell__ft {
-  line-height: 32px;
-  vertical-align: middle;
 }
 
 .weui-cell__bd {

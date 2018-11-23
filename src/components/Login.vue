@@ -48,14 +48,15 @@ export default {
       })
 
       this.$axios.post('api/login', postData).then(res => {
+        console.log('login>>>', res.status === 200, res.data.status === '200')
         // 登陆成功
-        if (res.status === 200 && res.data.status === 'success') {
+        if (res.status === 200 && res.data.status === 200) {
           // 保存用户信息状态
-          this.$cookie.set('user', this.$qs.stringify(res.data.msg), {
+          this.$cookie.set('user', this.$qs.stringify(res.data.data), {
             expires: 'session'
           })
 
-          console.log('get cookie:', this.$cookie.get('JSESSIONID'))
+          console.log('get cookie:', this.$cookie.get('user'))
 
           // 跳转
           this.$router.push(this.$route.query.redirect)

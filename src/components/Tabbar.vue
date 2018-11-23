@@ -4,15 +4,13 @@
     <div :class="{'weui-navbar-hide': !isNavShow(), 'weui-navbar': isNavShow()}">
       <div class="weui-navbar-inner">
         <div class="left sliding">
-          <a href="#" class="back link">
+          <a href="javascript: void(0);" class="tabbar-btn">
             <i class="f7-icons">chevron_left</i>
-            <!--span class="f7-icons-text">Back</span-->
           </a>
         </div>
         <div class="center sliding">{{navbarTitle}}</div>
         <div class="right">
-          <a href="#" class="link open-panel" data-panel="right">
-            <!--span class="f7-icons-text">Prev</span-->
+          <a href="javascript: void(0);" class="tabbar-btn">
             <i class="f7-icons">add</i>
           </a>
         </div>
@@ -72,6 +70,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.tabbar-btn {
+  color: #333!important;
+}
+.tabbar-btn i.f7-icons {
+  font-size: 18px;
+}
 </style>

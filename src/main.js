@@ -7,6 +7,7 @@ import router from './router'
 import VueResource from 'vue-resource'
 import axios from 'axios'
 import qs from 'qs'
+import _ from 'lodash'
 
 import 'weui/dist/style/weui.min.css'
 import '@/../static/css/app.css'
@@ -19,10 +20,25 @@ Vue.use(VueResource)
 
 // 路由过滤器
 router.beforeEach((to, from, next) => {
+  console.log('to', to)
+  // 如果是跳转到login页面，带上跳转回调
+  if (to.fullPath === '/login' && _.isEmpty(to.query.redirect)) {
+    console.log('跳转到login, 加上redirect')
+    next({
+      path: '/login',
+      query: {
+        redirect: from.fullPath
+      }
+    })
+  }
+
+  // 如果需要身份验证
   if (to.meta.requireAuth) {
     console.log('Going to:', to.path)
     console.log('    requireAuth:', to.meta.requireAuth)
     console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), 'need login:', !VueCookie.get('user'))
+
+    // 如果已经有身份
     if (!VueCookie.get('user')) {
       next({
         path: '/login',
@@ -38,10 +54,10 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-// http请求拦截器
+// axios请求拦截器
 axios.interceptors.request.use(
-  config => {
-    console.log('config>>>', config)
+  data => {
+    console.log('data>>>', data)
     // element ui Loading方法
     // loadinginstace = Loading.service({
     //   lock: true,
@@ -51,37 +67,35 @@ axios.interceptors.request.use(
     //   customClass:"osloading",
     //   fullscreen: true
     // })
-    return config
+    return data
   },
-  error => {
-    console.log('error>>>', error)
+  err => {
+    console.log('err.response.status>>>', err.response.status)
+    console.log('err>>>', err)
     // loadinginstace.close()
+    return Promise.reject(err)
+  }
+)
+// axios响应拦截器
+axios.interceptors.response.use((response) => {
+  console.log('resp', response)
+  // session过期处理 - 兼容
+  if (response.data &&
+      response.data.msg &&
+      response.data.msg === '未登录或登录超时，请重新登录!') {
+    console.log('session过期')
+    router.push('/login')
+  }
+  return response
+}, function (error) {
+  // session过期处理
+  if (error.response.status === 401) {
+    router.push('/login')
+  } else {
     return Promise.reject(error)
   }
-)
-
-// http response 拦截器
-axios.interceptors.response.use(
-  function (response) {
-    console.log('axios - response', response)
-    return response
-  },
-  function (error) {
-    console.log('axios - error', error, qs.parse(qs.stringify(error)))
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 返回 401 清除token信息并跳转到登录页面
-          // store.commit(types.LOGOUT)
-          console.log('后台报告：身份过期')
-          VueCookie.delete('user')
-          router.push('login')
-          break
-      }
-    }
-    return Promise.reject(error.response.data) // 返回接口返回的错误信息
-  }
-)
+})
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios

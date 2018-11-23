@@ -32,6 +32,15 @@ body, html {
 .weui-cell:before {
 	right: 15px;
 }
+/* 根据设计稿，较高的cell */
+.weui-cell-taller .weui-cell__hd,
+.weui-cell-taller .weui-cell__hd .icon,
+.weui-cell-taller .weui-cell__bd,
+.weui-cell-taller .weui-cell__ft {
+  line-height: 32px;
+  vertical-align: middle;
+}
+
 /* 按钮颜色 */
 .weui-btn_primary {
     background-color: #09b78d;
@@ -68,6 +77,23 @@ body, html {
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon>i,
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__label {
 	color: #09b78d;
+}
+
+.icon-tabbar-left {
+    content: " ";
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    border-width: 1px 1px 0 0;
+    border-color: #333;
+    border-style: solid;
+    -webkit-transform: matrix(-0.707,-0.707,0.707,-0.707,0,0);
+    transform: matrix(-0.707,-0.707,0.707,-0.707,0,0);
+    position: absolute;
+    /*top: 50%;*/
+    left: 15px;
+    margin-top: -8px;
+    /*right: 2px;*/
 }
 
 /* === 底部工具条 === */
