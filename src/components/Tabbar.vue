@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     go: function (path) {
-      console.log('>>>', this.$router.history.current.path + '/' + path)
+      // console.log('>>>', this.$router.history.current.path + '/' + path)
       this.$router.push(this.$router.history.current.path + '/' + path)
     },
     // 是当前路径
@@ -58,12 +58,12 @@ export default {
     },
     // 是否显示navbar
     isNavShow: function () {
-      console.log('params>>>', this.$route)
+      // console.log('params>>>', this.$route)
       let hideNavPath = ['/user/userInfo']
       return (hideNavPath.indexOf(this.$router.history.current.path) === -1)
     },
     getNavbarTitle (navbarTitle) {
-      console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
+      // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
       this.navbarTitle = navbarTitle
     }
   }

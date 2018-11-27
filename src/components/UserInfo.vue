@@ -112,11 +112,11 @@ export default {
   background-size: contain;
 }
 .user-title {
-    font-size: 18px;
-    font-weight: 400;
-    text-align: center;
-    margin: 20px 0;
-    color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  text-align: center;
+  margin: 20px 0;
+  color: #fff;
 }
 .card {
   border-radius: 5px;
@@ -156,21 +156,23 @@ i.edit-icon {
 
 /* 最后一个.weui-cell加下划线 */
 .weui-cell:last-child:after {
-    content: " ";
-    position: absolute;
-    left: 15px;
-    bottom: 0;
-    right: 15px;
-    height: 1px;
-    border-top: 1px solid #e5e5e5;
-    color: #e5e5e5;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scaleY(.5);
-    transform: scaleY(.5);
-    z-index: 2;
+  content: " ";
+  position: absolute;
+  left: 15px;
+  bottom: 0;
+  right: 15px;
+  height: 1px;
+  border-top: 1px solid #e5e5e5;
+  color: #e5e5e5;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scaleY(.5);
+  transform: scaleY(.5);
+  z-index: 2;
 }
 
+/* 根据设计稿，行内字号重定义，已在app.css中加入 */
+/*
 .weui-cell__bd {
   font-size: 15px;
 }
@@ -178,6 +180,7 @@ i.edit-icon {
 .weui-cell__ft i {
   font-size: 14px;
 }
+*/
 
 .icon {
   height: 25px;

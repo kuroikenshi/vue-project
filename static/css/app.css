@@ -41,6 +41,15 @@ body, html {
   vertical-align: middle;
 }
 
+/* 根据设计稿，行内字号重定义 */
+.weui-cell__bd {
+  font-size: 15px;
+}
+.weui-cell__ft,
+.weui-cell__ft i {
+  font-size: 14px;
+}
+
 /* 按钮颜色 */
 .weui-btn_primary {
     background-color: #09b78d;

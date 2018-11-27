@@ -21,6 +21,7 @@
 
         <div class="weui-btn-area">
           <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
+          <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="loginTestParent">登录-家长</a>
         </div>
       </div>
     </div><!-- end of .page__bd -->
@@ -39,7 +40,36 @@ export default {
   methods: {
     // 登陆方法
     login: function (event) {
-      this.username = 'admin'
+      // this.username = '18311021317'
+      // this.password = '123'
+      // 使用qs解决
+      let postData = this.$qs.stringify({
+        username: this.username,
+        password: this.password
+      })
+
+      this.$axios.post('api/login', postData).then(res => {
+        console.log('login>>>', res)
+        // 登陆成功
+        if (res.status === 200 && res.data.status === 200) {
+          // 保存用户信息状态
+          this.$cookie.set('user', this.$qs.stringify(res.data.data), {
+            expires: 'session'
+          })
+
+          console.log('get cookie:', this.$cookie.get('user'))
+
+          // 跳转
+          this.$router.push(this.$route.query.redirect)
+        } else {
+          alert(res.data.status + ': ' + res.data.msg)
+        }
+      })
+    },
+
+    // TODEL: 测试方法，上线删除
+    loginTestParent: function (event) {
+      this.username = '18311021317'
       this.password = '123'
       // 使用qs解决
       let postData = this.$qs.stringify({
@@ -48,7 +78,7 @@ export default {
       })
 
       this.$axios.post('api/login', postData).then(res => {
-        console.log('login>>>', res.status === 200, res.data.status === '200')
+        console.log('login>>>', res)
         // 登陆成功
         if (res.status === 200 && res.data.status === 200) {
           // 保存用户信息状态

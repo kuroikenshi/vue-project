@@ -59,7 +59,7 @@ export default new Router({
         name: 'UserInfo',
         component: UserInfo,
         meta: {
-          requireAuth: true
+          // requireAuth: true
         }
       }]
     }
