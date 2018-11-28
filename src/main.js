@@ -8,6 +8,7 @@ import VueResource from 'vue-resource'
 import axios from 'axios'
 import qs from 'qs'
 import _ from 'lodash'
+import ls from 'store'
 
 import 'weui/dist/style/weui.min.css'
 import '@/../static/css/app.css'
@@ -99,6 +100,7 @@ axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios
+window.ls = ls
 /* eslint-disable no-new */
 window.vue = new Vue({
   el: '#app',

@@ -4,15 +4,18 @@
 
       <div v-show="classList.length <= 0" class="weui-cell weui-cell-taller">
         <div class="weui-cell__bd center">
-          {{ !classListErrMsg ? (!classListLoaded ? "加载中..." : "-- 未找到绑定班级 --") : classListErrMsg }}<br/>
+          {{ !classListErrMsg ? (!classListLoaded ? "加载中..." : "-- 未找到绑定班级 --") : classListErrMsg }}
+          <!--
+          <br/>
           已加载 > {{ !!classListLoaded }}<br/>
           成功 > {{ !classListErrMsg }}<br/>
           失败消息 > "{{ classListErrMsg }}"<br/>
+          -->
         </div>
       </div>
 
       <a v-for="classItem in classList" v-bind:key="classItem.classCode" href="javascript: void(0);"
-          class="weui-cell weui-cell_access weui-cell-taller" v-on:click="enterClass(classItem.classCode)">
+          class="weui-cell weui-cell_access weui-cell-taller" v-on:click="enterClassMoments(classItem.classCode)">
         <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
         </div>
@@ -20,7 +23,7 @@
           <p>{{ classItem.classCode }}</p>
         </div>
         <div class="weui-cell__ft">
-          <span class="new-msg">{{ ((classItem.msgCount === undefined) ? "正在获取新消息个数..." : (classItem.msgCount + "条新消息")) }}</span>
+          <span class="new-msg">{{ ((classItem.msgCount === undefined) ? "正在获取新消息个数..." : (classItem.msgCount)) }}</span>
         </div>
       </a>
 
@@ -54,7 +57,7 @@ export default {
       this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
     },
     // 进入班级
-    enterClass (classCode) {
+    enterClassMoments (classCode) {
       console.log('classCode:', classCode)
     },
     // 获取班级列表
@@ -82,10 +85,10 @@ export default {
 
       return this.$axios.post('api/classes/getClassListByParentId/', postData).then(res => {
         console.log('getClassList>>>', res.data)
-        res.data.data[0].classList.forEach(classItem => {
+        res.data.data.classList.forEach(classItem => {
           classItem.msgCount = undefined
         })
-        this.classList = res.data.data[0].classList
+        this.classList = res.data.data.classList
         this.classListLoaded = true
         return Promise.resolve()
       }).catch(err => {
@@ -104,12 +107,36 @@ export default {
       // 遍历加载新消息个数
       this.classList.forEach(function (classItem) {
         // json测试
-        that.$axios.get('static/data/getNewsCount.json').then(res => {
+        // that.$axios.get('static/data/getNewsCount.json').then(res => {
+        //   console.log('getNewsCount>>>', res.data)
+        //   if (res.status === 200 && res.statusText === 'OK') {
+        //     console.log('    count:', res.data.data)
+        //     console.log('    classItem.msgCount:', classItem.msgCount)
+        //     classItem.msgCount = res.data.data + '条新消息'
+        //     console.log('    >>>>>', that.classList[0].msgCount)
+        //   } else {
+        //     alert('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
+        //   }
+        //   return Promise.resolve()
+        // }).catch(err => {
+        //   console.log('获取班级最新消息个数错误:', err)
+        //   classItem.msgCount = '获取新消息个数失败'
+        //   return Promise.reject(err)
+        // })
+
+        // 正式
+        console.log('>>>', classItem.classCode)
+        let postData = that.$qs.stringify({
+          classCode: classItem.classCode,
+          lastUpdate: new Date().valueOf() - 1000000
+        })
+
+        that.$axios.post('api/moments/getNewsCount', postData).then(res => {
           console.log('getNewsCount>>>', res.data)
           if (res.status === 200 && res.statusText === 'OK') {
             console.log('    count:', res.data.data)
             console.log('    classItem.msgCount:', classItem.msgCount)
-            classItem.msgCount = res.data.data
+            classItem.msgCount = res.data.data + '条新消息'
             console.log('    >>>>>', that.classList[0].msgCount)
           } else {
             alert('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
@@ -117,27 +144,9 @@ export default {
           return Promise.resolve()
         }).catch(err => {
           console.log('获取班级最新消息个数错误:', err)
-          classItem.msgCount = '?'
+          classItem.msgCount = '获取新消息个数失败'
           return Promise.reject(err)
         })
-
-        // 正式
-        // console.log('>>>', classItem.classCode)
-        // let postData = this.$qs.stringify({
-        //   classCode: classItem.classCode,
-        //   lastUpdate: new Date().valueOf()
-        // })
-
-        // this.$axios.post('api/classes/getNewsCount', postData).then(res => {
-        //   console.log('getNewsCount>>>', res.data)
-        //   this.classList = res.data.data[0].classList
-        //   this.classListLoaded = true
-        //   return Promise.resolve()
-        // }).catch(err => {
-        //   console.log('加载classList失败:', err)
-        //   this.classListErrMsg = '-- 加载失败 --'
-        //   return Promise.reject(err)
-        // })
       })
     }
   }
