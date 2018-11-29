@@ -9,6 +9,8 @@ import Chating from '@/components/Chating'
 
 import Tabbar from '@/components/Tabbar'
 import ClassList from '@/components/ClassList'
+import MomentList from '@/components/MomentList'
+import MomentItem from '@/components/MomentItem'
 import ChatList from '@/components/ChatList'
 import UserInfo from '@/components/UserInfo'
 
@@ -49,17 +51,34 @@ export default new Router({
       children: [{
         path: 'class/classList',
         name: 'ClassList',
-        component: ClassList
+        component: ClassList,
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'class/:classCode/moments',
+        name: 'MomentList',
+        component: MomentList,
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'test/momentItem',
+        name: 'MomentItem',
+        component: MomentItem
       }, {
         path: 'chat/chatList',
         name: 'ChatList',
-        component: ChatList
+        component: ChatList,
+        meta: {
+          requireAuth: true
+        }
       }, {
         path: 'user/userInfo',
         name: 'UserInfo',
         component: UserInfo,
         meta: {
-          // requireAuth: true
+          requireAuth: true
         }
       }]
     }

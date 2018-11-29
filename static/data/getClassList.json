@@ -1,18 +1,16 @@
 {
 	"status": 200,
 	"msg": "OK",
-	"data": {
-		"classList": [
-			{
-				"classCode": "PE19003",
-				"className": "泡泡少儿英语学习班1"
-			}, {
-				"classCode": "PE19004",
-				"className": "泡泡少儿英语学习班2"
-			}, {
-				"classCode": "PE19005",
-				"className": "泡泡少儿英语学习班3"
-			}
-		]
-	}
+	"data": [
+		{
+			"classCode": "PE19003",
+			"className": "泡泡少儿英语学习班1"
+		}, {
+			"classCode": "PE19004",
+			"className": "泡泡少儿英语学习班2"
+		}, {
+			"classCode": "PE19005",
+			"className": "泡泡少儿英语学习班3"
+		}
+	]
 }

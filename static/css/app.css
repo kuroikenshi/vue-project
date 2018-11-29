@@ -15,8 +15,39 @@ body, html {
     padding: 40px 15px 20px 15px;
     text-align: left;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
 }
+.link-color {
+    color: #09b78d;
+}
+.sub-color {
+    color: #999;
+}
+.stronger {
+    font-weight: 600;
+}
+.font-size-l {
+    font-size: 16px;
+}
+.font-size-m {
+    font-size: 15px;
+}
+.font-size-s {
+    font-size: 12px;
+}
+.font-size-xs {
+    font-size: 10px;
+}
+.display-ib {
+    display: inline-block;
+}
+.display-b {
+    display: block;
+}
+.margin-v3 {
+    margin: 3px 0;
+}
+
 /* weui-cells容器上方去掉画线 */
 .weui-cells.no-line:after,
 .weui-cells.no-line:before {

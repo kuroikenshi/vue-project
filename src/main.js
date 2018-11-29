@@ -19,6 +19,45 @@ import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
 Vue.use(VueCookie)
 Vue.use(VueResource)
 
+Vue.prototype.$qs = qs
+Vue.prototype.$axios = axios
+
+// 绑定用户的localstorage
+class UserLocalStorage {
+  constructor (username) {
+    this.username = username
+  }
+
+  init (username) {
+    this.username = username
+  }
+
+  get (key1, key2) {
+    let d = ls.get(this.username)
+    if (d === undefined) {
+      return undefined
+    }
+    let obj = d[key1]
+    if (obj === undefined) {
+      return undefined
+    }
+    return obj[key2]
+  }
+
+  set (key1, key2, val) {
+    let d = ls.get(this.username)
+    if (d === undefined) {
+      d = {}
+    }
+    if (d[key1] === undefined) {
+      d[key1] = {}
+    }
+    d[key1][key2] = val
+    ls.set(this.username, d)
+  }
+}
+window.uls = new UserLocalStorage()
+
 // 路由过滤器
 router.beforeEach((to, from, next) => {
   console.log('to', to)
@@ -98,9 +137,6 @@ axios.interceptors.response.use((response) => {
 })
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
-Vue.prototype.$qs = qs
-Vue.prototype.$axios = axios
-window.ls = ls
 /* eslint-disable no-new */
 window.vue = new Vue({
   el: '#app',

@@ -4,11 +4,11 @@
     <div :class="{'weui-navbar-hide': !isNavShow(), 'weui-navbar': isNavShow()}">
       <div class="weui-navbar-inner">
         <div class="left sliding">
-          <a href="javascript: void(0);" class="tabbar-btn">
+          <a href="javascript: void(0);" class="tabbar-btn" v-on:click="goBack">
             <i class="f7-icons">chevron_left</i>
           </a>
         </div>
-        <div class="center sliding">{{navbarTitle}}</div>
+        <div class="center sliding stronger">{{navbarTitle}}</div>
         <div class="right">
           <a href="javascript: void(0);" class="tabbar-btn">
             <i class="f7-icons">add</i>
@@ -51,6 +51,9 @@ export default {
     go: function (path) {
       // console.log('>>>', this.$router.history.current.path + '/' + path)
       this.$router.push(this.$router.history.current.path + '/' + path)
+    },
+    goBack: function () {
+      this.$router.back()
     },
     // 是当前路径
     isCurrent: function (path) {

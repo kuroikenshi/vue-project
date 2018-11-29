@@ -56,8 +56,9 @@ export default {
           this.$cookie.set('user', this.$qs.stringify(res.data.data), {
             expires: 'session'
           })
-
           console.log('get cookie:', this.$cookie.get('user'))
+
+          window.uls.init(res.data.data.username)
 
           // 跳转
           this.$router.push(this.$route.query.redirect)
@@ -85,8 +86,9 @@ export default {
           this.$cookie.set('user', this.$qs.stringify(res.data.data), {
             expires: 'session'
           })
-
           console.log('get cookie:', this.$cookie.get('user'))
+
+          window.uls.init(res.data.data.username)
 
           // 跳转
           this.$router.push(this.$route.query.redirect)

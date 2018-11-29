@@ -10,9 +10,18 @@ export default {
   name: 'MyComp',
   data () {
     return {
+      classCode: this.$route.params.classCode,
+      navbarTitle: this.$route.params.classCode + '班级空间'
     }
   },
+  created () {
+    this.updateNavbarTitle()
+  },
   methods: {
+    // 更新navbar标题
+    updateNavbarTitle () {
+      this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
+    },
     goback: function (event) {
       console.log(this.$router)
       this.$router.back()

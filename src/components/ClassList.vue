@@ -44,29 +44,35 @@ export default {
   },
   created () {
     this.updateNavbarTitle()
-    // TODO: 加载classList
+
+    // 加载classList
     this.getClassList().then(() => {
       console.log('this>>>', this.classList[0].msgCount)
+
+      // 根据classList加载msgCount
       this.getEachClassNewsCount()
     })
-    // TODO: 根据classList加载msgCount
   },
   methods: {
     // 更新navbar标题
     updateNavbarTitle () {
       this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
     },
-    // 进入班级
+
+    // 进入班级动态
     enterClassMoments (classCode) {
       console.log('classCode:', classCode)
+
+      this.$router.push('/class/' + classCode + '/moments')
     },
+
     // 获取班级列表
     getClassList () {
       // json测试
       // this.$axios.get('static/data/getClassList.json').then(res => {
       //   console.log('getClassList>>>', res)
       //   let that = this
-      //   that.classList = res.data.data.classList
+      //   that.classList = res.data.data
       //   that.classListLoaded = true
       //   console.log('...')
       //   return Promise.resolve()
@@ -85,10 +91,10 @@ export default {
 
       return this.$axios.post('api/classes/getClassListByParentId/', postData).then(res => {
         console.log('getClassList>>>', res.data)
-        res.data.data.classList.forEach(classItem => {
+        res.data.data.forEach(classItem => {
           classItem.msgCount = undefined
         })
-        this.classList = res.data.data.classList
+        this.classList = res.data.data
         this.classListLoaded = true
         return Promise.resolve()
       }).catch(err => {
@@ -128,8 +134,10 @@ export default {
         console.log('>>>', classItem.classCode)
         let postData = that.$qs.stringify({
           classCode: classItem.classCode,
-          lastUpdate: new Date().valueOf() - 1000000
+          lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate') || new Date(2018).valueOf()
         })
+
+        console.log('postData>>>', postData)
 
         that.$axios.post('api/moments/getNewsCount', postData).then(res => {
           console.log('getNewsCount>>>', res.data)
