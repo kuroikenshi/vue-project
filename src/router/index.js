@@ -58,14 +58,14 @@ export default new Router({
       }, {
         path: 'class/:classCode/moments',
         name: 'MomentList',
-        component: MomentList,
+        component: MomentItem,
         meta: {
           requireAuth: true
         }
       }, {
         path: 'test/momentItem',
         name: 'MomentItem',
-        component: MomentItem
+        component: MomentList
       }, {
         path: 'chat/chatList',
         name: 'ChatList',

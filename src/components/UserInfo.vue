@@ -10,7 +10,8 @@
       <p class="user-name">{{ user.name }}</p>
     </div>
 
-    <!-- <div class="weui-cells__title">带说明的列表项</div>
+    <!--
+    <div class="weui-cells__title">带说明的列表项</div>
     <div class="weui-cells">
       <div class="weui-cell">
         <div class="weui-cell__bd">
@@ -19,7 +20,9 @@
         <div class="weui-cell__ft">说明文字</div>
       </div>
     </div>
-    <div class="weui-cells__title">带图标、说明的列表项</div> -->
+    <div class="weui-cells__title">带图标、说明的列表项</div>
+    -->
+
     <div class="weui-cells no-line">
       <div class="weui-cell weui-cell-taller">
         <div class="weui-cell__hd">
