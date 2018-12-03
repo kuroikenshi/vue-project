@@ -90,6 +90,11 @@ body, html {
     background-color: #00ad85;
 }
 
+/* 图片预览，长图的解决方案 */
+.weui-gallery__img {
+  background-size: cover;
+}
+
 /* === 底部工具条-图标 === */
 .my-icon {
 	background-size: 100%!important;

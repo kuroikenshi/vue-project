@@ -1,19 +1,19 @@
 <template>
   <div class="moment">
     <div class="title-row">
-      <img src="/static/imgs/user-photo.png" class="user-photo"/>
-      <a class="link-color font-size-l stronger display-ib margin-v3">托尼老师</a>
-      <p class="sub-color font-size-xs">2018-09-13 12:00</p>
+      <img :src="userPhoto" class="user-photo" v-once/>
+      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ createBy }}</a>
+      <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
     </div>
     <div class="detail-row">
-      <p class="content-row font-size-m">
-        今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。
+      <p class="content-row font-size-m" v-once>
+        {{ content }}
       </p>
       <div class="thumbnails-row">
-        <img src="/static/imgs/user-photo.png" alt="" class="thumbnail"/>
-        <img src="/static/imgs/user-photo.png" alt="" class="thumbnail"/>
-        <img src="/static/imgs/user-photo.png" alt="" class="thumbnail"/>
-        <img src="/static/imgs/user-photo.png" alt="" class="thumbnail"/>
+        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key"
+            :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow">
+          <img :src="val" />
+        </span>
       </div>
       <div class="act-buttons-row">
         <a class="act-button">
@@ -61,15 +61,67 @@
 </template>
 
 <script>
+import weui from 'weui.js'
+
 export default {
   name: 'MyComp',
   data () {
     return {
+      'momentId': 1,
+      'classCode': 'GWC182021',
+      'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
+      'imagesContent': [
+        '/static/imgs/user-photo.png',
+        '/static/imgs/timg.jpg',
+        '/static/imgs/user-photo.png',
+        '/static/imgs/user-photo.png'
+      ],
+
+      'userPhoto': '/static/imgs/user-photo.png',
+      'createBy': '托尼老师',
+      'createDate': '2018-11-05 14:57:25.0',
+
+      'commentsList': [{
+        'id': 1,
+        'momentId': 1,
+        'author': '八月助教',
+        'content': '特别好',
+        'toUser': null
+      }, {
+        'id': 2,
+        'momentId': 1,
+        'author': '小五父亲',
+        'content': '真的特别好',
+        'toUser': null
+      }]
+    }
+  },
+  computed: {
+    createDateFormatted: function () {
+      return this.createDate.replace(/\..*$/, '')
+    },
+    photos: function () {
+      let arr = []
+      this.imagesContent.forEach(imgUrl => {
+        arr.push({
+          url: imgUrl
+        })
+      })
+      return arr
     }
   },
   created () {
+    // initImageBrowser
+    this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
   },
   methods: {
+    gallaryShow: function (evt) {
+      console.log('evt', evt, weui)
+      weui.gallery(evt.target.getAttribute('src'))
+    },
+    onF7PBOpen: function (evt) {
+      console.log('onF7PBOpen')
+    }
   }
 }
 </script>
@@ -103,9 +155,14 @@ export default {
   display: block;
 }
 .thumbnail {
+  overflow: hidden;
   width: calc((100% - 35px) / 3);
   margin: 10px 10px 0px 0;
+  display: block;
   float: left;
+}
+.thumbnail img {
+  width: 100%;
 }
 
 .comment-block {
