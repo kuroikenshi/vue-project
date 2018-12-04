@@ -13,7 +13,9 @@ import ls from 'store'
 import 'weui/dist/style/weui.min.css'
 import '@/../static/css/app.css'
 
-// f7-icons-css
+import { Swipe, SwipeItem } from 'vue-swipe'
+import 'vue-swipe/dist/vue-swipe.css'
+
 import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
 
 Vue.use(VueCookie)
@@ -21,6 +23,9 @@ Vue.use(VueResource)
 
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios
+
+Vue.component('swipe', Swipe)
+Vue.component('swipe-item', SwipeItem)
 
 // 绑定用户的localstorage
 class UserLocalStorage {

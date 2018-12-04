@@ -10,10 +10,11 @@
         {{ content }}
       </p>
       <div class="thumbnails-row">
-        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key"
+        <!-- <s p an class="thumbnail" v -for="(val, key) in imagesContent" : key="key"
             :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow">
-          <img :src="val" />
-        </span>
+          <i mg : src="val" />
+        </span> -->
+        <photo-broswer></photo-broswer>
       </div>
       <div class="act-buttons-row">
         <a class="act-button">
@@ -62,9 +63,13 @@
 
 <script>
 import weui from 'weui.js'
+import PhotoBrowser from '@/components/PhotoBrowser'
 
 export default {
   name: 'MyComp',
+  components: {
+    'photo-broswer': PhotoBrowser
+  },
   data () {
     return {
       'momentId': 1,
