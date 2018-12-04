@@ -10,11 +10,11 @@
         {{ content }}
       </p>
       <div class="thumbnails-row">
-        <!-- <s p an class="thumbnail" v -for="(val, key) in imagesContent" : key="key"
+        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key"
             :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow">
-          <i mg : src="val" />
-        </span> -->
-        <photo-broswer></photo-broswer>
+          <img :src="val" />
+        </span>
+        {{showPB}}
       </div>
       <div class="act-buttons-row">
         <a class="act-button">
@@ -63,15 +63,12 @@
 
 <script>
 import weui from 'weui.js'
-import PhotoBrowser from '@/components/PhotoBrowser'
 
 export default {
   name: 'MyComp',
-  components: {
-    'photo-broswer': PhotoBrowser
-  },
   data () {
     return {
+      'showPB': true,
       'momentId': 1,
       'classCode': 'GWC182021',
       'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
@@ -123,6 +120,7 @@ export default {
     gallaryShow: function (evt) {
       console.log('evt', evt, weui)
       weui.gallery(evt.target.getAttribute('src'))
+      console.log('this', this)
     },
     onF7PBOpen: function (evt) {
       console.log('onF7PBOpen')

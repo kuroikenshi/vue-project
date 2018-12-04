@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <router-view/>
+    <photo-broswer/>
   </div>
 </template>
 
 <script>
+import PhotoBrowser from '@/components/PhotoBrowser'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    'photo-broswer': PhotoBrowser
+  }
 }
 </script>
 
