@@ -19,6 +19,14 @@ module.exports = {
             pathRewrite: {
                 '^/api': ''
             }
+        },
+        // 尝试跨域
+        '/demo': {
+            target: 'http://localhost:3000',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/demo': '/popsoul'
+            }
         }
     },
 
