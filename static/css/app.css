@@ -144,6 +144,7 @@ body, html {
 /* === 底部工具条 === */
 .weui-navbar+.weui-tab__panel {
 	padding-top: 44px;
+  padding-bottom: 50px;
 }
 .weui-navbar+.weui-tab__panel>.page {
 	padding-top: 0px;

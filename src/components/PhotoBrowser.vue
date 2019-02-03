@@ -1,5 +1,5 @@
 <template>
-  <div class="weui-gallery weui-animate-fade-in" @click="close">
+  <div class="weui-gallery weui-animate-fade-in" @click="close" ref="aaa">
 
     <swipe class="weui-gallery__img" :auto="0">
       <swipe-item v-for="(val, key) in photos" :key="key">

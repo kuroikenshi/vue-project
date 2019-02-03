@@ -5,17 +5,23 @@
       <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ createBy }}</a>
       <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
     </div>
+
+    <!-- 状态详情块 -->
     <div class="detail-row">
+      <!-- 内容行 -->
       <p class="content-row font-size-m" v-once>
         {{ content }}
       </p>
+
+      <!-- 图片行 -->
       <div class="thumbnails-row">
         <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key"
-            :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow">
+            :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow2">
           <img :src="val" />
         </span>
-        {{showPB}}
       </div>
+
+      <!-- 点赞评论行 -->
       <div class="act-buttons-row">
         <a class="act-button">
           <i class="icon icon-heart"></i>
@@ -26,7 +32,11 @@
           <span class="sub-color font-size-m">评论</span>
         </a>
       </div>
+
+      <!-- 评论块 -->
       <div class="comment-block">
+
+        <!-- 点赞行 -->
         <div class="likes-row">
           <span><i class="liked-icon icon icon-heart"></i></span>
           <span class="liked-cname font-size-m link-color">八月父亲</span>
@@ -37,6 +47,8 @@
           <span class="liked-cname font-size-m link-color">大花父亲</span>
           <span class="liked-cname font-size-m link-color">大花父亲</span>
         </div>
+
+        <!-- 评论列表 -->
         <div class="comments-list">
           <div class="comment">
             <span class="author-label">
@@ -58,17 +70,29 @@
         </div>
       </div>
     </div>
+
+    <!-- PhotoBrowser -->
+    <div class="weui-gallery weui-animate-fade-in" :style="{display: isShow}" @click="close">
+      <swipe class="weui-gallery__img" :auto="0">
+        <swipe-item v-for="(item, index) in photos" :item="item" :key="item.id" :index="index">
+          <div class="photo-holder">
+            <img :src ="item.url" />
+          </div>
+         </swipe-item>
+      </swipe>
+    </div>
+
   </div>
 </template>
 
 <script>
-import weui from 'weui.js'
+// import weui from 'weui.js'
 
 export default {
   name: 'MyComp',
   data () {
     return {
-      'showPB': true,
+      'showPB': false,
       'momentId': 1,
       'classCode': 'GWC182021',
       'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
@@ -105,26 +129,46 @@ export default {
     photos: function () {
       let arr = []
       this.imagesContent.forEach(imgUrl => {
-        arr.push({
+        console.log(imgUrl)
+        let imgItem = {
+          id: arr.length,
           url: imgUrl
-        })
+        }
+        arr.push(imgItem)
       })
       return arr
+    },
+    isShow: function () {
+      return this.showPB ? 'block' : 'none'
     }
   },
   created () {
     // initImageBrowser
     this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
+    console.log('vue>>>', window.vue)
   },
   methods: {
-    gallaryShow: function (evt) {
-      console.log('evt', evt, weui)
-      weui.gallery(evt.target.getAttribute('src'))
-      console.log('this', this)
+    no: function () {
+      console.log('no')
     },
-    onF7PBOpen: function (evt) {
-      console.log('onF7PBOpen')
+    close: function (evt) {
+      this.showPB = false
+    },
+    gallaryShow2: function (evt) {
+      this.showPB = true
     }
+    /*
+    gallaryShow: function (evt) {
+      weui.gallery(evt.target.getAttribute('src'))
+
+      / * if (!this.pb1) {
+        this.pb1 = window.$.photoBrowser({
+          items: this.imagesContent
+        })
+      }
+      this.pb1.open() * /
+    },
+    */
   }
 }
 </script>
@@ -232,5 +276,27 @@ export default {
 .to-user:before {
   content: '回复';
   color: #000;
+}
+
+/* --- PhotoBrowser --- */
+.weui-gallery {
+  z-index: 10000000;
+  position: absolute;
+  float: left;
+}
+.photo-holder {
+  width: 100%;
+  /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 */
+  max-height: 100%;
+  overflow-y: auto;
+  /* 纵向居中，配合高度一屏保证超出无效 */
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+}
+.photo-holder img {
+  width: 100%;
+  display: block;
 }
 </style>
