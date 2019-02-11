@@ -76,7 +76,7 @@
       <swipe class="weui-gallery__img" :auto="0">
         <swipe-item v-for="(item, index) in photos" :item="item" :key="item.id" :index="index">
           <div class="photo-holder">
-            <img :src ="item.url" />
+            <img :src="item.url" />
           </div>
          </swipe-item>
       </swipe>
