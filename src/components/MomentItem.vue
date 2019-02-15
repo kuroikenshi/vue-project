@@ -1,7 +1,7 @@
 <template>
   <div class="moment">
     <div class="title-row">
-      <img :src="userPhoto" class="user-photo" v-once/>
+      <img :src="userPhoto" class="user-photo" v-once />
       <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ createBy }}</a>
       <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
     </div>
@@ -15,8 +15,9 @@
 
       <!-- 图片行 -->
       <div class="thumbnails-row">
-        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key"
-            :style="{height: thumbnailWidth, width: thumbnailWidth}" @click="gallaryShow2">
+        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key" 
+             :style="{height: thumbnailWidth, width: thumbnailWidth}"
+             @click="gallaryShow2(key)">
           <img :src="val" />
         </span>
       </div>
@@ -55,7 +56,7 @@
               <a href="javascript:void(0);" class="author font-size-m link-color">八月助教</a>
             </span>
             <p class="comment-content">
-            特别好！！特别好！！特别好！！特别好！特别好！！
+              特别好！！特别好！！特别好！！特别好！特别好！！
             </p>
           </div>
           <div class="comment">
@@ -64,7 +65,7 @@
               <a href="javascript:void(0);" class="to-user font-size-m link-color">八月父亲</a>
             </span>
             <p class="comment-content">
-            特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！
+              特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！
             </p>
           </div>
         </div>
@@ -72,13 +73,13 @@
     </div>
 
     <!-- PhotoBrowser -->
-    <div class="weui-gallery weui-animate-fade-in" :style="{display: isShow}" @click="close">
-      <swipe class="weui-gallery__img" :auto="0">
-        <swipe-item v-for="(item, index) in photos" :item="item" :key="item.id" :index="index">
+    <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}" @click="handleClick">
+      <swipe ref="swipe" class="weui-gallery__img" :auto="0">
+        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index">
           <div class="photo-holder">
             <img :src="item.url" />
           </div>
-         </swipe-item>
+        </swipe-item>
       </swipe>
     </div>
 
@@ -86,217 +87,335 @@
 </template>
 
 <script>
-// import weui from 'weui.js'
+  import _ from 'lodash'
+  // import weui from 'weui.js'
+  
+  var timer = null
 
-export default {
-  name: 'MyComp',
-  data () {
-    return {
-      'showPB': false,
-      'momentId': 1,
-      'classCode': 'GWC182021',
-      'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
-      'imagesContent': [
-        '/static/imgs/user-photo.png',
-        '/static/imgs/timg.jpg',
-        '/static/imgs/user-photo.png',
-        '/static/imgs/user-photo.png'
-      ],
-
-      'userPhoto': '/static/imgs/user-photo.png',
-      'createBy': '托尼老师',
-      'createDate': '2018-11-05 14:57:25.0',
-
-      'commentsList': [{
-        'id': 1,
+  export default {
+    name: 'MyComp',
+    data() {
+      return {
+        'defaultIndex': 1,
+        
+        'showPB': false,
         'momentId': 1,
-        'author': '八月助教',
-        'content': '特别好',
-        'toUser': null
-      }, {
-        'id': 2,
-        'momentId': 1,
-        'author': '小五父亲',
-        'content': '真的特别好',
-        'toUser': null
-      }]
-    }
-  },
-  computed: {
-    createDateFormatted: function () {
-      return this.createDate.replace(/\..*$/, '')
-    },
-    photos: function () {
-      let arr = []
-      this.imagesContent.forEach(imgUrl => {
-        console.log(imgUrl)
-        let imgItem = {
-          id: arr.length,
-          url: imgUrl
-        }
-        arr.push(imgItem)
-      })
-      return arr
-    },
-    isShow: function () {
-      return this.showPB ? 'block' : 'none'
-    }
-  },
-  created () {
-    // initImageBrowser
-    this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
-    console.log('vue>>>', window.vue)
-  },
-  methods: {
-    no: function () {
-      console.log('no')
-    },
-    close: function (evt) {
-      this.showPB = false
-    },
-    gallaryShow2: function (evt) {
-      this.showPB = true
-    }
-    /*
-    gallaryShow: function (evt) {
-      weui.gallery(evt.target.getAttribute('src'))
+        'classCode': 'GWC182021',
+        'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
+        'imagesContent': [
+          '/static/imgs/th1.jpg',
+          '/static/imgs/m3.jpg',
+          '/static/imgs/sb1.jpg',
+          '/static/imgs/s5.jpg',
+          '/static/imgs/sb3.jpg',
+          '/static/imgs/sb4.jpg',
+          '/static/imgs/timg.jpg'
+        ],
 
-      / * if (!this.pb1) {
-        this.pb1 = window.$.photoBrowser({
-          items: this.imagesContent
-        })
+        'userPhoto': '/static/imgs/user-photo.png',
+        'createBy': '托尼老师',
+        'createDate': '2018-11-05 14:57:25.0',
+
+        'commentsList': [{
+          'id': 1,
+          'momentId': 1,
+          'author': '八月助教',
+          'content': '特别好',
+          'toUser': null
+        }, {
+          'id': 2,
+          'momentId': 1,
+          'author': '小五父亲',
+          'content': '真的特别好',
+          'toUser': null
+        }]
       }
-      this.pb1.open() * /
     },
-    */
+    computed: {
+      createDateFormatted: function() {
+        return this.createDate.replace(/\..*$/, '')
+      },
+      photos: function() {
+        let arr = []
+        this.imagesContent.forEach(imgUrl => {
+          console.log(imgUrl)
+          let imgItem = {
+            id: arr.length,
+            url: imgUrl
+          }
+          arr.push(imgItem)
+        })
+        return arr
+      },
+      isShow: function() {
+        return this.showPB ? 'block' : 'none'
+      }
+    },
+    created() {
+      // initImageBrowser
+      this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
+      console.log('vue>>>', window.vue)
+
+      setTimeout(function() {
+        
+        var box = document.querySelector("#box")
+        /* var boxes = document.querySelector(".box")
+        
+        _.forEach(boxes, function(name, idx) {
+          let box = boxes[idx]
+          
+          var boxGesture = setGesture(box); //得到一个对象
+          boxGesture.gesturestart = function() { //双指开始
+            box.style.backgroundColor = "yellow";
+          };
+          boxGesture.gesturemove = function(e) { //双指移动
+            // box.innerHTML = e.scale + "<br />" + e.rotation;
+            box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
+          };
+          boxGesture.gestureend = function() { //双指结束
+            // box.innerHTML = "";
+            // box.style.cssText = "background-color:red";
+            box.style.backgroundColor = "red";
+          };
+        }) */
+        
+        var boxGesture = setGesture(box); //得到一个对象
+        boxGesture.gesturestart = function() { //双指开始
+          box.style.backgroundColor = "yellow";
+        };
+        boxGesture.gesturemove = function(e) { //双指移动
+          // box.innerHTML = e.scale + "<br />" + e.rotation;
+          // box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
+          // box.style.transform = "scale(" + e.scale + ")"; //改变目标元素的大小
+          
+          console.log('>>>', box.querySelector('.is-active').querySelector('.photo-holder').classList)
+          box.querySelector('.is-active').querySelector('.photo-holder').classList.add('in-scale')
+          box.querySelector('.is-active').querySelector('.photo-holder').querySelector('img').style.transform = "scale(" + e.scale + ")"
+        };
+        boxGesture.gestureend = function() { //双指结束
+          // box.innerHTML = "";
+          // box.style.cssText = "background-color:red";
+          box.style.backgroundColor = "red";
+        };
+        
+        
+      }, 1000);
+
+    },
+    methods: {
+      no: function() {
+        console.log('no')
+      },
+      handleClick: function(evt) {
+        console.log(evt)
+// 
+//         if (window.handleClickTimer) {}
+// 
+//         let that = this
+//         window.handleClickTimer = setTimeout(function() {
+//           that.showPB = false
+//         }, 0)
+        console.log('single')
+        
+        // 双击
+        if (timer !== null) {
+          clearTimeout(timer)
+          timer = null
+          console.log('db')
+          // evt.
+        }
+        else {
+          timer = setTimeout(() => {
+            console.log('single go')
+            this.showPB = false
+            timer = null
+          }, 300);
+        
+        }
+      },
+
+      gallaryShow2: function(idx) {
+        this.showPB = true
+        
+        // this.defaultIndex = idx
+        console.log('>>>', this.$refs)
+        window.$refs = this.$refs
+//         let that = this
+//         setTimeout(function () {
+//           
+//           console.log('1>', that.$refs.swipe.index)
+//           that.$refs.swipe.goto('1')
+//           console.log('2>', that.$refs.swipe.index)
+//           
+//         }, 1000)
+//           console.log('2>', that.$refs.swipe.index)
+      }
+      /*
+      gallaryShow: function (evt) {
+        weui.gallery(evt.target.getAttribute('src'))
+
+        / * if (!this.pb1) {
+          this.pb1 = window.$.photoBrowser({
+            items: this.imagesContent
+          })
+        }
+        this.pb1.open() * /
+      },
+      */
+    }
   }
-}
 </script>
 
 <style scoped>
-.moment {
-  // margin: 15px;
-  padding: 0 15px 15px 15px;
-  border-bottom: 1px solid #ccc;
-}
-.title-row {
-  padding: 15px 0 6px;
-}
-.user-photo {
-  width: 45px;
-  height: 45px;
-  float: left;
-  margin-right: 10px;
-}
-.cname {
-  font-weight: 600;
-}
+  .moment {
+    // margin: 15px;
+    padding: 0 15px 15px 15px;
+    border-bottom: 1px solid #ccc;
+  }
 
-.thumbnails-row {
-  margin-right: -15px;
-}
-.thumbnails-row:before,
-.thumbnails-row:after {
-  content: " ";
-  clear: both;
-  display: block;
-}
-.thumbnail {
-  overflow: hidden;
-  width: calc((100% - 35px) / 3);
-  margin: 10px 10px 0px 0;
-  display: block;
-  float: left;
-}
-.thumbnail img {
-  width: 100%;
-}
+  .title-row {
+    padding: 15px 0 6px;
+  }
 
-.comment-block {
-  background: #eee;
-}
+  .user-photo {
+    width: 45px;
+    height: 45px;
+    float: left;
+    margin-right: 10px;
+  }
 
-.icon {
-  height: 25px;
-  width: 25px;
-  display: inline-block;
-  // margin-right: 8px;
-}
-.icon-heart {
-  background: url('/static/imgs/icon-heart.png') no-repeat;
-  background-size: contain;
-}
-.icon-heart-a {
-  background: url('/static/imgs/icon-heart-a.png') no-repeat;
-  background-size: contain;
-}
-.icon-comment {
-  background: url('/static/imgs/icon-comment.png') no-repeat;
-  background-size: contain;
-}
+  .cname {
+    font-weight: 600;
+  }
 
-.act-buttons-row,
-.act-buttons-row * {
-  line-height: 32px;
-  vertical-align: middle;
-}
-.act-buttons-row {
-  text-align: right;
-}
-.act-button {
-  margin-left: 8px;
-}
+  .thumbnails-row {
+    margin-right: -15px;
+  }
 
-.likes-row {
-  line-height: 28px;
-  vertical-align: middle;
-  padding: 3px 6px;
-  border-bottom: 1px solid #fff;
-}
-.liked-icon {
-  height: 28px;
-  line-height: 28px;
-  vertical-align: middle;
-  display: inline-block;
-}
-.liked-cname + .liked-cname:before {
-  content: ', ';
-  color: #000;
-}
+  .thumbnails-row:before,
+  .thumbnails-row:after {
+    content: " ";
+    clear: both;
+    display: block;
+  }
 
-.comment {
-  padding: 3px 6px;
-}
-.author-label {
-  float: left;
-}
-.author-label:after {
-  content: '：';
-}
-.to-user:before {
-  content: '回复';
-  color: #000;
-}
+  .thumbnail {
+    overflow: hidden;
+    width: calc((100% - 35px) / 3);
+    margin: 10px 10px 0px 0;
+    display: block;
+    float: left;
+  }
 
-/* --- PhotoBrowser --- */
-.weui-gallery {
-  z-index: 10000000;
-  position: absolute;
-  float: left;
-}
-.photo-holder {
-  width: 100%;
-  /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 */
-  max-height: 100%;
-  overflow-y: auto;
-  /* 纵向居中，配合高度一屏保证超出无效 */
-  top: 50%;
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%,-50%);
-}
-.photo-holder img {
-  width: 100%;
-  display: block;
-}
+  .thumbnail img {
+    width: 100%;
+  }
+
+  .comment-block {
+    background: #eee;
+  }
+
+  .icon {
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    // margin-right: 8px;
+  }
+
+  .icon-heart {
+    background: url('/static/imgs/icon-heart.png') no-repeat;
+    background-size: contain;
+  }
+
+  .icon-heart-a {
+    background: url('/static/imgs/icon-heart-a.png') no-repeat;
+    background-size: contain;
+  }
+
+  .icon-comment {
+    background: url('/static/imgs/icon-comment.png') no-repeat;
+    background-size: contain;
+  }
+
+  .act-buttons-row,
+  .act-buttons-row * {
+    line-height: 32px;
+    vertical-align: middle;
+  }
+
+  .act-buttons-row {
+    text-align: right;
+  }
+
+  .act-button {
+    margin-left: 8px;
+  }
+
+  .likes-row {
+    line-height: 28px;
+    vertical-align: middle;
+    padding: 3px 6px;
+    border-bottom: 1px solid #fff;
+  }
+
+  .liked-icon {
+    height: 28px;
+    line-height: 28px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .liked-cname+.liked-cname:before {
+    content: ', ';
+    color: #000;
+  }
+
+  .comment {
+    padding: 3px 6px;
+  }
+
+  .author-label {
+    float: left;
+  }
+
+  .author-label:after {
+    content: '：';
+  }
+
+  .to-user:before {
+    content: '回复';
+    color: #000;
+  }
+
+  /* --- PhotoBrowser --- */
+  /* .weui-gallery {
+    z-index: 10000000;
+    position: absolute;
+    float: left;
+  } */
+
+  .photo-holder {
+    width: 100%;
+    /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 */
+    max-height: 100%;
+    overflow-y: auto;
+    /* 纵向居中，配合高度一屏保证超出无效 */
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  .photo-holder img {
+    width: 100%;
+    display: block;
+  }
+  
+  .photo-holder.in-scale {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
