@@ -73,9 +73,9 @@
     </div>
 
     <!-- PhotoBrowser -->
-    <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}" @click="handleClick">
+    <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}">
       <swipe ref="swipe" class="weui-gallery__img" :auto="0">
-        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index">
+        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index" class="box" @click="handleClick">
           <div class="photo-holder">
             <img :src="item.url" />
           </div>
@@ -158,28 +158,51 @@
 
       setTimeout(function() {
         
-        var box = document.querySelector("#box")
-        /* var boxes = document.querySelector(".box")
+        // var box = document.querySelector("#box")
+        var boxes = document.querySelectorAll(".box")
         
-        _.forEach(boxes, function(name, idx) {
-          let box = boxes[idx]
+        const toScaleMin = 1;
+        const toScaleMax = 3;
+        
+        _.forEach(boxes, function(box, idx) {
+//           let box = boxes[idx]
+//           console.log('name:', name, 'idx:', idx, 'box:', box)
+          let originScale = 1;
           
-          var boxGesture = setGesture(box); //得到一个对象
+          let boxGesture = setGesture(box); //得到一个对象
           boxGesture.gesturestart = function() { //双指开始
             box.style.backgroundColor = "yellow";
+            let _originScale = box.querySelector('.photo-holder').querySelector('img').style.transform.match(/scale\((.*)\)/)[1]
+            if (parseFloat(_originScale) !== NaN && !!parseFloat(_originScale).toFixed) {
+              originScale = parseFloat(_originScale).toFixed(2)
+            }
           };
           boxGesture.gesturemove = function(e) { //双指移动
             // box.innerHTML = e.scale + "<br />" + e.rotation;
-            box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
+            // box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
+            // box.style.transform = "scale(" + e.scale + ")"; //改变目标元素的大小
+            
+            console.log('>>>', box.querySelector('.photo-holder').classList)
+            // box.querySelector('.photo-holder').classList.add('in-scale')
+            
+            // 计算缩放
+            let toScale = (parseFloat(originScale) * parseFloat(e.scale)).toFixed(2)
+            if (toScale > toScaleMax) {
+              toScale = toScaleMax
+            } else if (toScale < toScaleMin)  {
+              toScale = toScaleMin
+            }
+            
+            box.querySelector('.photo-holder').querySelector('img').style.transform = "scale(" +  toScale  + ")"
           };
           boxGesture.gestureend = function() { //双指结束
             // box.innerHTML = "";
             // box.style.cssText = "background-color:red";
             box.style.backgroundColor = "red";
           };
-        }) */
+        })
         
-        var boxGesture = setGesture(box); //得到一个对象
+        /* var boxGesture = setGesture(box); //得到一个对象
         boxGesture.gesturestart = function() { //双指开始
           box.style.backgroundColor = "yellow";
         };
@@ -196,7 +219,7 @@
           // box.innerHTML = "";
           // box.style.cssText = "background-color:red";
           box.style.backgroundColor = "red";
-        };
+        }; */
         
         
       }, 1000);
