@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
-    <!-- <photo-broswer/> -->
+    <photo-broswer/>
   </div>
 </template>
 

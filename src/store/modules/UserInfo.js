@@ -30,4 +30,5 @@ let UserInfo = {
   mutations
 }
 
-export default UserInfo */
+export default UserInfo
+ */

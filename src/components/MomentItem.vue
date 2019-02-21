@@ -73,21 +73,22 @@
     </div>
 
     <!-- PhotoBrowser -->
-    <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}">
+    <!-- <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}" @click="handleClick">
       <swipe ref="swipe" class="weui-gallery__img" :auto="0">
-        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index" class="box" @click="handleClick">
+        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index" class="box">
           <div class="photo-holder">
             <img :src="item.url" />
           </div>
         </swipe-item>
       </swipe>
-    </div>
+    </div> -->
 
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+  import { mapGetters, mapMutations } from 'vuex'
   // import weui from 'weui.js'
   
   var timer = null
@@ -135,28 +136,31 @@
       createDateFormatted: function() {
         return this.createDate.replace(/\..*$/, '')
       },
-      photos: function() {
-        let arr = []
+      photoArr: function() {
+        // 初始化photos
+        let photoArr = []
         this.imagesContent.forEach(imgUrl => {
           console.log(imgUrl)
           let imgItem = {
-            id: arr.length,
+            id: photoArr.length,
             url: imgUrl
           }
-          arr.push(imgItem)
+          photoArr.push(imgItem)
         })
-        return arr
+        return photoArr
       },
-      isShow: function() {
-        return this.showPB ? 'block' : 'none'
-      }
+      ...mapGetters([
+        'photos'
+      ])
     },
     created() {
       // initImageBrowser
       this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
       console.log('vue>>>', window.vue)
+      
 
-      setTimeout(function() {
+      // 绑定双指操作
+      /* setTimeout(function() {
         
         // var box = document.querySelector("#box")
         var boxes = document.querySelectorAll(".box")
@@ -202,96 +206,32 @@
           };
         })
         
-        /* var boxGesture = setGesture(box); //得到一个对象
-        boxGesture.gesturestart = function() { //双指开始
-          box.style.backgroundColor = "yellow";
-        };
-        boxGesture.gesturemove = function(e) { //双指移动
-          // box.innerHTML = e.scale + "<br />" + e.rotation;
-          // box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
-          // box.style.transform = "scale(" + e.scale + ")"; //改变目标元素的大小
-          
-          console.log('>>>', box.querySelector('.is-active').querySelector('.photo-holder').classList)
-          box.querySelector('.is-active').querySelector('.photo-holder').classList.add('in-scale')
-          box.querySelector('.is-active').querySelector('.photo-holder').querySelector('img').style.transform = "scale(" + e.scale + ")"
-        };
-        boxGesture.gestureend = function() { //双指结束
-          // box.innerHTML = "";
-          // box.style.cssText = "background-color:red";
-          box.style.backgroundColor = "red";
-        }; */
-        
-        
-      }, 1000);
+      }, 1000); */
 
     },
     methods: {
-      no: function() {
-        console.log('no')
-      },
-      handleClick: function(evt) {
-        console.log(evt)
-// 
-//         if (window.handleClickTimer) {}
-// 
-//         let that = this
-//         window.handleClickTimer = setTimeout(function() {
-//           that.showPB = false
-//         }, 0)
-        console.log('single')
-        
-        // 双击
-        if (timer !== null) {
-          clearTimeout(timer)
-          timer = null
-          console.log('db')
-          // evt.
-        }
-        else {
-          timer = setTimeout(() => {
-            console.log('single go')
-            this.showPB = false
-            timer = null
-          }, 300);
-        
-        }
-      },
-
       gallaryShow2: function(idx) {
-        this.showPB = true
-        
-        // this.defaultIndex = idx
-        console.log('>>>', this.$refs)
-        window.$refs = this.$refs
-//         let that = this
-//         setTimeout(function () {
-//           
-//           console.log('1>', that.$refs.swipe.index)
-//           that.$refs.swipe.goto('1')
-//           console.log('2>', that.$refs.swipe.index)
-//           
-//         }, 1000)
-//           console.log('2>', that.$refs.swipe.index)
-      }
-      /*
-      gallaryShow: function (evt) {
-        weui.gallery(evt.target.getAttribute('src'))
+        // 切换显示图片
+        this.$store.state.PhotoBrowser.photos = this.photoArr
+        // 定位到点击的图片
+        window.PBSwipe.goto(idx)
 
-        / * if (!this.pb1) {
-          this.pb1 = window.$.photoBrowser({
-            items: this.imagesContent
-          })
-        }
-        this.pb1.open() * /
+        // TODO: 过度动画
+
+        let that = this
+        setTimeout(() => {
+          this.PBshow()
+        }, 350)
+        console.log(this.$store.state.PhotoBrowser.photos)
       },
-      */
+     ...mapMutations(['PBshow'])
     }
   }
 </script>
 
 <style scoped>
   .moment {
-    // margin: 15px;
+    /* margin: 15px; */
     padding: 0 15px 15px 15px;
     border-bottom: 1px solid #ccc;
   }
@@ -342,7 +282,7 @@
     height: 25px;
     width: 25px;
     display: inline-block;
-    // margin-right: 8px;
+    /* margin-right: 8px; */
   }
 
   .icon-heart {
@@ -417,12 +357,12 @@
     float: left;
   } */
 
-  .photo-holder {
+  /* .photo-holder {
     width: 100%;
-    /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 */
+    /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 * /
     max-height: 100%;
     overflow-y: auto;
-    /* 纵向居中，配合高度一屏保证超出无效 */
+    /* 纵向居中，配合高度一屏保证超出无效 * /
     top: 50%;
     left: 50%;
     position: absolute;
@@ -441,4 +381,16 @@
     justify-content: center;
     align-items: center;
   }
+  
+  #box {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000!important;
+    float: left;
+    width: 100%;
+    height: 100%;
+  } */
 </style>
