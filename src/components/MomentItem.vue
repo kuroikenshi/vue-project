@@ -15,7 +15,7 @@
 
       <!-- 图片行 -->
       <div class="thumbnails-row">
-        <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key" 
+        <span class="thumbnail" v-for="(val, key) in elementUrl" :key="key" 
              :style="{height: thumbnailWidth, width: thumbnailWidth}"
              @click="openPB(key)">
           <img :src="val" v-on:load="imageAdjust" />
@@ -80,13 +80,10 @@
     name: 'MyComp',
     data() {
       return {
-        'defaultIndex': 1,
-        
-        'showPB': false,
         'momentId': 1,
         'classCode': 'GWC182021',
         'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
-        'imagesContent': [
+        'elementUrl': [
           '/static/imgs/th1.jpg',
           '/static/imgs/m3.jpg',
           '/static/imgs/sb1.jpg',
@@ -122,7 +119,7 @@
       photoArr: function() {
         // 初始化photos
         let photoArr = []
-        this.imagesContent.forEach(imgUrl => {
+        this.elementUrl.forEach(imgUrl => {
           console.log(imgUrl)
           
           let imgItem = {
@@ -157,7 +154,7 @@
       },
       openPB: function(idx) {
         let pb = $.photoBrowser({
-          items: this.imagesContent,
+          items: this.elementUrl,
           initIndex: idx,
           onClose: function() {
             console.log(this)

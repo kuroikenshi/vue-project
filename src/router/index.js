@@ -58,7 +58,7 @@ export default new Router({
       }, {
         path: 'class/:classCode/moments',
         name: 'MomentList',
-        component: MomentItem,
+        component: MomentList,
         meta: {
           requireAuth: true
         }
