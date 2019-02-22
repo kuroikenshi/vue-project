@@ -4,7 +4,7 @@ import Vue from 'vue'
 import VueCookie from 'vue-cookie'
 import App from './App'
 import router from './router'
-import store from './store/store'
+// import store from './store/store'
 import VueResource from 'vue-resource'
 import axios from 'axios'
 import qs from 'qs'
@@ -146,7 +146,7 @@ axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 /* eslint-disable no-new */
 window.vue = new Vue({
   el: '#app',
-  store,
+  // store,
   router,
   components: { App },
   template: '<App/>'

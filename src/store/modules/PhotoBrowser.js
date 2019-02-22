@@ -1,4 +1,4 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 
 // 用户信息储存模块
 const state = {
@@ -47,3 +47,4 @@ let Msg = {
 }
 
 export default Msg
+ */

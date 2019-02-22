@@ -1,4 +1,4 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 import Vuex from 'vuex'
 import PhotoBrowser from './modules/PhotoBrowser'
 
@@ -8,3 +8,4 @@ export default new Vuex.Store({
     PhotoBrowser
   }
 })
+ */

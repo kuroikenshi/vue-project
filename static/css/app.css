@@ -193,3 +193,8 @@ body, html {
 .f7-icons-text {
 	vertical-align: top;
 }
+
+/* jquery-weui PhotoBrowser置于最前 */
+.weui-photo-browser-modal {
+  z-index: 1000;
+}

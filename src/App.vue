@@ -1,19 +1,19 @@
 <template>
   <div id="app">
     <router-view/>
-    <photo-broswer/>
+    <!-- <photo-broswer/> -->
   </div>
 </template>
 
 <script>
-import PhotoBrowser from '@/components/PhotoBrowser'
+// import PhotoBrowser from '@/components/PhotoBrowser'
 
-console.log(PhotoBrowser)
+// console.log(PhotoBrowser)
 
 export default {
   name: 'App',
   components: {
-    'photo-broswer': PhotoBrowser
+    // 'photo-broswer': PhotoBrowser
   }
 }
 </script>

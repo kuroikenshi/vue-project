@@ -76,11 +76,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import { mapGetters, mapMutations } from 'vuex'
-  
-  var timer = null
-
   export default {
     name: 'MyComp',
     data() {
@@ -137,10 +132,10 @@
           photoArr.push(imgItem)
         })
         return photoArr
-      },
+      }/* ,
       ...mapGetters([
         'photos'
-      ])
+      ]) */
     },
     created() {
       // initImageBrowser
@@ -161,26 +156,19 @@
         }
       },
       openPB: function(idx) {
-        // 切换显示图片
-        // this.$store.state.PhotoBrowser.photos = this.photoArr
-        this.setPhotos(this.photoArr)
-        // this.$store.commit('setPhotos', this.photoArr)
+        let pb = $.photoBrowser({
+          items: this.imagesContent,
+          initIndex: idx,
+          onClose: function() {
+            console.log(this)
+            $('.weui-photo-browser-modal').remove()
+          }
+        })
         
-        // 定位到点击的图片
-        console.log('idx>>>', idx)
-        // setTimeout(function() {
-        window.PBSwipe.goto(idx)
-        // }, 16)
-
-        // TODO: 过度动画
-
-        let that = this
-        // setTimeout(() => {
-          this.PBshow()
-        // }, 350)
-        console.log('>>>', this.$store.state.PhotoBrowser.photos, window.PBSwipe.index)
-      },
-     ...mapMutations(['setPhotos', 'PBshow'])
+        pb.open()
+        
+      }/* ,
+     ...mapMutations(['setPhotos', 'PBshow']) */
     }
   }
 </script>
