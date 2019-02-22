@@ -17,8 +17,8 @@
       <div class="thumbnails-row">
         <span class="thumbnail" v-for="(val, key) in imagesContent" :key="key" 
              :style="{height: thumbnailWidth, width: thumbnailWidth}"
-             @click="gallaryShow2(key)">
-          <img :src="val" />
+             @click="openPB(key)">
+          <img :src="val" v-on:load="imageAdjust" />
         </span>
       </div>
 
@@ -72,24 +72,12 @@
       </div>
     </div>
 
-    <!-- PhotoBrowser -->
-    <!-- <div class="weui-gallery weui-animate-fade-in" id="box" :style="{display: isShow}" @click="handleClick">
-      <swipe ref="swipe" class="weui-gallery__img" :auto="0">
-        <swipe-item v-for="(item, index) in photos" :key="item.id" :index="index" class="box">
-          <div class="photo-holder">
-            <img :src="item.url" />
-          </div>
-        </swipe-item>
-      </swipe>
-    </div> -->
-
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
   import { mapGetters, mapMutations } from 'vuex'
-  // import weui from 'weui.js'
   
   var timer = null
 
@@ -141,6 +129,7 @@
         let photoArr = []
         this.imagesContent.forEach(imgUrl => {
           console.log(imgUrl)
+          
           let imgItem = {
             id: photoArr.length,
             url: imgUrl
@@ -157,74 +146,41 @@
       // initImageBrowser
       this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
       console.log('vue>>>', window.vue)
-      
-
-      // 绑定双指操作
-      /* setTimeout(function() {
-        
-        // var box = document.querySelector("#box")
-        var boxes = document.querySelectorAll(".box")
-        
-        const toScaleMin = 1;
-        const toScaleMax = 3;
-        
-        _.forEach(boxes, function(box, idx) {
-//           let box = boxes[idx]
-//           console.log('name:', name, 'idx:', idx, 'box:', box)
-          let originScale = 1;
-          
-          let boxGesture = setGesture(box); //得到一个对象
-          boxGesture.gesturestart = function() { //双指开始
-            box.style.backgroundColor = "yellow";
-            let _originScale = box.querySelector('.photo-holder').querySelector('img').style.transform.match(/scale\((.*)\)/)[1]
-            if (parseFloat(_originScale) !== NaN && !!parseFloat(_originScale).toFixed) {
-              originScale = parseFloat(_originScale).toFixed(2)
-            }
-          };
-          boxGesture.gesturemove = function(e) { //双指移动
-            // box.innerHTML = e.scale + "<br />" + e.rotation;
-            // box.style.transform = "scale(" + e.scale + ") rotate(" + e.rotation + "deg)"; //改变目标元素的大小和角度
-            // box.style.transform = "scale(" + e.scale + ")"; //改变目标元素的大小
-            
-            console.log('>>>', box.querySelector('.photo-holder').classList)
-            // box.querySelector('.photo-holder').classList.add('in-scale')
-            
-            // 计算缩放
-            let toScale = (parseFloat(originScale) * parseFloat(e.scale)).toFixed(2)
-            if (toScale > toScaleMax) {
-              toScale = toScaleMax
-            } else if (toScale < toScaleMin)  {
-              toScale = toScaleMin
-            }
-            
-            box.querySelector('.photo-holder').querySelector('img').style.transform = "scale(" +  toScale  + ")"
-          };
-          boxGesture.gestureend = function() { //双指结束
-            // box.innerHTML = "";
-            // box.style.cssText = "background-color:red";
-            box.style.backgroundColor = "red";
-          };
-        })
-        
-      }, 1000); */
-
     },
     methods: {
-      gallaryShow2: function(idx) {
+      imageAdjust: function (evt) {
+        console.log(evt, evt.target)
+        let img = evt.target
+        let w = img.naturalWidth
+        let h = img.naturalHeight
+        console.log('imgLoaded>>>', w, h)
+        if (w > h) {
+          img.style.width = 'initial'
+          img.style.height = '100%'
+          img.style.textAlign = 'center'
+        }
+      },
+      openPB: function(idx) {
         // 切换显示图片
-        this.$store.state.PhotoBrowser.photos = this.photoArr
+        // this.$store.state.PhotoBrowser.photos = this.photoArr
+        this.setPhotos(this.photoArr)
+        // this.$store.commit('setPhotos', this.photoArr)
+        
         // 定位到点击的图片
+        console.log('idx>>>', idx)
+        // setTimeout(function() {
         window.PBSwipe.goto(idx)
+        // }, 16)
 
         // TODO: 过度动画
 
         let that = this
-        setTimeout(() => {
+        // setTimeout(() => {
           this.PBshow()
-        }, 350)
-        console.log(this.$store.state.PhotoBrowser.photos)
+        // }, 350)
+        console.log('>>>', this.$store.state.PhotoBrowser.photos, window.PBSwipe.index)
       },
-     ...mapMutations(['PBshow'])
+     ...mapMutations(['setPhotos', 'PBshow'])
     }
   }
 </script>
@@ -350,47 +306,4 @@
     color: #000;
   }
 
-  /* --- PhotoBrowser --- */
-  /* .weui-gallery {
-    z-index: 10000000;
-    position: absolute;
-    float: left;
-  } */
-
-  /* .photo-holder {
-    width: 100%;
-    /* 用最大高度一屏来保证滚动条的出现，动态高度保证居中 * /
-    max-height: 100%;
-    overflow-y: auto;
-    /* 纵向居中，配合高度一屏保证超出无效 * /
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-  }
-  .photo-holder img {
-    width: 100%;
-    display: block;
-  }
-  
-  .photo-holder.in-scale {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 255, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #box {
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000!important;
-    float: left;
-    width: 100%;
-    height: 100%;
-  } */
 </style>

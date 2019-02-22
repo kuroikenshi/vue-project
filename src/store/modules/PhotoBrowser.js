@@ -8,7 +8,7 @@ const state = {
     { 'id': 2, 'url': '/static/imgs/sb1.jpg' }
   ],
   showPB: false,
-  activeIndex: 0
+  activeIndex: 4
 }
 
 // 对应compute
@@ -25,12 +25,13 @@ const getters = {
 const mutations = {
   setPhotos: function (state, photos) {
     state.photos = photos
-    console.log('set photos>>>', state.photos)
+    console.log('DDDDDDDDDDDDDDDDDDDDDSET photos>>>', state.photos)
   },
   togglePBShow: function (state) {
     state.showPB = !state.showPB
   },
   PBshow: function (state) {
+    console.log('>>> PBshow')
     state.showPB = true
   },
   PBhide: function (state) {

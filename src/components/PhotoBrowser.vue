@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapState, mapGetters, mapMutations } from 'vuex'
 
   export default {
     name: 'photo-browser',
@@ -22,16 +22,30 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'photos',
-        'isShow'
-      ])
+      ...mapState({
+        photos(state) {
+          console.log('state>>>', state.PhotoBrowser.photos)
+  //           setTimeout(function() {
+  //           }, 0)
+          return state.PhotoBrowser.photos
+        }
+      }),
+      ...mapGetters({
+        isShow: 'isShow'
+      })
     },
     mounted() {
       window.PBSwipe = this.$refs.PBSwipe
+            if (!!this.$refs.PBSwipe) {
+              window.PBSwipe.goto(this.$store.state.PhotoBrowser.activeIndex)
+            }
     },
     methods: {
       ...mapMutations(['PBhide']),
+      
+      goto: function (idx) {
+        
+      },
       
       handleClick: function(evt) {
         var that = this
