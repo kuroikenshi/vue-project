@@ -31,7 +31,7 @@ export default {
     },
     // 获取动态数据
     getMoments () {
-      console.log('>>> 获取动态数据')
+      // console.log('>>> 获取动态数据')
       
       return this.$axios.post('demo/moments/getMoments').then(res => {
         console.log('getMoments>>>', res.data)

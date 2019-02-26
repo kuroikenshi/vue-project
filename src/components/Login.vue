@@ -56,9 +56,18 @@ export default {
           this.$cookie.set('user', this.$qs.stringify(res.data.data), {
             expires: 'session'
           })
-          console.log('get cookie:', this.$cookie.get('user'))
+          // console.log('get cookie:?????', this.$qs.parse(this.$cookie.get('user')))
 
-          window.uls.init(res.data.data.username)
+          if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+            // 加载指定用户的uls
+            window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
+            // 更新uls中存储的信息（示例，这里没必要）
+            window.uls.set('userinfo', 'username', $qs.parse(this.$cookie.get('user'))['username'])
+          }
+          // 万一没有username的情况
+          else {
+            alert('[ERR] Cookie中username为: ' + username + ', from login.vue')
+          }
 
           // 跳转
           this.$router.push(this.$route.query.redirect)
@@ -68,8 +77,8 @@ export default {
       })
     },
 
-    // TODEL: 测试方法，上线删除
-    loginTestParent: function (event) {
+    // TODEL: 测试方法，上线删除 <<<方法参数陈旧，需要用的时候记得更新
+    /* loginTestParent: function (event) {
       this.username = '18311021317'
       this.password = '123'
       // 使用qs解决
@@ -96,7 +105,7 @@ export default {
           alert(res.data.status + ': ' + res.data.msg)
         }
       })
-    }
+    } */
   }
 }
 </script>

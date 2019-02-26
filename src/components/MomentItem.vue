@@ -25,7 +25,7 @@
       <!-- 点赞评论行 -->
       <div class="act-buttons-row">
         <a class="act-button">
-          <i class="icon icon-heart"></i>
+          <i class="icon" :class="{ 'icon-heart': !currentUserLiked, 'icon-heart-a': currentUserLiked }"></i>
           <span class="sub-color font-size-m">赞</span>
         </a>
         <a class="act-button">
@@ -38,19 +38,13 @@
       <div class="comment-block">
 
         <!-- 点赞行 -->
-        <div class="likes-row">
+        <div class="likes-row" v-show="!!likedUsernames&&!!likedUsernames.length">
           <span><i class="liked-icon icon icon-heart"></i></span>
-          <span class="liked-cname font-size-m link-color">八月父亲</span>
-          <span class="liked-cname font-size-m link-color">九月母亲</span>
-          <span class="liked-cname font-size-m link-color">大花父亲</span>
-          <span class="liked-cname font-size-m link-color">大花父亲</span>
-          <span class="liked-cname font-size-m link-color">大花父亲</span>
-          <span class="liked-cname font-size-m link-color">大花父亲</span>
-          <span class="liked-cname font-size-m link-color">大花父亲</span>
+          <span class="liked-cname font-size-m link-color" v-for="(likedUsername, key) in likedUsernames" :key="key">{{ likedUsername }}</span>
         </div>
 
         <!-- 评论列表 -->
-        <div class="comments-list">
+        <div class="comments-list" v-show="!!momentItem.commentsList&&!!momentItem.commentsList.length">
           <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key">
             <span class="author-label">
               <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.author }}</a>
@@ -68,61 +62,39 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   export default {
     name: 'MyComp',
     props: ['momentItem'],
     data() {
       return {
-        /* 'momentId': 1,
-        'classCode': 'GWC182021',
-        'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
-        'elementUrl': [
-          '/static/imgs/th1.jpg',
-          '/static/imgs/m3.jpg',
-          '/static/imgs/sb1.jpg',
-          '/static/imgs/s5.jpg',
-          '/static/imgs/sb3.jpg',
-          '/static/imgs/sb4.jpg',
-          '/static/imgs/timg.jpg'
-        ],
-
-        'userPhoto': '/static/imgs/user-photo.png',
-        'createBy': '托尼老师',
-        'createDate': '2018-11-05 14:57:25.0',
-
-        'commentsList': [{
-          'id': 1,
-          'momentId': 1,
-          'author': '八月助教',
-          'content': '特别好',
-          'toUser': null
-        }, {
-          'id': 2,
-          'momentId': 1,
-          'author': '小五父亲',
-          'content': '真的特别好',
-          'toUser': null
-        }] */
       }
     },
     computed: {
       createDateFormatted: function() {
         return this.momentItem.createDate.replace(/\..*$/, '')
       },
-      photoArr: function() {
-        // 初始化photos
-        let photoArr = []
-        this.momentItem.elementUrl.forEach(imgUrl => {
-          // console.log(imgUrl)
-          
-          let imgItem = {
-            id: photoArr.length,
-            url: imgUrl
-          }
-          photoArr.push(imgItem)
-        })
-        return photoArr
-      }/* ,
+      // 点赞用户名单
+      likedUsernames: function () {
+        let usernameArr = []
+        if (_.isArray(this.momentItem.likes)) {
+          this.momentItem.likes.forEach(likedItem => {
+            usernameArr.push(likedItem.username)
+          })
+        }
+        return usernameArr
+      },
+      // 当前用户已点赞
+      currentUserLiked: function () {
+        let userIdArr = []
+        if (_.isArray(this.momentItem.likes)) {
+          this.momentItem.likes.forEach(likedItem => {
+            userIdArr.push(likedItem.userId)
+          })
+        }
+        return (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1)
+      }
+      /* ,
       ...mapGetters([
         'photos'
       ]) */
@@ -131,8 +103,8 @@
       this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
     },
     methods: {
+      // 调整缩略图宽度等样式
       imageAdjust: function (evt) {
-        // console.log(evt, evt.target)
         let img = evt.target
         let w = img.naturalWidth
         let h = img.naturalHeight
@@ -143,7 +115,8 @@
           img.style.textAlign = 'center'
         }
       },
-      openPB: function(idx) {
+      // 打开PhotoBrowser
+      openPB: function (idx) {
         let pb = $.photoBrowser({
           items: this.momentItem.elementUrl,
           initIndex: idx,
@@ -155,7 +128,12 @@
         
         pb.open()
         
-      }/* ,
+      },
+      // 点击喜欢
+      toggleLiked: function () {
+        // 
+      }
+      /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
     }
   }
@@ -244,6 +222,10 @@
 
   .act-button {
     margin-left: 8px;
+  }
+  .act-button.active span {
+    color: rgba(0, 255, 0, 1);
+    transition: all 0.3s;
   }
 
   .likes-row {

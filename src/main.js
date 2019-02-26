@@ -30,8 +30,9 @@ Vue.component('swipe-item', SwipeItem)
 
 // 绑定用户的localstorage
 class UserLocalStorage {
-  constructor (username) {
-    this.username = username
+  constructor () {
+    // console.log('UserLocalStorage - constructor username:', username)
+    // this.username = username
   }
 
   init (username) {
@@ -84,7 +85,7 @@ router.beforeEach((to, from, next) => {
     console.log('    requireAuth:', to.meta.requireAuth)
     console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), 'need login:', !VueCookie.get('user'))
 
-    // 如果已经有身份
+    // 如果没有登录
     if (!VueCookie.get('user')) {
       next({
         path: '/login',
@@ -92,7 +93,16 @@ router.beforeEach((to, from, next) => {
           redirect: to.fullPath
         } // 把要跳转的地址作为参数传到下一步
       })
-    } else {
+    }
+    // 如果已登录，直接装载登录uls
+    else {
+      if (!window.uls.username) {
+        let username = qs.parse(VueCookie.get('user'))['username']
+        if (!username) {
+          alert('[ERR] Cookie中username为: ' + username + ', from>>> auto load in main.js')
+        }
+        window.uls.init(username)
+      }
       next()
     }
   } else {

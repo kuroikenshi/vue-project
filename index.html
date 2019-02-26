@@ -34,6 +34,24 @@
     <script type="text/javascript" src="static/vendor/PhotoSwipe-4.1.3/photoswipe-ui-default.min.js"></script> -->
     
     <script>
+      // TODO: 替换成原生js
+      // 给点赞按钮加特效(玩)
+      $('body').on('touchstart', '.act-button', function () {
+        console.log(this, this.classList, this.classList.add);
+        this.classList.add('active');
+        
+        $(this).on('touchend', function () {
+          this.classList.remove('active');
+        });
+      });
+      
+      // 给String扩展按照urlParam方式获取key的value的方法 => 使用window.vue.$qs.parse替换
+      /* String.prototype.getUrlParam = function (key) {
+        var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = this.match(reg);  //匹配目标参数
+        if (r != null) return decodeURI(r[2]); return null; //返回参数值
+      } */
+      
       /*window.onload = function(){
         if (document.documentElement.scrollHeight <= document.documentElement.clientHeight) {
           bodyTag = document.getElementsByTagName('body')[0];
