@@ -1,8 +1,8 @@
 <template>
   <div class="moment">
     <div class="title-row">
-      <img :src="userPhoto" class="user-photo" v-once />
-      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ createBy }}</a>
+      <img :src="momentItem.userPhoto" class="user-photo" v-once />
+      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ momentItem.createBy }}</a>
       <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
     </div>
 
@@ -10,12 +10,12 @@
     <div class="detail-row">
       <!-- 内容行 -->
       <p class="content-row font-size-m" v-once>
-        {{ content }}
+        {{ momentItem.content }}
       </p>
 
       <!-- 图片行 -->
       <div class="thumbnails-row">
-        <span class="thumbnail" v-for="(val, key) in elementUrl" :key="key" 
+        <span class="thumbnail" v-for="(val, key) in momentItem.elementUrl" :key="key" 
              :style="{height: thumbnailWidth, width: thumbnailWidth}"
              @click="openPB(key)">
           <img :src="val" v-on:load="imageAdjust" />
@@ -51,23 +51,15 @@
 
         <!-- 评论列表 -->
         <div class="comments-list">
-          <div class="comment">
+          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key">
             <span class="author-label">
-              <a href="javascript:void(0);" class="author font-size-m link-color">八月助教</a>
+              <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.author }}</a>
+              <a href="javascript:void(0);" class="to-user font-size-m link-color" v-show="!!comment.toUser" v-once>{{ comment.toUser }}</a>
             </span>
             <p class="comment-content">
-              特别好！！特别好！！特别好！！特别好！特别好！！
+              {{ comment.content }}
             </p>
-          </div>
-          <div class="comment">
-            <span class="author-label">
-              <a href="javascript:void(0);" class="author font-size-m link-color">小五父亲</a>
-              <a href="javascript:void(0);" class="to-user font-size-m link-color">八月父亲</a>
-            </span>
-            <p class="comment-content">
-              特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！特别好！！
-            </p>
-          </div>
+          </div><!-- END OF .comment -->
         </div>
       </div>
     </div>
@@ -78,9 +70,10 @@
 <script>
   export default {
     name: 'MyComp',
+    props: ['momentItem'],
     data() {
       return {
-        'momentId': 1,
+        /* 'momentId': 1,
         'classCode': 'GWC182021',
         'content': '今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。今天的音乐课，大家一起欣赏了XXX音乐，受到艺术熏陶。',
         'elementUrl': [
@@ -109,18 +102,18 @@
           'author': '小五父亲',
           'content': '真的特别好',
           'toUser': null
-        }]
+        }] */
       }
     },
     computed: {
       createDateFormatted: function() {
-        return this.createDate.replace(/\..*$/, '')
+        return this.momentItem.createDate.replace(/\..*$/, '')
       },
       photoArr: function() {
         // 初始化photos
         let photoArr = []
-        this.elementUrl.forEach(imgUrl => {
-          console.log(imgUrl)
+        this.momentItem.elementUrl.forEach(imgUrl => {
+          // console.log(imgUrl)
           
           let imgItem = {
             id: photoArr.length,
@@ -135,17 +128,15 @@
       ]) */
     },
     created() {
-      // initImageBrowser
       this.thumbnailWidth = ((window.screen.width - 50) / 3).toFixed(2) + 'px'
-      console.log('vue>>>', window.vue)
     },
     methods: {
       imageAdjust: function (evt) {
-        console.log(evt, evt.target)
+        // console.log(evt, evt.target)
         let img = evt.target
         let w = img.naturalWidth
         let h = img.naturalHeight
-        console.log('imgLoaded>>>', w, h)
+        // console.log('imgLoaded>>>', w, h)
         if (w > h) {
           img.style.width = 'initial'
           img.style.height = '100%'
@@ -154,7 +145,7 @@
       },
       openPB: function(idx) {
         let pb = $.photoBrowser({
-          items: this.elementUrl,
+          items: this.momentItem.elementUrl,
           initIndex: idx,
           onClose: function() {
             console.log(this)

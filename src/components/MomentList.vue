@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h1>HOME</h1>
-    <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="goback">goback</a>
+    <moment-item v-for="momentItem in momentList" v-bind:key="momentItem.momentId" v-bind:momentItem="momentItem" />
   </div>
 </template>
 
 <script>
+import MomentItem from '@/components/MomentItem'
+  
 export default {
   name: 'MyComp',
+  components: {
+    'moment-item': MomentItem
+  },
   data () {
     return {
       classCode: this.$route.params.classCode,
