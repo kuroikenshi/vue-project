@@ -1,6 +1,6 @@
 <template>
   <div>
-    <moment-item v-for="momentItem in momentList" v-bind:key="momentItem.momentId" v-bind:momentItem="momentItem" />
+    <moment-item v-for="momentItem in momentList" v-bind:key="momentItem.momentId" v-bind:momentItemBased="momentItem" />
   </div>
 </template>
 

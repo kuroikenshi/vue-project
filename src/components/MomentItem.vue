@@ -24,7 +24,7 @@
 
       <!-- 点赞评论行 -->
       <div class="act-buttons-row">
-        <a class="act-button">
+        <a class="act-button" @click="toggleLiked">
           <i class="icon" :class="{ 'icon-heart': !currentUserLiked, 'icon-heart-a': currentUserLiked }"></i>
           <span class="sub-color font-size-m">赞</span>
         </a>
@@ -65,12 +65,16 @@
   import _ from 'lodash'
   export default {
     name: 'MyComp',
-    props: ['momentItem'],
+    props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
     data() {
       return {
+        momentItemUpdated: undefined  // 用来存储更新后的momentItem
       }
     },
     computed: {
+      momentItem: function() {
+        return this.momentItemUpdated || this.momentItemBased
+      },
       createDateFormatted: function() {
         return this.momentItem.createDate.replace(/\..*$/, '')
       },
@@ -131,7 +135,26 @@
       },
       // 点击喜欢
       toggleLiked: function () {
-        // 
+        console.log('toggleLiked')
+        
+        let postData = this.$qs.stringify({
+          momentId: this.momentItem.momentId,
+          userId: window.uls.get('userinfo', 'username')
+        })
+        
+        this.$axios.post('demo/moments/toggleLike', postData).then(res => {
+          console.log('toggleLike>>>', res.data)
+          
+          this.momentItemUpdated = res.data.data
+//           this.momentList = res.data.data
+//           this.momentListLoaded = true
+          return Promise.resolve()
+        }).catch(err => {
+          console.log('加载toggleLike返回数据失败:', err)
+//           this.momentListLoaded = true
+//           this.momentListErrMsg = '-- 加载失败 --'
+          return Promise.reject(err)
+        })
       }
       /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
