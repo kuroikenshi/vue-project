@@ -198,3 +198,37 @@ body, html {
 .weui-photo-browser-modal {
   z-index: 1000;
 }
+
+.weui-mask {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 评论条 */
+.commentbar {
+  /* height: 44px; */
+  height: 2.65rem;
+}
+.commentbar .commentbar-input {
+  height: 1.8rem;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 0.3rem;
+  margin: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  width: calc(100% - 4.3rem);
+  padding: 0 0.2rem;
+}
+.commentbar .comment-button {
+  position: absolute;
+  right: 0;
+  box-sizing: border-box;
+  height: 2.65rem;
+  line-height: 2.65rem;
+  color: #04BE02;
+  z-index: 1;
+  padding: 0 0.8rem;
+}
+.commentbar .comment-button.disabled {
+  color: #999;
+}

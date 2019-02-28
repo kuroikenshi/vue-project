@@ -19,6 +19,35 @@
     <!-- built files will be auto injected -->
     
     
+    <div class="weui-mask" id="iosMask" style="display: none"></div>
+    <div class="weui-actionsheet" id="iosActionsheet">
+      <!-- <div class="weui-actionsheet__title">
+         <p class="weui-actionsheet__title-text">这是一个标题，可以为一行或者两行。</p>
+      </div> -->
+      <!-- <div class="toolbar">
+        <div class="toolbar-inner">
+          <a href="javascript:;" class="picker-button close-picker">完成</a>
+          <input type="text" class="title" id="commentInput2" >
+        </div>
+      </div> -->
+      <div class="commentbar">
+        <form>
+          <input type="text" class="commentbar-input" id="commentInput" >
+          <a href="javascript:;" class="comment-button disabled" id="commentSubmit">提交</a>
+        </form>
+      </div>
+      <!-- <div class="weui-actionsheet__menu">
+        <div class="weui-actionsheet__cell">示例菜单</div>
+        <div class="weui-actionsheet__cell">示例菜单</div>
+        <div class="weui-actionsheet__cell">示例菜单</div>
+        <div class="weui-actionsheet__cell">示例菜单</div>
+      </div> -->
+      <!-- <div class="weui-actionsheet__action">
+        <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
+      </div> -->
+   </div>
+      
+    <!-- <button id="showIOSActionSheet">clickme</button> -->
 
     <!-- 使用 -->
     <!-- <div class="page__bd page__bd_spacing">
@@ -43,6 +72,40 @@
         $(this).on('touchend', function () {
           this.classList.remove('active');
         });
+      });
+      
+      // 底部输入框示例-TODEL
+      $(function(){
+        var $iosActionsheet = $('#iosActionsheet');
+        var $iosMask = $('#iosMask');
+        /* 
+        $('#iosActionsheetCancel').on('click', hideActionSheet);
+        $("#showIOSActionSheet").on("click", function(){
+          $iosActionsheet.addClass('weui-actionsheet_toggle');
+          $iosMask.fadeIn(200);
+        }); */
+    
+        // 给遮罩加点击事件
+        function hideActionSheet() {
+          $iosActionsheet.removeClass('weui-actionsheet_toggle');
+          $iosMask.fadeOut(200);
+        }
+        $iosMask.on('click', hideActionSheet);
+    
+        // 提交按钮加禁用
+        var $input = $('#commentInput')
+        $input.on('input', function () {
+          if ($(this).val().length == 0) {
+            $('#commentSubmit').addClass('disabled')
+          } else {
+            $('#commentSubmit').removeClass('disabled')
+          }
+        })
+      });
+      
+      // ios软键盘收回后向 页面向下滑动500px
+      document.body.addEventListener('focusout', function () {
+          window.scrollTo(0, 500);
       });
       
       // 给String扩展按照urlParam方式获取key的value的方法 => 使用window.vue.$qs.parse替换

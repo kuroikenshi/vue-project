@@ -21,7 +21,7 @@
 
         <div class="weui-btn-area">
           <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
-          <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="loginTestParent">登录-家长</a>
+          <!-- <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="loginTestParent">登录-家长</a> -->
         </div>
       </div>
     </div><!-- end of .page__bd -->
@@ -40,6 +40,9 @@ export default {
   methods: {
     // 登陆方法
     login: function (event) {
+      console.log('>>>1', this.$qs)
+      console.log(this.$axios)
+      
       // this.username = '18311021317'
       // this.password = '123'
       // 使用qs解决
@@ -62,7 +65,7 @@ export default {
             // 加载指定用户的uls
             window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
             // 更新uls中存储的信息（示例，这里没必要）
-            window.uls.set('userinfo', 'username', $qs.parse(this.$cookie.get('user'))['username'])
+            window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
           }
           // 万一没有username的情况
           else {

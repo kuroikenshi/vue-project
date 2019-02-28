@@ -1,5 +1,6 @@
 <template>
   <div class="moment">
+    <!-- 标题块 -->
     <div class="title-row">
       <img :src="momentItem.userPhoto" class="user-photo" v-once />
       <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ momentItem.createBy }}</a>
@@ -26,9 +27,9 @@
       <div class="act-buttons-row">
         <a class="act-button" @click="toggleLiked">
           <i class="icon" :class="{ 'icon-heart': !currentUserLiked, 'icon-heart-a': currentUserLiked }"></i>
-          <span class="sub-color font-size-m">赞</span>
+          <span class="sub-color font-size-m">{{ currentUserLiked ? "已" : "" }}赞</span>
         </a>
-        <a class="act-button">
+        <a class="act-button" @click="popComment">
           <i class="icon icon-comment"></i>
           <span class="sub-color font-size-m">评论</span>
         </a>
@@ -56,6 +57,7 @@
           </div><!-- END OF .comment -->
         </div>
       </div>
+      
     </div>
 
   </div>
@@ -68,7 +70,8 @@
     props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
     data() {
       return {
-        momentItemUpdated: undefined  // 用来存储更新后的momentItem
+        momentItemUpdated: undefined,  // 用来存储更新后的momentItem
+        commentSubmitting: false
       }
     },
     computed: {
@@ -96,6 +99,7 @@
             userIdArr.push(likedItem.userId)
           })
         }
+        // alert('已点赞>>>' + (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1))
         return (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1)
       }
       /* ,
@@ -155,6 +159,60 @@
 //           this.momentListErrMsg = '-- 加载失败 --'
           return Promise.reject(err)
         })
+      },
+      // 评论
+      popComment: function() {
+        var $iosActionsheet = $('#iosActionsheet')
+        var $iosMask = $('#iosMask')
+        var $input = $('#commentInput')
+        var $submit = $('#commentSubmit')
+        
+        $iosActionsheet.addClass('weui-actionsheet_toggle')
+        $iosMask.fadeIn(0)
+        
+//         $iosMask.off('click').on('click', () => {
+//           $iosActionsheet.removeClass('weui-actionsheet_toggle')
+//           $iosMask.fadeOut(200)
+//         })
+        
+        $input.focus()
+        
+        $submit.off('click')
+        $submit.on('click', () => {
+          if (!this.commentSubmitting) {
+            console.log('>>>', this.momentItem.momentId)
+            
+            let postData = this.$qs.stringify({
+              momentId: this.momentItem.momentId,
+              content: $input.val(),
+              authorId: window.uls.get('userinfo', 'username'),
+              authorName: '华晨名'
+            })
+            
+            if ($input.val().length > 0) {
+              this.commentSubmitting = true
+
+              this.$axios.post('demo/comments/publishComment', postData).then(res => {
+                console.log('publishComment>>>', res.data)
+                
+                this.momentItemUpdated = res.data.data
+                
+                $input.val('')
+                this.commentSubmitting = false
+                
+                $iosActionsheet.removeClass('weui-actionsheet_toggle')
+                $iosMask.fadeOut(200)
+                
+                return Promise.resolve()
+              }).catch(err => {
+                this.commentSubmitting = false
+                console.log('加载publishComment返回数据失败:', err)
+                return Promise.reject(err)
+              })
+            }
+            
+          }
+        })
       }
       /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
@@ -206,7 +264,7 @@
   .thumbnail img {
     width: 100%;
   }
-
+  
   .comment-block {
     background: #eee;
   }
@@ -270,8 +328,12 @@
     color: #000;
   }
 
+  .comments-list {
+    padding: 5px;
+  }
   .comment {
-    padding: 3px 6px;
+    padding: 0px 6px;
+    font-size: 15px;
   }
 
   .author-label {
