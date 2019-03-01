@@ -103,10 +103,10 @@
         })
       });
       
-      // ios软键盘收回后向 页面向下滑动500px
-      document.body.addEventListener('focusout', function () {
+      // ios软键盘收回后向 页面向下滑动500px(造成对提交按钮的阻塞，直接放到提交按钮上去)
+      /* document.body.addEventListener('focusout', function () {
           window.scrollTo(0, 500);
-      });
+      }); */
       
       // 给String扩展按照urlParam方式获取key的value的方法 => 使用window.vue.$qs.parse替换
       /* String.prototype.getUrlParam = function (key) {

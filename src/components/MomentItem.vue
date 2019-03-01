@@ -46,10 +46,10 @@
 
         <!-- 评论列表 -->
         <div class="comments-list" v-show="!!momentItem.commentsList&&!!momentItem.commentsList.length">
-          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key">
+          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="popComment(comment.authorId, comment.authorName)">
             <span class="author-label">
-              <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.author }}</a>
-              <a href="javascript:void(0);" class="to-user font-size-m link-color" v-show="!!comment.toUser" v-once>{{ comment.toUser }}</a>
+              <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.authorName }}</a>
+              <a href="javascript:void(0);" class="to-user font-size-m link-color" v-show="!!comment.toUserName" v-once>{{ comment.toUserName }}</a>
             </span>
             <p class="comment-content">
               {{ comment.content }}
@@ -161,14 +161,36 @@
         })
       },
       // 评论
-      popComment: function() {
+      popComment: function(toUserId, toUserName) {
+        console.log('event', event)
+        console.log('event.target.classList', event.target.classList)
+        
         var $iosActionsheet = $('#iosActionsheet')
         var $iosMask = $('#iosMask')
         var $input = $('#commentInput')
         var $submit = $('#commentSubmit')
         
-        $iosActionsheet.addClass('weui-actionsheet_toggle')
-        $iosMask.fadeIn(0)
+        $input.removeAttr('placeholder')
+        
+        // 回复样式提示
+        let node = event.target
+        if (node.classList.contains('comment-content')) {
+          node.parentNode.classList.add('active')
+          $input.attr('placeholder', '回复' + toUserName + ':')
+          
+          setTimeout(() => {
+            $iosActionsheet.addClass('weui-actionsheet_toggle')
+            $iosMask.fadeIn(0)
+          }, 300)
+          setTimeout(() => {
+            node.parentNode.classList.remove('active')
+          }, 600)
+        }
+        // 普通评论
+        else {
+          $iosActionsheet.addClass('weui-actionsheet_toggle')
+          $iosMask.fadeIn(0)
+        }
         
 //         $iosMask.off('click').on('click', () => {
 //           $iosActionsheet.removeClass('weui-actionsheet_toggle')
@@ -186,7 +208,9 @@
               momentId: this.momentItem.momentId,
               content: $input.val(),
               authorId: window.uls.get('userinfo', 'username'),
-              authorName: '华晨名'
+              authorName: '华晨名',
+              toUserId: toUserId,
+              toUserName: toUserName
             })
             
             if ($input.val().length > 0) {
@@ -199,6 +223,9 @@
                 
                 $input.val('')
                 this.commentSubmitting = false
+                
+                // 解决键盘收起来，画面键盘位置留白的问题
+                window.scrollTo(0, 500);
                 
                 $iosActionsheet.removeClass('weui-actionsheet_toggle')
                 $iosMask.fadeOut(200)
@@ -329,10 +356,10 @@
   }
 
   .comments-list {
-    padding: 5px;
+    padding: 5px 0px;
   }
   .comment {
-    padding: 0px 6px;
+    padding: 0px 12px;
     font-size: 15px;
   }
 
@@ -342,11 +369,17 @@
 
   .author-label:after {
     content: '：';
+    margin-left: -7px;
+    margin-right: 5px;
   }
 
   .to-user:before {
     content: '回复';
     color: #000;
+  }
+
+  .comment.active {
+    background: #ddd;
   }
 
 </style>
