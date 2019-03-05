@@ -165,6 +165,12 @@
         console.log('event', event)
         console.log('event.target.classList', event.target.classList)
         
+      
+        if (toUserId === window.uls.get('userinfo', 'username')) {
+          console.log('禁止回复自己，应提示删除')
+          return false
+        }
+        
         var $iosActionsheet = $('#iosActionsheet')
         var $iosMask = $('#iosMask')
         var $input = $('#commentInput')
@@ -172,7 +178,7 @@
         
         $input.removeAttr('placeholder')
         
-        // 回复样式提示
+        // 点击评论内容时，回复样式提示
         let node = event.target
         if (node.classList.contains('comment-content')) {
           node.parentNode.classList.add('active')
@@ -189,7 +195,7 @@
         // 普通评论
         else {
           $iosActionsheet.addClass('weui-actionsheet_toggle')
-          $iosMask.fadeIn(0)
+          $iosMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
         }
         
 //         $iosMask.off('click').on('click', () => {
@@ -369,7 +375,7 @@
 
   .author-label:after {
     content: '：';
-    margin-left: -7px;
+    margin-left: 0px;
     margin-right: 5px;
   }
 
