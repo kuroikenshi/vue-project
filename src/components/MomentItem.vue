@@ -29,7 +29,7 @@
           <i class="icon" :class="{ 'icon-heart': !currentUserLiked, 'icon-heart-a': currentUserLiked }"></i>
           <span class="sub-color font-size-m">{{ currentUserLiked ? "已" : "" }}赞</span>
         </a>
-        <a class="act-button" @click="popComment">
+        <a class="act-button" @click="comment">
           <i class="icon icon-comment"></i>
           <span class="sub-color font-size-m">评论</span>
         </a>
@@ -46,7 +46,7 @@
 
         <!-- 评论列表 -->
         <div class="comments-list" v-show="!!momentItem.commentsList&&!!momentItem.commentsList.length">
-          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="popComment(comment.authorId, comment.authorName)">
+          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="clickedCommentItem(comment.authorId, comment.authorName)">
             <span class="author-label">
               <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.authorName }}</a>
               <a href="javascript:void(0);" class="to-user font-size-m link-color" v-show="!!comment.toUserName" v-once>{{ comment.toUserName }}</a>
@@ -65,6 +65,21 @@
 
 <script>
   import _ from 'lodash'
+  
+  let $iosActionsheet = $('#iosActionsheet')  // 弹出输入框容器
+  let $iosMask = $('#iosMask')                // 弹出输入框的遮罩层
+  let $input = $('#commentInput')             // 评论输入框
+  let $submit = $('#commentSubmit')           // 评论提交按钮
+  
+  // 弹出评论输入框
+  function __popCommentInputBox() {
+    // 输入框清空回复给用户的字样
+    $input.removeAttr('placeholder')
+    $iosActionsheet.addClass('weui-actionsheet_toggle')
+    $iosMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题
+    $input.focus()
+  }
+  
   export default {
     name: 'MyComp',
     props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
@@ -123,6 +138,7 @@
           img.style.textAlign = 'center'
         }
       },
+      
       // 打开PhotoBrowser
       openPB: function (idx) {
         let pb = $.photoBrowser({
@@ -137,6 +153,7 @@
         pb.open()
         
       },
+      
       // 点击喜欢
       toggleLiked: function () {
         console.log('toggleLiked')
@@ -160,51 +177,45 @@
           return Promise.reject(err)
         })
       },
-      // 评论
-      popComment: function(toUserId, toUserName) {
-        console.log('event', event)
-        console.log('event.target.classList', event.target.classList)
-        
       
-        if (toUserId === window.uls.get('userinfo', 'username')) {
-          console.log('禁止回复自己，应提示删除')
-          return false
-        }
-        
-        var $iosActionsheet = $('#iosActionsheet')
-        var $iosMask = $('#iosMask')
-        var $input = $('#commentInput')
-        var $submit = $('#commentSubmit')
-        
-        $input.removeAttr('placeholder')
-        
-        // 点击评论内容时，回复样式提示
-        let node = event.target
-        if (node.classList.contains('comment-content')) {
-          node.parentNode.classList.add('active')
+      // 直接评论
+      comment: function () {
+        __popCommentInputBox()
+        this.__initSubmit()
+      },
+      
+      // 回复某人
+      __replyToUser: function(toUserId, toUserName) {
+        // 稍后弹出输入框
+        setTimeout(() => {
+          __popCommentInputBox()
           $input.attr('placeholder', '回复' + toUserName + ':')
-          
-          setTimeout(() => {
-            $iosActionsheet.addClass('weui-actionsheet_toggle')
-            $iosMask.fadeIn(0)
-          }, 300)
-          setTimeout(() => {
-            node.parentNode.classList.remove('active')
-          }, 600)
+          this.__initSubmit(toUserId, toUserName)
+        }, 150)
+      },
+      
+      // 点击了评论对象 -> 回复或删除
+      clickedCommentItem: function(toUserId, toUserName) {
+        // 点击对象行加高亮
+        let $tgtNode = $(event.target)
+        $tgtNode.closest('.comment').addClass('active')
+        // 稍后取消高亮
+        setTimeout(() => {
+          $tgtNode.closest('.comment').removeClass('active')
+        }, 600)
+        
+        // 如果点击的是自己的评论 -> 删除
+        if (toUserId === window.uls.get('userinfo', 'username')) {
+          this.__promptToDelete()
         }
-        // 普通评论
+        // 点击别人的评论 -> 回复
         else {
-          $iosActionsheet.addClass('weui-actionsheet_toggle')
-          $iosMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
+          this.__replyToUser(toUserId, toUserName)
         }
-        
-//         $iosMask.off('click').on('click', () => {
-//           $iosActionsheet.removeClass('weui-actionsheet_toggle')
-//           $iosMask.fadeOut(200)
-//         })
-        
-        $input.focus()
-        
+      },
+      
+      // 初始化设置、绑定事件用来评论
+      __initSubmit: function (toUserId, toUserName) {
         $submit.off('click')
         $submit.on('click', () => {
           if (!this.commentSubmitting) {
@@ -214,14 +225,14 @@
               momentId: this.momentItem.momentId,
               content: $input.val(),
               authorId: window.uls.get('userinfo', 'username'),
-              authorName: '华晨名',
+              authorName: '华晨名',  // TODO
               toUserId: toUserId,
               toUserName: toUserName
             })
             
             if ($input.val().length > 0) {
               this.commentSubmitting = true
-
+        
               this.$axios.post('demo/comments/publishComment', postData).then(res => {
                 console.log('publishComment>>>', res.data)
                 
@@ -246,7 +257,54 @@
             
           }
         })
-      }
+      },
+      
+      // 引导删除
+      __promptToDelete: function () {
+        console.log('<<<__promptToDelete>>> TODO')
+      },
+      /* ,
+      // 评论
+      popComment: function(toUserId, toUserName) {
+        console.log('event', event)
+        console.log('event.target.classList', event.target.classList)
+        
+        
+        if (event.target.classList.contains('comment-content')) {
+          node.parentNode.classList.add('active')
+        }
+        
+        
+        
+        // 点击评论内容时，高亮提示
+        let node = event.target
+        if (node.classList.contains('comment-content')) {
+          node.parentNode.classList.add('active')
+          $input.attr('placeholder', '回复' + toUserName + ':')
+          
+          setTimeout(() => {
+            $iosActionsheet.addClass('weui-actionsheet_toggle')
+            $iosMask.fadeIn(300)
+          }, 300)
+          setTimeout(() => {
+            node.parentNode.classList.remove('active')
+          }, 600)
+        }
+        // 普通评论
+        else {
+          / * $iosActionsheet.addClass('weui-actionsheet_toggle')
+          $iosMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题 * /
+        }
+        
+//         $iosMask.off('click').on('click', () => {
+//           $iosActionsheet.removeClass('weui-actionsheet_toggle')
+//           $iosMask.fadeOut(200)
+//         })
+        
+        $input.focus()
+        
+        
+      } */
       /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
     }
