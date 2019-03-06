@@ -73,10 +73,12 @@
   
   // 弹出评论输入框
   function __popCommentInputBox() {
-    // 输入框清空回复给用户的字样
-    $input.removeAttr('placeholder')
     $iosActionsheet.addClass('weui-actionsheet_toggle')
     $iosMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题
+
+    // 输入框清空回复给用户的字样
+    $input.removeAttr('placeholder')
+    $input.html('')
     $input.focus()
   }
   
@@ -185,17 +187,15 @@
       },
       
       // 回复某人
-      __replyToUser: function(toUserId, toUserName) {
+      __replyToUser: function (toUserId, toUserName) {
         // 稍后弹出输入框
-        setTimeout(() => {
-          __popCommentInputBox()
-          $input.attr('placeholder', '回复' + toUserName + ':')
-          this.__initSubmit(toUserId, toUserName)
-        }, 150)
+        __popCommentInputBox()
+        $input.attr('placeholder', '回复' + toUserName + ':')
+        this.__initSubmit(toUserId, toUserName)
       },
       
       // 点击了评论对象 -> 回复或删除
-      clickedCommentItem: function(toUserId, toUserName) {
+      clickedCommentItem: function (toUserId, toUserName) {
         // 点击对象行加高亮
         let $tgtNode = $(event.target)
         $tgtNode.closest('.comment').addClass('active')
