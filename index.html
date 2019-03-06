@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <title>vue-project</title>
 
@@ -10,56 +9,36 @@
     <link rel="stylesheet" href="node_modules/weui/style/weui.min.css"/>
     <link rel="stylesheet" href="static/vendor/jquery-weui/css/jquery-weui.css"/>
     
-    <!-- PhotoSwipe -->
-    <!-- <link rel="stylesheet" href="static/vendor/PhotoSwipe-4.1.3/photoswipe.css">
-    <link rel="stylesheet" href="static/vendor/PhotoSwipe-4.1.3/default-skin/default-skin.css"> -->
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
     
-    <div class="weui-mask" id="iosMask" style="display: none"></div>
-    <div class="weui-actionsheet" id="iosActionsheet">
-      <!-- <div class="weui-actionsheet__title">
-         <p class="weui-actionsheet__title-text">这是一个标题，可以为一行或者两行。</p>
-      </div> -->
-      <!-- <div class="toolbar">
-        <div class="toolbar-inner">
-          <a href="javascript:;" class="picker-button close-picker">完成</a>
-          <input type="text" class="title" id="commentInput2" >
-        </div>
-      </div> -->
+    <!-- 班级动态-评论框-遮罩层 -->
+    <div class="weui-mask" id="commentMask" style="display: none"></div>
+    <!-- 班级动态-评论框 -->
+    <div class="weui-actionsheet" id="commentContainer">
       <div class="commentbar">
         <form>
           <input type="text" class="commentbar-input" id="commentInput" onkeypress="if(event.keyCode == 13) return false;">
           <a href="javascript:;" class="comment-button disabled" id="commentSubmit">提交</a>
         </form>
       </div>
-      <!-- <div class="weui-actionsheet__menu">
-        <div class="weui-actionsheet__cell">示例菜单</div>
-        <div class="weui-actionsheet__cell">示例菜单</div>
-        <div class="weui-actionsheet__cell">示例菜单</div>
-        <div class="weui-actionsheet__cell">示例菜单</div>
-      </div> -->
-      <!-- <div class="weui-actionsheet__action">
-        <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
-      </div> -->
     </div>
-
-    <!-- <button id="showIOSActionSheet">clickme</button> -->
-
-    <!-- 使用 -->
-    <!-- <div class="page__bd page__bd_spacing">
-       <a href="javascript:;" class="weui-btn weui-btn_primary">绿色按钮</a>
-    </div> -->
+    <!-- 班级动态-评论菜单 -->
+    <div class="weui-actionsheet" id="commentAction">
+      <div class="weui-actionsheet__menu">
+          <div class="weui-actionsheet__cell">删除</div>
+      </div>
+      <div class="weui-actionsheet__action">
+          <div class="weui-actionsheet__cell" id="commentActionCancel">取消</div>
+      </div>
+    </div>
     
+    <!-- 引入各类jquery插件 -->
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
     <script src="static/vendor/jquery-weui/js/swiper.js"></script>
-    
-    <!-- PhotoSwipe -->
-    <!-- <script type="text/javascript" src="static/vendor/PhotoSwipe-4.1.3/photoswipe.min.js"></script>
-    <script type="text/javascript" src="static/vendor/PhotoSwipe-4.1.3/photoswipe-ui-default.min.js"></script> -->
     
     <script>
       // TODO: 替换成原生js
@@ -73,49 +52,52 @@
         });
       });
       
-      // 底部输入
-      $(function(){
-        var $iosActionsheet = $('#iosActionsheet')  // 弹出输入框容器
-        var $iosMask = $('#iosMask')                // 弹出输入框的遮罩层
-        var $input = $('#commentInput')             // 评论输入框
-        var $submit = $('#commentSubmit')           // 评论提交按钮
-    
-        // 给遮罩加点击事件
-        function hideActionSheet() {
-          // 解决键盘收起来，画面键盘位置留白的问题
-          window.scrollTo(0, 500);
-          $iosActionsheet.removeClass('weui-actionsheet_toggle');
-          $iosMask.fadeOut(200);
+      
+      /* 
+        评论框相关事件 == START ==
+      */
+      window.$commentMask = $('#commentMask')                     // 遮罩层
+      window.$commentContainer = $('#commentContainer')   // 弹出输入框容器
+      window.$input = $('#commentInput')                  // 评论输入框
+      window.$submit = $('#commentSubmit')                // 评论提交按钮
+  
+      // 给遮罩加点击事件
+      function hideActionSheet() {
+        // 解决键盘收起来，画面键盘位置留白的问题
+        window.scrollTo(0, 500);
+        $commentContainer.removeClass('weui-actionsheet_toggle');
+        $commentMask.fadeOut(200);
+      }
+      $commentMask.on('click', hideActionSheet);
+      
+      // 检查是否应该禁用提交
+      function checkDisable($input) {
+        if ($input.val().length == 0) {
+          $('#commentSubmit').addClass('disabled')
+        } else {
+          $('#commentSubmit').removeClass('disabled')
         }
-        $iosMask.on('click', hideActionSheet);
-        
-        // 检查是否应该禁用提交
-        function checkDisable($input) {
-          if ($input.val().length == 0) {
-            $('#commentSubmit').addClass('disabled')
-          } else {
-            $('#commentSubmit').removeClass('disabled')
-          }
-        }
+      }
 
-        var $input = $('#commentInput')
-        $input.on({
-          // 输入时检查是否禁用
-          'input': function () {
-            checkDisable($(this))
-          },
-          // 获得焦点时检查是否禁用
-          'focus': function () {
-            checkDisable($(this))
-          },
-          // 输入框失去焦点滑动，解决点击"完成",键盘收起,但是tab有空白的问题
-          'blur': function () {
-            setTimeout(function() {
-              window.scrollTo(0, 500);
-            }, 0);
-          }
-        })
+      $input.on({
+        // 输入时检查是否禁用
+        'input': function () {
+          checkDisable($(this))
+        },
+        // 获得焦点时检查是否禁用
+        'focus': function () {
+          checkDisable($(this))
+        },
+        // 输入框失去焦点滑动，解决点击"完成",键盘收起,但是tab有空白的问题
+        'blur': function () {
+          setTimeout(function() {
+            window.scrollTo(0, 500);
+          }, 0);
+        }
       });
+      /* 
+        评论框相关事件 === END ===
+      */
 
       
       // ios软键盘收回后向 页面向下滑动500px(造成对提交按钮的阻塞，直接放到提交按钮上去)

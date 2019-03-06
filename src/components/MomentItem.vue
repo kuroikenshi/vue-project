@@ -49,7 +49,9 @@
           <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="clickedCommentItem(comment.authorId, comment.authorName)">
             <span class="author-label">
               <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.authorName }}</a>
-              <a href="javascript:void(0);" class="to-user font-size-m link-color" v-show="!!comment.toUserName" v-once>{{ comment.toUserName }}</a>
+              <!-- <span v-if="!!comment.toUserName" v-once>回复</span> -->
+              {{ !!comment.toUserName ? '回复' : '' }}
+              <a href="javascript:void(0);" class="to-user font-size-m link-color" v-if="!!comment.toUserName" v-once>{{ comment.toUserName }}</a>
             </span>
             <p class="comment-content">
               {{ comment.content }}
@@ -66,20 +68,23 @@
 <script>
   import _ from 'lodash'
   
-  let $iosActionsheet = $('#iosActionsheet')  // 弹出输入框容器
-  let $iosMask = $('#iosMask')                // 弹出输入框的遮罩层
-  let $input = $('#commentInput')             // 评论输入框
-  let $submit = $('#commentSubmit')           // 评论提交按钮
+//   let $commentContainer = $('#commentContainer')  // 弹出输入框容器
+//   let $commentMask = $('#commentMask')                // 弹出输入框的遮罩层
+//   let $input = $('#commentInput')             // 评论输入框
+//   let $submit = $('#commentSubmit')           // 评论提交按钮
   
   // 弹出评论输入框
   function __popCommentInputBox() {
-    $iosActionsheet.addClass('weui-actionsheet_toggle')
-    $iosMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题
+    $commentContainer.addClass('weui-actionsheet_toggle')
+    $commentMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
 
     // 输入框清空回复给用户的字样
     $input.removeAttr('placeholder')
     $input.val('')
     $input.focus()
+    setTimeout(function() {
+      $input.focus()
+    }, 600)
   }
   
   export default {
@@ -243,8 +248,8 @@
                 // 解决键盘收起来，画面键盘位置留白的问题
                 window.scrollTo(0, 500);
                 
-                $iosActionsheet.removeClass('weui-actionsheet_toggle')
-                $iosMask.fadeOut(200)
+                $commentContainer.removeClass('weui-actionsheet_toggle')
+                $commentMask.fadeOut(200)
                 
                 return Promise.resolve()
               }).catch(err => {
@@ -282,8 +287,8 @@
           $input.attr('placeholder', '回复' + toUserName + ':')
           
           setTimeout(() => {
-            $iosActionsheet.addClass('weui-actionsheet_toggle')
-            $iosMask.fadeIn(300)
+            $commentContainer.addClass('weui-actionsheet_toggle')
+            $commentMask.fadeIn(300)
           }, 300)
           setTimeout(() => {
             node.parentNode.classList.remove('active')
@@ -291,13 +296,13 @@
         }
         // 普通评论
         else {
-          / * $iosActionsheet.addClass('weui-actionsheet_toggle')
-          $iosMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题 * /
+          / * $commentContainer.addClass('weui-actionsheet_toggle')
+          $commentMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题 * /
         }
         
-//         $iosMask.off('click').on('click', () => {
-//           $iosActionsheet.removeClass('weui-actionsheet_toggle')
-//           $iosMask.fadeOut(200)
+//         $commentMask.off('click').on('click', () => {
+//           $commentContainer.removeClass('weui-actionsheet_toggle')
+//           $commentMask.fadeOut(200)
 //         })
         
         $input.focus()
@@ -432,14 +437,17 @@
 
   .author-label:after {
     content: '：';
-    margin-left: 0px;
+    display: inline-block;
+    width: 10px;
     margin-right: 5px;
   }
 
-  .to-user:before {
+  /* .to-user:before {
     content: '回复';
+    margin-left: -2px;
+    padding-right: 2px;
     color: #000;
-  }
+  } */
 
   .comment.active {
     background: #ddd;
