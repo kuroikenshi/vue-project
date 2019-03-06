@@ -88,22 +88,32 @@
           $iosMask.fadeOut(200);
         }
         $iosMask.on('click', hideActionSheet);
-    
-        // 提交按钮加禁用
-        var $input = $('#commentInput')
-        $input.on('input', function () {
-          if ($(this).val().length == 0) {
+        
+        // 检查是否应该禁用提交
+        function checkDisable($input) {
+          if ($input.val().length == 0) {
             $('#commentSubmit').addClass('disabled')
           } else {
             $('#commentSubmit').removeClass('disabled')
           }
-        })
-        
-        // 输入框失去焦点滑动，解决点击"完成",键盘收起,但是tab有空白的问题
-        $input.on('blur', function() {
-          setTimeout(function() {
-            window.scrollTo(0, 500);
-          }, 0);
+        }
+
+        var $input = $('#commentInput')
+        $input.on({
+          // 输入时检查是否禁用
+          'input': function () {
+            checkDisable($(this))
+          },
+          // 获得焦点时检查是否禁用
+          'focus': function () {
+            checkDisable($(this))
+          },
+          // 输入框失去焦点滑动，解决点击"完成",键盘收起,但是tab有空白的问题
+          'blur': function () {
+            setTimeout(function() {
+              window.scrollTo(0, 500);
+            }, 0);
+          }
         })
       });
 
