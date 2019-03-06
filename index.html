@@ -75,8 +75,10 @@
       
       // 底部输入
       $(function(){
-        var $iosActionsheet = $('#iosActionsheet');
-        var $iosMask = $('#iosMask');
+        var $iosActionsheet = $('#iosActionsheet')  // 弹出输入框容器
+        var $iosMask = $('#iosMask')                // 弹出输入框的遮罩层
+        var $input = $('#commentInput')             // 评论输入框
+        var $submit = $('#commentSubmit')           // 评论提交按钮
     
         // 给遮罩加点击事件
         function hideActionSheet() {

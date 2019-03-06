@@ -78,7 +78,7 @@
 
     // 输入框清空回复给用户的字样
     $input.removeAttr('placeholder')
-    $input.html('')
+    $input.val('')
     $input.focus()
   }
   
@@ -88,7 +88,7 @@
     data() {
       return {
         momentItemUpdated: undefined,  // 用来存储更新后的momentItem
-        commentSubmitting: false
+        commentSubmitting: false       // 用来避免重复提交的变量
       }
     },
     computed: {
@@ -237,8 +237,7 @@
                 console.log('publishComment>>>', res.data)
                 
                 this.momentItemUpdated = res.data.data
-                
-                $input.val('')
+
                 this.commentSubmitting = false
                 
                 // 解决键盘收起来，画面键盘位置留白的问题
