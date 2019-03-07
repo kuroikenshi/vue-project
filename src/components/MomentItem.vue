@@ -46,7 +46,7 @@
 
         <!-- 评论列表 -->
         <div class="comments-list" v-show="!!momentItem.commentsList&&!!momentItem.commentsList.length">
-          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="clickedCommentItem(comment.authorId, comment.authorName)">
+          <div class="comment" v-for="(comment, key) in momentItem.commentsList" :key="key" @click="clickedCommentItem(comment)">
             <span class="author-label">
               <a href="javascript:void(0);" class="author font-size-m link-color">{{ comment.authorName }}</a>
               <!-- <span v-if="!!comment.toUserName" v-once>回复</span> -->
@@ -200,7 +200,7 @@
       },
       
       // 点击了评论对象 -> 回复或删除
-      clickedCommentItem: function (toUserId, toUserName) {
+      clickedCommentItem: function (comment) {
         // 点击对象行加高亮
         let $tgtNode = $(event.target)
         $tgtNode.closest('.comment').addClass('active')
@@ -208,14 +208,14 @@
         setTimeout(() => {
           $tgtNode.closest('.comment').removeClass('active')
         }, 600)
-        
+
         // 如果点击的是自己的评论 -> 删除
-        if (toUserId === window.uls.get('userinfo', 'username')) {
-          this.__promptToDelete()
+        if (comment.authorId === window.uls.get('userinfo', 'username')) {
+          this.__promptToDelete(comment.commentId)
         }
         // 点击别人的评论 -> 回复
         else {
-          this.__replyToUser(toUserId, toUserName)
+          this.__replyToUser(comment.authorId, comment.authorName)
         }
       },
       
@@ -264,8 +264,34 @@
       },
       
       // 引导删除
-      __promptToDelete: function () {
-        console.log('<<<__promptToDelete>>> TODO')
+      __promptToDelete: function (commentId) {
+        console.log('<<<__promptToDelete>>> ', commentId)
+        
+        // 弹出操作面板
+        $commentActionContainer.addClass('weui-actionsheet_toggle')
+        $commentActionMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
+        
+        $commentActionDelete.off('click')
+        $commentActionDelete.on('click', () => {
+          // 删除评论数据
+          let postData = this.$qs.stringify({
+            momentId: this.momentItem.momentId,
+            commentId: commentId
+          })
+          
+          this.$axios.post('demo/comments/deleteComment', postData).then(res => {
+            console.log('deleteComment>>>', res.data)
+            
+            this.momentItemUpdated = res.data.data
+            
+            window.commentActionHide()
+            
+            return Promise.resolve()
+          }).catch(err => {
+            console.log('加载deleteComment返回数据失败:', err)
+            return Promise.reject(err)
+          })
+        })
       },
       /* ,
       // 评论

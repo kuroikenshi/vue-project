@@ -25,10 +25,13 @@
         </form>
       </div>
     </div>
-    <!-- 班级动态-评论菜单 -->
-    <div class="weui-actionsheet" id="commentAction">
+    
+    <!-- 评论操作-遮罩层 -->
+    <div class="weui-mask" id="commentActionMask" style="display: none"></div>
+    <!-- 评论操作-评论菜单 -->
+    <div class="weui-actionsheet" id="commentActionContainer">
       <div class="weui-actionsheet__menu">
-          <div class="weui-actionsheet__cell">删除</div>
+          <div class="weui-actionsheet__cell" id="commentActionDelete">删除</div>
       </div>
       <div class="weui-actionsheet__action">
           <div class="weui-actionsheet__cell" id="commentActionCancel">取消</div>
@@ -56,19 +59,18 @@
       /* 
         评论框相关事件 == START ==
       */
-      window.$commentMask = $('#commentMask')                     // 遮罩层
+      window.$commentMask = $('#commentMask')             // 遮罩层
       window.$commentContainer = $('#commentContainer')   // 弹出输入框容器
       window.$input = $('#commentInput')                  // 评论输入框
       window.$submit = $('#commentSubmit')                // 评论提交按钮
   
       // 给遮罩加点击事件
-      function hideActionSheet() {
+      $commentMask.on('click', function () {
         // 解决键盘收起来，画面键盘位置留白的问题
         window.scrollTo(0, 500);
         $commentContainer.removeClass('weui-actionsheet_toggle');
         $commentMask.fadeOut(200);
-      }
-      $commentMask.on('click', hideActionSheet);
+      });
       
       // 检查是否应该禁用提交
       function checkDisable($input) {
@@ -99,6 +101,25 @@
         评论框相关事件 === END ===
       */
 
+      /* 
+        评论框相关事件 == START ==
+      */
+      window.$commentActionMask = $('#commentActionMask')             // 遮罩层
+      window.$commentActionContainer = $('#commentActionContainer')   // 弹出输入框容器
+      window.$commentActionDelete = $('#commentActionDelete')         // 删除评论按钮
+      window.$commentActionCancel = $('#commentActionCancel')         // 取消操作按钮
+      
+      window.commentActionHide = function () {
+        $commentActionContainer.removeClass('weui-actionsheet_toggle');
+        $commentActionMask.fadeOut(200);
+      }
+      
+      // 给遮罩、取消按钮加点击事件
+      $commentActionMask.on('click', commentActionHide)
+      $commentActionCancel.on('click', commentActionHide)
+      /* 
+        评论框相关事件 === END ===
+      */
       
       // ios软键盘收回后向 页面向下滑动500px(造成对提交按钮的阻塞，直接放到提交按钮上去)
       /* document.body.addEventListener('focusout', function () {
