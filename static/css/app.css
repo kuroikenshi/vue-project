@@ -186,6 +186,14 @@ body, html {
 	display: none;
 }
 
+/* 隐藏底部tabbar */
+.weui-tabbar-hide {
+  display: none;
+}
+.weui-tab__panel.no-tabbar {
+  padding-bottom: 0px;
+}
+
 /* === f7-icons 额外配置 === */
 .f7-icons {
 	margin: 1px 5px;

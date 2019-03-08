@@ -11,6 +11,7 @@ import Tabbar from '@/components/Tabbar'
 import ClassList from '@/components/ClassList'
 import MomentList from '@/components/MomentList'
 import MomentItem from '@/components/MomentItem'
+import MomentAdd from '@/components/MomentAdd'
 import ChatList from '@/components/ChatList'
 import UserInfo from '@/components/UserInfo'
 
@@ -63,9 +64,12 @@ export default new Router({
           requireAuth: true
         }
       }, {
-        path: 'test/momentItem',
-        name: 'MomentItem',
-        component: MomentList
+        path: 'class/momentAdd',
+        name: 'MomentAdd',
+        component: MomentAdd,
+        meta: {
+          requireAuth: true
+        }
       }, {
         path: 'chat/chatList',
         name: 'ChatList',

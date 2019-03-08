@@ -8,20 +8,25 @@
             <i class="f7-icons">chevron_left</i>
           </a>
         </div>
+
         <div class="center sliding stronger">{{navbarTitle}}</div>
+
         <div class="right">
-          <a href="javascript: void(0);" class="tabbar-btn">
+          <a href="javascript: void(0);" class="tabbar-btn"
+              v-show="(new RegExp('\/class\/[^\/]*\/moments')).test($router.history.current.path)"
+              @click="momentAdd">
             <i class="f7-icons">add</i>
           </a>
         </div>
       </div>
     </div>
 
-    <div class="weui-tab__panel">
+    <div class="weui-tab__panel" :class="{'no-tabbar': !isTabShow()}">
+      <div style="padding-left: 5px; background: lightgray;">{{ $router.history.current.path }}</div>
       <router-view @eventPop_updateNavbarTitle="getNavbarTitle"></router-view>
     </div>
 
-    <div class="weui-tabbar">
+    <div :class="{'weui-tabbar-hide': !isTabShow(), 'weui-tabbar': isTabShow()}">
       <router-link href="javascript:;" class="weui-tabbar__item" :class="{'weui-bar__item_on': isCurrent('class')}" to="/class/classList">
         <i class="weui-tabbar__icon my-icon icon-home"></i>
         <p class="weui-tabbar__label">班级空间</p>
@@ -65,9 +70,19 @@ export default {
       let hideNavPath = ['/user/userInfo']
       return (hideNavPath.indexOf(this.$router.history.current.path) === -1)
     },
+    // 是否显示navbar
+    isTabShow: function () {
+      // console.log('params>>>', this.$route)
+      let hideTabPath = ['/class/momentAdd']
+      return (hideTabPath.indexOf(this.$router.history.current.path) === -1)
+    },
     getNavbarTitle (navbarTitle) {
       // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
       this.navbarTitle = navbarTitle
+    },
+    // 进入班级动态
+    momentAdd () {    
+      this.$router.push('/class/momentAdd')
     }
   }
 }
@@ -79,5 +94,8 @@ export default {
 }
 .tabbar-btn i.f7-icons {
   font-size: 18px;
+}
+.right {
+  min-width: 18px;
 }
 </style>
