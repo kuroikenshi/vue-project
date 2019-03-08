@@ -240,3 +240,32 @@ body, html {
 .commentbar .comment-button.disabled {
   color: #999;
 }
+
+
+/* 各种图标 */
+.icon {
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  margin-right: 8px;
+}
+.icon-gender {
+  background: url('/static/imgs/icon-gender.png') no-repeat;
+  background-size: contain;
+}
+.icon-smart-phone {
+  background: url('/static/imgs/icon-smart-phone.png') no-repeat;
+  background-size: contain;
+}
+.icon-mail-opened {
+  background: url('/static/imgs/icon-mail-opened.png') no-repeat;
+  background-size: contain;
+}
+.icon-book {
+  background: url('/static/imgs/icon-book.png') no-repeat;
+  background-size: contain;
+}
+.icon-schedule {
+  background: url('/static/imgs/icon-schedule.png') no-repeat;
+  background-size: contain;
+}
