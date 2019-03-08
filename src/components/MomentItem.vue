@@ -3,7 +3,7 @@
     <!-- 标题块 -->
     <div class="title-row">
       <img :src="momentItem.userPhoto" class="user-photo" v-once />
-      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ momentItem.createBy }}</a>
+      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ momentItem.createName }}</a>
       <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
     </div>
 

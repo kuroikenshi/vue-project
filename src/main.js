@@ -2,10 +2,11 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueCookie from 'vue-cookie'
+import VueResource from 'vue-resource'
+import VueInfiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 // import store from './store/store'
-import VueResource from 'vue-resource'
 import axios from 'axios'
 import qs from 'qs'
 import _ from 'lodash'
@@ -21,6 +22,7 @@ import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
 
 Vue.use(VueCookie)
 Vue.use(VueResource)
+Vue.use(VueInfiniteScroll)
 
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios
