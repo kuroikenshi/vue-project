@@ -212,6 +212,12 @@ body, html {
   opacity: 1;
 }
 
+/* jquery-weui 影响的原始weui样式 */
+.weui-dialog, .weui-toast {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* 评论条 */
 .commentbar {
   /* height: 44px; */

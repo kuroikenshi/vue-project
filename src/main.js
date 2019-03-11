@@ -12,6 +12,9 @@ import qs from 'qs'
 import _ from 'lodash'
 import ls from 'store'
 
+import weui from 'weui.js'
+import 'weui'
+
 import 'weui/dist/style/weui.min.css'
 import '@/../static/css/app.css'
 
@@ -24,8 +27,24 @@ Vue.use(VueCookie)
 Vue.use(VueResource)
 Vue.use(VueInfiniteScroll)
 
+Vue.mixin({
+  data() {
+    return {
+      weuijsDialog: null
+    }
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy')
+    if (this.weuijsDialog) {
+      this.weuijsDialog.hide()
+      this.weuijsDialog = null
+    }
+  }  
+})
+
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios
+Vue.prototype.$weui = weui
 
 Vue.component('swipe', Swipe)
 Vue.component('swipe-item', SwipeItem)
@@ -163,3 +182,4 @@ window.vue = new Vue({
   components: { App },
   template: '<App/>'
 })
+
