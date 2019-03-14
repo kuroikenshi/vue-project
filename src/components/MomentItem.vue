@@ -68,11 +68,6 @@
 <script>
   import _ from 'lodash'
   
-//   let $commentContainer = $('#commentContainer')  // 弹出输入框容器
-//   let $commentMask = $('#commentMask')                // 弹出输入框的遮罩层
-//   let $input = $('#commentInput')             // 评论输入框
-//   let $submit = $('#commentSubmit')           // 评论提交按钮
-  
   // 弹出评论输入框
   function __popCommentInputBox() {
     $commentContainer.addClass('weui-actionsheet_toggle')
@@ -267,74 +262,37 @@
       __promptToDelete: function (commentId) {
         console.log('<<<__promptToDelete>>> ', commentId)
         
-        // 弹出操作面板
-        $commentActionContainer.addClass('weui-actionsheet_toggle')
-        $commentActionMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
-        
-        $commentActionDelete.off('click')
-        $commentActionDelete.on('click', () => {
-          // 删除评论数据
-          let postData = this.$qs.stringify({
-            momentId: this.momentItem.momentId,
-            commentId: commentId
-          })
-          
-          this.$axios.post('demo/comments/deleteComment', postData).then(res => {
-            console.log('deleteComment>>>', res.data)
-            
-            this.momentItemUpdated = res.data.data
-            
-            window.commentActionHide()
-            
-            return Promise.resolve()
-          }).catch(err => {
-            console.log('加载deleteComment返回数据失败:', err)
-            return Promise.reject(err)
-          })
-        })
-      },
-      /* ,
-      // 评论
-      popComment: function(toUserId, toUserName) {
-        console.log('event', event)
-        console.log('event.target.classList', event.target.classList)
-        
-        
-        if (event.target.classList.contains('comment-content')) {
-          node.parentNode.classList.add('active')
-        }
-        
-        
-        
-        // 点击评论内容时，高亮提示
-        let node = event.target
-        if (node.classList.contains('comment-content')) {
-          node.parentNode.classList.add('active')
-          $input.attr('placeholder', '回复' + toUserName + ':')
-          
-          setTimeout(() => {
-            $commentContainer.addClass('weui-actionsheet_toggle')
-            $commentMask.fadeIn(300)
-          }, 300)
-          setTimeout(() => {
-            node.parentNode.classList.remove('active')
-          }, 600)
-        }
-        // 普通评论
-        else {
-          / * $commentContainer.addClass('weui-actionsheet_toggle')
-          $commentMask.fadeIn(300)  // 这里必须有值，在为0的时候，会出现光标错位问题 * /
-        }
-        
-//         $commentMask.off('click').on('click', () => {
-//           $commentContainer.removeClass('weui-actionsheet_toggle')
-//           $commentMask.fadeOut(200)
-//         })
-        
-        $input.focus()
-        
-        
-      } */
+        this.weuijsPopedItem = this.$weui.actionSheet(
+          [{
+            label: '删除',
+            onClick: () => {
+              // 删除评论数据
+              let postData = this.$qs.stringify({
+                momentId: this.momentItem.momentId,
+                commentId: commentId
+              })
+              
+              this.$axios.post('demo/comments/deleteComment', postData).then(res => {
+                console.log('deleteComment>>>', res.data)
+                this.momentItemUpdated = res.data.data
+                return Promise.resolve()
+              }).catch(err => {
+                console.log('加载deleteComment返回数据失败:', err)
+                return Promise.reject(err)
+              })
+            }
+          }], 
+          [{
+            label: '取消',
+            onClick: function() {
+              console.log('取消')
+            }
+          }],
+          {
+            className: 'weui-actionsheet-limit'
+          }
+        )
+      }
       /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
     }

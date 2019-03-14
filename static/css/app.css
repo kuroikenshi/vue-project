@@ -207,17 +207,20 @@ body, html {
   z-index: 1000;
 }
 
+/* jquery-weui 影响的原始weui样式 */
 .weui-mask {
   visibility: visible;
   opacity: 1;
 }
-
-/* jquery-weui 影响的原始weui样式 */
 .weui-dialog, .weui-toast {
   opacity: 1;
   visibility: visible;
 }
-
+/* .weui-toptips {
+  z-index: 5000;
+  opacity: 1;
+  transition: opacity .3s;
+} */
 /* 评论条 */
 .commentbar {
   /* height: 44px; */
@@ -274,4 +277,12 @@ body, html {
 .icon-schedule {
   background: url('/static/imgs/icon-schedule.png') no-repeat;
   background-size: contain;
+}
+
+/* TopTips的颜色 */
+.xdf_orange {
+  background-color: darkorange;
+}
+.xdf_green {
+  background-color: #09b78d;
 }

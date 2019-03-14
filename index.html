@@ -26,18 +26,6 @@
       </div>
     </div>
     
-    <!-- 评论操作-遮罩层 -->
-    <div class="weui-mask" id="commentActionMask" style="display: none"></div>
-    <!-- 评论操作-评论菜单 -->
-    <div class="weui-actionsheet" id="commentActionContainer">
-      <div class="weui-actionsheet__menu">
-          <div class="weui-actionsheet__cell" id="commentActionDelete">删除</div>
-      </div>
-      <div class="weui-actionsheet__action">
-          <div class="weui-actionsheet__cell" id="commentActionCancel">取消</div>
-      </div>
-    </div>
-    
     <!-- 引入各类jquery插件 -->
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
@@ -101,22 +89,59 @@
         评论框相关事件 === END ===
       */
 
-      /* 
-        评论框相关事件 == START ==
-      */
-      window.$commentActionMask = $('#commentActionMask')             // 遮罩层
-      window.$commentActionContainer = $('#commentActionContainer')   // 弹出输入框容器
-      window.$commentActionDelete = $('#commentActionDelete')         // 删除评论按钮
-      window.$commentActionCancel = $('#commentActionCancel')         // 取消操作按钮
-      
-      window.commentActionHide = function () {
-        $commentActionContainer.removeClass('weui-actionsheet_toggle');
-        $commentActionMask.fadeOut(200);
+      // 开始提交状态的方法
+      window.backgroundSubmit = function(param) {
+        // 提示开始任务
+        window.vue.$weui.topTips('发布中，请勿关闭此页...', {
+          duration: 5000,
+          className: 'weui-toptips_visible xdf_orange',
+        })
+        
+        // 批量上传图片
+        let axiosList = []
+        Array.from(param.imageFiles).forEach(imgFile => {
+          let formData = new FormData()
+          console.log(imgFile, imgFile.name)
+          formData.append('name', imgFile.name)
+          formData.append('category', 47)
+          formData.append('file', imgFile)
+          
+          axiosList.push(window.vue.$axios.post('http://new.bj.xdf.cn/tupian/uploadImage.php', formData).then(res => {
+            if (res.code == 200) {
+              console.log('提交成功')
+              console.log(res, res.data)
+            } else {
+              console.log("请输入完整再提交")
+            }
+          }))
+        })
+
+/*  {
+            /* headers: {
+              'Content-Type': 'application/x-www-form-urlencode'
+            } * /
+          } */
+
+        window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
+          /* console.log('User', userResp.data);
+          console.log('Repositories', reposResp.data); */
+
+          // 成功后,获取图片url,拼装数据
+          // 提交
+          
+          // 成功后提示
+          window.vue.$weui.topTips('发布成功！', {
+            duration: 3000,
+            className: 'weui-toptips_visible xdf_green',
+          })
+
+        }))
+        
+        
+        
       }
       
-      // 给遮罩、取消按钮加点击事件
-      $commentActionMask.on('click', commentActionHide)
-      $commentActionCancel.on('click', commentActionHide)
+      
       /* 
         评论框相关事件 === END ===
       */

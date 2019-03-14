@@ -22,7 +22,7 @@
     </div>
 
     <div class="weui-tab__panel" :class="{'no-tabbar': !isTabShow()}">
-      <div style="padding-left: 5px; background: lightgray;">{{ $router.history.current.path }}</div>
+      <!-- <div style="padding-left: 5px; background: lightgray;">{{ $router.history.current.path }}</div> -->
       <router-view @eventPop_updateNavbarTitle="getNavbarTitle"></router-view>
     </div>
 

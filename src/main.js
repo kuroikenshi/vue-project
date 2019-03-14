@@ -30,16 +30,29 @@ Vue.use(VueInfiniteScroll)
 Vue.mixin({
   data() {
     return {
-      weuijsDialog: null
+      weuijsPopedItem: null
     }
   },
   beforeDestroy() {
     console.log('beforeDestroy')
-    if (this.weuijsDialog) {
-      this.weuijsDialog.hide()
-      this.weuijsDialog = null
+    if (this.weuijsPopedItem) {
+      this.weuijsPopedItem.hide()
+      this.weuijsPopedItem = null
     }
-  }  
+    
+    //页面销毁时自动隐藏
+    // this.mixin_weuijs_picker_actionsheet('actionsheet', 'hidden')
+  }/* ,
+  methods: {
+    // value指的是 picker 或者 actionsheet
+    // state 指的是 visible 或者 hidden
+    mixin_weuijs_picker_actionsheet(value, state) {
+      let mask = document.querySelectorAll('.weui-mask')
+      let picker = document.querySelectorAll('.weui-' + value)
+      mask.forEach(item => {item.style.visibility = state})
+      picker.forEach(item => {item.style.visibility = state})
+    }
+  } */
 })
 
 Vue.prototype.$qs = qs
@@ -172,7 +185,7 @@ axios.interceptors.response.use((response) => {
     return Promise.reject(error)
   }
 })
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+// axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 /* eslint-disable no-new */
 window.vue = new Vue({
