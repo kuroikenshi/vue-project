@@ -90,6 +90,11 @@ export default {
     this.thumbnailWidth = ((window.screen.width - 78) / 3).toFixed(2) + 'px'
     this.thumbnailAddWidth = ((window.screen.width - 78) / 3 - 2).toFixed(2) + 'px'
     this.$emit('eventPop_updateNavbarTitle', '发布状态')
+    
+    // 更新tabbar参数
+    this.$emit('eventPop_updateTabbar', {
+      'navbarTitle': '发布状态'
+    })
   },
   computed: {
     bgImgs: function() {

@@ -23,7 +23,7 @@
 
     <div class="weui-tab__panel" :class="{'no-tabbar': !isTabShow()}">
       <!-- <div style="padding-left: 5px; background: lightgray;">{{ $router.history.current.path }}</div> -->
-      <router-view @eventPop_updateNavbarTitle="getNavbarTitle"></router-view>
+      <router-view @eventPop_updateTabbar="updateSomeValue"></router-view>
     </div>
 
     <div :class="{'weui-tabbar-hide': !isTabShow(), 'weui-tabbar': isTabShow()}">
@@ -49,7 +49,8 @@ export default {
   data () {
     return {
       // msg: 'This is my component',
-      navbarTitle: '----'
+      navbarTitle: '----',
+      backPath: ''
     }
   },
   methods: {
@@ -58,7 +59,13 @@ export default {
       this.$router.push(this.$router.history.current.path + '/' + path)
     },
     goBack: function () {
-      this.$router.back()
+      if (!this.backPath) {
+        this.$router.back()
+      } else {
+        let backPath = this.backPath
+        this.backPath = ''
+        this.$router.push(backPath)
+      }
     },
     // 是当前路径
     isCurrent: function (path) {
@@ -76,9 +83,12 @@ export default {
       let hideTabPath = ['/class/momentAdd']
       return (hideTabPath.indexOf(this.$router.history.current.path) === -1)
     },
-    getNavbarTitle (navbarTitle) {
+    // 更新一些值
+    updateSomeValue: function(data) {
       // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
-      this.navbarTitle = navbarTitle
+      for (let key in data) {
+        this[key] = data[key]
+      }
     },
     // 进入班级动态
     momentAdd () {    

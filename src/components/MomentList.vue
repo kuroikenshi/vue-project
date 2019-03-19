@@ -22,7 +22,6 @@ export default {
   data () {
     return {
       classCode: this.$route.params.classCode,
-      navbarTitle: this.$route.params.classCode + '班级空间',
       momentList: [],
       scrollLoading: false,       // 正在滚动加载
       firstDataNotLoaded: true,   // 首批数据尚未装载，用来限制滚动加载
@@ -45,15 +44,15 @@ export default {
     }
   },
   created () {
-    this.updateNavbarTitle()
+    // 更新tabbar参数
+    this.$emit('eventPop_updateTabbar', {
+      'navbarTitle': this.$route.params.classCode + '班级空间',
+      'backPath': '/class/classList'
+    })
     
     this.getFirstMoments()
   },
   methods: {
-    // 更新navbar标题
-    updateNavbarTitle () {
-      this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
-    },
     // 获取首次动态数据
     getFirstMoments () {
       let postData = this.$qs.stringify({

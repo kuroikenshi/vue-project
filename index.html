@@ -99,7 +99,8 @@
         
         // 批量上传图片
         let axiosList = []
-        Array.from(param.imageFiles).forEach(imgFile => {
+        let elementUrl = {}
+        Array.from(param.imageFiles).forEach((imgFile, idx) => {
           let formData = new FormData()
           console.log(imgFile, imgFile.name)
           formData.append('name', imgFile.name)
@@ -108,37 +109,49 @@
           
           axiosList.push(window.vue.$axios.post('http://new.bj.xdf.cn/tupian/uploadImage.php', formData).then(res => {
             if (res.code == 200) {
-              console.log('提交成功')
+              console.log('图片上传成功')
               console.log(res, res.data)
+              elementUrl[idx] = res.data.data.url // TODO 修改成正确的
             } else {
-              console.log("请输入完整再提交")
+              console.error("图片上传失败")
             }
           }))
         })
 
-/*  {
-            /* headers: {
-              'Content-Type': 'application/x-www-form-urlencode'
-            } * /
-          } */
-
+        // 图片上传完成后,发布班级动态
         window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
-          /* console.log('User', userResp.data);
-          console.log('Repositories', reposResp.data); */
-
           // 成功后,获取图片url,拼装数据
-          // 提交
-          
-          // 成功后提示
-          window.vue.$weui.topTips('发布成功！', {
-            duration: 3000,
-            className: 'weui-toptips_visible xdf_green',
+          let postData = window.vue.$qs.stringify({
+            content: param.content,
+            classCode: param.classCode,
+            type: param.type,
+            elementUrl: Object.values(elementUrl)
           })
-
+          
+          // 提交
+          window.vue.$axios.post('/demo/moments/publishMoment', postData).then(res => {
+            console.log('publishComment>>>', res.data)
+            
+            // 成功后提示
+            window.vue.$weui.topTips('发布成功！', {
+              duration: 3000,
+              className: 'weui-toptips_visible xdf_green',
+            })
+            window.vue.$router.push('/class/' + param.classCode + '/moments')
+            
+            return Promise.resolve()
+          }).catch(err => {
+            // 失败后提示
+            window.vue.$weui.topTips('发布失败！' + err.toString(), {
+              duration: 5000,
+              className: 'weui-toptips_visible',
+            })
+            return Promise.reject(err)
+          })
         }))
         
-        
-        
+        // 跳转到指定班级动态页面
+        window.vue.$router.push('/class/' + param.classCode + '/moments')
       }
       
       
