@@ -137,7 +137,10 @@
               duration: 3000,
               className: 'weui-toptips_visible xdf_green',
             })
-            window.vue.$router.push('/class/' + param.classCode + '/moments')
+            setTimeout(function() {
+              console.log('刷新')
+              window.vue.$router.push('/class/' + param.classCode + '/moments')
+            }, 500)
             
             return Promise.resolve()
           }).catch(err => {

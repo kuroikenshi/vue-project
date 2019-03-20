@@ -36,24 +36,21 @@ export default {
   name: 'MyComp',
   data () {
     return {
-      navbarTitle: '班级列表',
       classListLoaded: false,
       classListErrMsg: '',
       classList: []
     }
   },
   created () {
-    this.updateNavbarTitle()
+      // 更新tabbar参数
+      this.$emit('eventPop_updateTabbar', {
+        'navbarTitle': '班级列表'
+      })
 
     // 加载classList
     this.getClassList()
   },
   methods: {
-    // 更新navbar标题
-    updateNavbarTitle () {
-      this.$emit('eventPop_updateNavbarTitle', this.navbarTitle)
-    },
-
     // 进入班级动态
     enterClassMoments (classCode) {
       console.log('classCode:', classCode)
