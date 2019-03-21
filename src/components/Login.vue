@@ -40,8 +40,6 @@ export default {
   methods: {
     // 登陆方法
     login: function (event) {
-      console.log('>>>1', this.$qs)
-      console.log(this.$axios)
       
       // this.username = '18311021317'
       // this.password = '123'
@@ -51,16 +49,18 @@ export default {
         password: this.password
       })
 
-      this.$axios.post('demo/login', postData).then(res => {
-        console.log('login>>>', res)
+      // this.$axios.post('demo/login', postData).then(res => {
+      this.$axios.post('demo/login/teacherLoginTest', postData).then(res => {
+        console.log('login Resp>>>', res)
         // 登陆成功
         if (res.status === 200 && res.data.status === 200) {
           // 保存用户信息状态
-          this.$cookie.set('user', this.$qs.stringify(res.data.data), {
+          this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
             expires: 'session'
           })
-          // console.log('get cookie:?????', this.$qs.parse(this.$cookie.get('user')))
+          console.log('get cookie:?????', this.$qs.parse(this.$cookie.get('user')))
 
+          // if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
           if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
             // 加载指定用户的uls
             window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
@@ -69,7 +69,7 @@ export default {
           }
           // 万一没有username的情况
           else {
-            alert('[ERR] Cookie中username为: ' + username + ', from login.vue')
+            alert('[ERR] Cookie中username为: ' + this.username + ', from login.vue')
           }
 
           // 跳转

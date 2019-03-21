@@ -21,13 +21,31 @@ module.exports = {
             }
         },
         // 尝试跨域
-        '/demo': {
+        /* '/demo': {
             target: 'http://localhost:3000',
             changeOrigin: true,
             pathRewrite: {
                 '^/demo': '/popsoul'
             }
-        }
+        }, */
+        
+        // 测试服务器
+        /* '/demo': {
+            target: 'http://10.15.5.38:8088',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/demo': '/'
+            }
+        }, */
+        
+        // 黄国庆的机器
+        '/demo': {
+            target: 'http://10.176.242.104:80',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/demo': ''
+            }
+        },
     },
 
     // Various Dev Server settings

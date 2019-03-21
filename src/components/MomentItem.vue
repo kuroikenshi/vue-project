@@ -106,6 +106,15 @@
             usernameArr.push(likedItem.username)
           })
         }
+        else if (
+            (typeof this.momentItem.likes) === "string" &&
+            this.momentItem.likes.charAt(0) === '[' &&
+            this.momentItem.likes.charAt(this.momentItem.likes.length - 1) === ']'
+        ) {
+          JSON.parse(this.momentItem.likes).forEach(likedItem => {
+            usernameArr.push(likedItem.username)
+          })
+        }
         return usernameArr
       },
       // 当前用户已点赞

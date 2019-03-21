@@ -20,12 +20,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     // {
-    //   path: '/',
+    //   path: '',
     //   name: 'HelloWorld',
     //   component: HelloWorld
     // },
     // {
-    //   path: '/my-comp',
+    //   path: 'my-comp',
     //   name: 'MyComp',
     //   component: MyComp
     // },
@@ -47,7 +47,7 @@ export default new Router({
       path: '/',
       name: 'Tabbar',
       component: Tabbar,
-      redirect: '/user/userInfo', // 默认首页
+      redirect: 'user/userInfo', // 默认首页
 
       children: [{
         path: 'class/classList',

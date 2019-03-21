@@ -55,6 +55,7 @@ Vue.mixin({
   } */
 })
 
+Vue.config.debug = true;
 Vue.prototype.$qs = qs
 Vue.prototype.$axios = axios
 Vue.prototype.$weui = weui
@@ -121,6 +122,7 @@ router.beforeEach((to, from, next) => {
 
     // 如果没有登录
     if (!VueCookie.get('user')) {
+      console.log('没有登录')
       next({
         path: '/login',
         query: {
@@ -147,7 +149,7 @@ router.beforeEach((to, from, next) => {
 // axios请求拦截器
 axios.interceptors.request.use(
   data => {
-    console.log('data>>>', data)
+    // console.log('data>>>', data)
     // element ui Loading方法
     // loadinginstace = Loading.service({
     //   lock: true,
@@ -186,6 +188,7 @@ axios.interceptors.response.use((response) => {
   }
 })
 // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+axios.defaults.withCredentials = true
 
 /* eslint-disable no-new */
 window.vue = new Vue({

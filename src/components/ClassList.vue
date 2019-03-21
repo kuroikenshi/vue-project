@@ -62,7 +62,8 @@ export default {
     getClassList () {
       console.log('>>> 获取班级列表')
 
-      return this.$axios.post('demo/classes/getClassList').then(res => {
+      // return this.$axios.post('demo/classes/getClassList').then(res => {
+      return this.$axios.post('demo/classes/getClassListByTeachCodeTest').then(res => {
         console.log('getClassList>>>', res.data)
         this.classList = res.data.data
         this.classListLoaded = true

@@ -25,13 +25,14 @@ export default {
       momentList: [],
       scrollLoading: false,       // 正在滚动加载
       firstDataNotLoaded: true,   // 首批数据尚未装载，用来限制滚动加载
+      firstDataLoadError: false,  // 首批数据加载失败
       noMoreData: false           // 没有更多的数据了
     }
   },
   computed: {
     // 禁用滚动加载
     scrollLoadDisabled: function () {
-      return this.firstDataNotLoaded || this.scrollLoading || this.noMoreData
+      return this.firstDataNotLoaded || this.firstDataLoadError || this.scrollLoading || this.noMoreData
     },
     // 老的动态id
     oldestMomentId: function () {
@@ -76,6 +77,7 @@ export default {
       }).catch(err => {
         console.log('加载momentList失败:', err)
         this.momentListLoaded = true
+        this.firstDataLoadError = true
         this.momentListErrMsg = '-- 加载失败 --'
         this.firstDataNotLoaded = false
         return Promise.reject(err)
