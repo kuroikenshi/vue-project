@@ -31,11 +31,12 @@
     <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
     <script src="static/vendor/jquery-weui/js/swiper.js"></script>
     
+    <script src="static/js/base.js"></script>
+    
     <script>
       // TODO: 替换成原生js
       // 给点赞按钮加特效(玩)
       $('body').on('touchstart', '.act-button', function () {
-        console.log(this, this.classList, this.classList.add);
         this.classList.add('active');
         
         $(this).on('touchend', function () {

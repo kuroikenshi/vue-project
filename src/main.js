@@ -97,6 +97,12 @@ class UserLocalStorage {
     d[key1][key2] = val
     ls.set(this.username, d)
   }
+  
+  showAll () {
+    for (key in this) {
+      console.log(key + ':', this[key])
+    }
+  }
 }
 window.uls = new UserLocalStorage()
 

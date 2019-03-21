@@ -96,7 +96,16 @@
         return this.momentItemUpdated || this.momentItemBased
       },
       createDateFormatted: function() {
-        return this.momentItem.createDate.replace(/\..*$/, '')
+        if (this.momentItem.createDate) {
+          if (typeof this.momentItem.createDate === 'number') {
+            return (new Date(this.momentItem.createDate)).Format('yyyy-MM-dd hh:mm')
+          }
+          else if (typeof this.momentItem.createDate === 'string') {
+            return this.momentItem.createDate.replace(/\..*$/, '')
+          }
+        } else {
+          return '-- 迷之发布时间 --'
+        }
       },
       // 点赞用户名单
       likedUsernames: function () {
@@ -106,6 +115,7 @@
             usernameArr.push(likedItem.username)
           })
         }
+        // 处理下ArrayString
         else if (
             (typeof this.momentItem.likes) === "string" &&
             this.momentItem.likes.charAt(0) === '[' &&
@@ -125,8 +135,18 @@
             userIdArr.push(likedItem.userId)
           })
         }
+        // 处理下ArrayString
+        else if (
+            (typeof this.momentItem.likes) === "string" &&
+            this.momentItem.likes.charAt(0) === '[' &&
+            this.momentItem.likes.charAt(this.momentItem.likes.length - 1) === ']'
+        ) {
+          JSON.parse(this.momentItem.likes).forEach(likedItem => {
+            userIdArr.push(likedItem.userId)
+          })
+        }
         // alert('已点赞>>>' + (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1))
-        return (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1)
+        return (userIdArr.indexOf(window.uls.get('userinfo', 'id')) != -1)
       }
       /* ,
       ...mapGetters([
@@ -171,7 +191,7 @@
         
         let postData = this.$qs.stringify({
           momentId: this.momentItem.momentId,
-          userId: window.uls.get('userinfo', 'username')
+          userId: window.uls.get('userinfo', 'id')
         })
         
         this.$axios.post('demo/moments/toggleLike', postData).then(res => {
@@ -214,7 +234,8 @@
         }, 600)
 
         // 如果点击的是自己的评论 -> 删除
-        if (comment.authorId === window.uls.get('userinfo', 'username')) {
+        console.log('作者id:', comment.authorId, '<->', window.uls.get('userinfo', 'id'))
+        if (comment.authorId === window.uls.get('userinfo', 'id')) {
           this.__promptToDelete(comment.commentId)
         }
         // 点击别人的评论 -> 回复
@@ -347,6 +368,7 @@
     margin: 10px 10px 0px 0;
     display: block;
     float: left;
+    background: rgba(0, 0, 0, 0.1);
   }
 
   .thumbnail img {
