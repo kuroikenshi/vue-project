@@ -93,7 +93,16 @@
     },
     computed: {
       momentItem: function() {
-        return this.momentItemUpdated || this.momentItemBased
+        let _momentItem = this.momentItemUpdated || this.momentItemBased
+
+        // 处理下ArrayString
+        if (window.isArrayString(_momentItem.elementUrl)) {
+          // 防止出现单引号，转换出错
+          _momentItem.elementUrl = _momentItem.elementUrl.replace(/'/g, '"')
+          _momentItem.elementUrl = JSON.parse(_momentItem.elementUrl)
+        }
+
+        return _momentItem
       },
       createDateFormatted: function() {
         if (this.momentItem.createDate) {
@@ -116,11 +125,7 @@
           })
         }
         // 处理下ArrayString
-        else if (
-            (typeof this.momentItem.likes) === "string" &&
-            this.momentItem.likes.charAt(0) === '[' &&
-            this.momentItem.likes.charAt(this.momentItem.likes.length - 1) === ']'
-        ) {
+        else if (window.isArrayString(this.momentItem.likes)) {
           JSON.parse(this.momentItem.likes).forEach(likedItem => {
             usernameArr.push(likedItem.username)
           })
@@ -136,11 +141,7 @@
           })
         }
         // 处理下ArrayString
-        else if (
-            (typeof this.momentItem.likes) === "string" &&
-            this.momentItem.likes.charAt(0) === '[' &&
-            this.momentItem.likes.charAt(this.momentItem.likes.length - 1) === ']'
-        ) {
+        else if (window.isArrayString(this.momentItem.likes)) {
           JSON.parse(this.momentItem.likes).forEach(likedItem => {
             userIdArr.push(likedItem.userId)
           })

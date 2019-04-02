@@ -21,3 +21,11 @@ Date.prototype.Format = function(fmt) { //author: meizz
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
   return fmt;
 }
+
+window.isArrayString = function(o) {
+  return (
+    (typeof o) === "string" &&
+    o.charAt(0) === '[' &&
+    o.charAt(o.length - 1) === ']'
+  );
+}
