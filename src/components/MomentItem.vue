@@ -195,7 +195,7 @@
           userId: window.uls.get('userinfo', 'id')
         })
         
-        this.$axios.post('demo/moments/toggleLike', postData).then(res => {
+        this.$axios.post('moments/toggleLike', postData).then(res => {
           console.log('toggleLike>>>', res.data)
           
           this.momentItemUpdated = res.data.data
@@ -264,7 +264,7 @@
             if ($input.val().length > 0) {
               this.commentSubmitting = true
         
-              this.$axios.post('demo/comments/publishComment', postData).then(res => {
+              this.$axios.post('comments/publishComment', postData).then(res => {
                 console.log('publishComment>>>', res.data)
                 
                 this.momentItemUpdated = res.data.data
@@ -303,7 +303,7 @@
                 commentId: commentId
               })
               
-              this.$axios.post('demo/comments/deleteComment', postData).then(res => {
+              this.$axios.post('comments/deleteComment', postData).then(res => {
                 console.log('deleteComment>>>', res.data)
                 this.momentItemUpdated = res.data.data
                 return Promise.resolve()

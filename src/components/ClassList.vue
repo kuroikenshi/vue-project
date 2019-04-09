@@ -62,8 +62,8 @@ export default {
     getClassList () {
       console.log('>>> 获取班级列表')
 
-      // return this.$axios.post('demo/classes/getClassList').then(res => {
-      return this.$axios.post('demo/classes/getClassListByTeachCodeTest').then(res => {
+      // return this.$axios.post('classes/getClassList').then(res => {
+      return this.$axios.post('classes/getClassListByTeachCodeTest').then(res => {
         console.log('getClassList>>>', res.data)
         this.classList = res.data.data
         this.classListLoaded = true
@@ -91,7 +91,7 @@ export default {
 
         console.log('postData>>>', postData)
 
-        that.$axios.post('demo/moments/getNewsCount', postData).then(res => {
+        that.$axios.post('moments/getNewsCount', postData).then(res => {
           console.log('getNewsCount>>>', res.data)
           if (res.status === 200 && res.statusText === 'OK') {
             console.log('    count:', res.data.data)

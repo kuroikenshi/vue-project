@@ -77,7 +77,7 @@ export default {
       
       // console.log('>>> 获取动态数据')
       
-      return this.$axios.post('demo/moments/getMoments', postData).then(res => {
+      return this.$axios.post('moments/getMoments', postData).then(res => {
         console.log('首次加载-加载成功>>>', res.data)
         
         // 加载新的，重置没有更多的开关
@@ -107,7 +107,7 @@ export default {
         mode: 'old'                                   // 查找之前的
       })
       
-      return this.$axios.post('demo/moments/getMoments', postData).then(res => {
+      return this.$axios.post('moments/getMoments', postData).then(res => {
         console.log('加载更多-加载成功>>>', res.data)
         
         if (res.data.data.length == 0) {

@@ -39,11 +39,11 @@ module.exports = {
         }, */
         
         // 黄国庆的机器
-        '/demo': {
+        '*': {
             target: 'http://10.176.242.104:80',
             changeOrigin: true,
             pathRewrite: {
-                '^/demo': ''
+                '^.': ''
             }
         },
     },

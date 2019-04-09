@@ -49,8 +49,8 @@ export default {
         password: this.password
       })
 
-      // this.$axios.post('demo/login', postData).then(res => {
-      this.$axios.post('demo/login/teacherLoginTest', postData).then(res => {
+      // this.$axios.post('login', postData).then(res => {
+      this.$axios.post('login/teacherLoginTest', postData).then(res => {
         console.log('login Resp>>>', res)
         // 登陆成功
         if (res.status === 200 && res.data.status === 200) {
