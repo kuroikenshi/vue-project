@@ -29,3 +29,17 @@ window.isArrayString = function(o) {
     o.charAt(o.length - 1) === ']'
   );
 }
+
+window.weuiSuccess = function (tipText) {
+  window.vue.$weui.topTips(tipText, {
+    duration: 3000,
+    className: 'weui-toptips_visible xdf_green'
+  })
+}
+
+window.weuiErr = function (tipText) {
+  window.vue.$weui.topTips(tipText, {
+    duration: 3000,
+    className: 'weui-toptips_visible'
+  })
+}

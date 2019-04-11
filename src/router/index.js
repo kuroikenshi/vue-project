@@ -3,7 +3,8 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 // import MyComp from '@/components/MyComp'
 
-import Login from '@/components/Login'
+// import Login from '@/components/Login'
+import LoginWithVCode from '@/components/LoginWithVCode'
 
 import Chating from '@/components/Chating'
 
@@ -33,7 +34,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: LoginWithVCode
     },
 
     {

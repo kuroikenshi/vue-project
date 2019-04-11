@@ -89,6 +89,12 @@ body, html {
     color: hsla(0,0%,100%,.6);
     background-color: #00ad85;
 }
+.weui-btn {
+    transition: background-color ease-in-out 0.3s;
+}
+.weui-btn[disabled] {
+    background-color: #ddd;
+}
 
 /* 图片预览，长图的解决方案 */
 .weui-gallery__img {

@@ -31,10 +31,10 @@
         <i class="weui-tabbar__icon my-icon icon-home"></i>
         <p class="weui-tabbar__label">班级空间</p>
       </router-link>
-      <router-link href="javascript:;" class="weui-tabbar__item" :class="{'weui-bar__item_on': isCurrent('chat')}" to="/chat/chatList">
+      <!-- <router-link href="javascript:;" class="weui-tabbar__item" :class="{'weui-bar__item_on': isCurrent('chat')}" to="/chat/chatList">
         <i class="weui-tabbar__icon my-icon icon-mail"></i>
         <p class="weui-tabbar__label">私信</p>
-      </router-link>
+      </router-link> -->
       <router-link href="javascript:;" class="weui-tabbar__item" :class="{'weui-bar__item_on': isCurrent('user')}" to="/user/userInfo">
         <i class="weui-tabbar__icon my-icon icon-user"></i>
         <p class="weui-tabbar__label">我</p>
