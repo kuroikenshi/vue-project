@@ -11,46 +11,55 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        // 尝试跨域
-        '/api': {
-            target: 'http://192.168.3.53:8082',
-            // target: 'http://192.168.10.121:8082',
-            changeOrigin: true,
-            pathRewrite: {
-                '^/api': ''
-            }
-        },
-        // 尝试跨域
-        /* '/demo': {
-            target: 'http://localhost:3000',
-            changeOrigin: true,
-            pathRewrite: {
-                '^/demo': '/popsoul'
-            }
-        }, */
-        
-        // 测试服务器
-        /* '/demo': {
-            target: 'http://10.15.5.38:8088',
-            changeOrigin: true,
-            pathRewrite: {
-                '^/demo': '/'
-            }
-        }, */
-        
-        // 黄国庆的机器
-        '*': {
-            target: 'http://10.176.242.104:80',
-            changeOrigin: true,
-            pathRewrite: {
-                '^.': ''
-            }
-        },
+      // 尝试跨域
+      /* '/api': {
+          target: 'http://localhost:3000',
+          // target: 'http://192.168.10.121:8082',
+          changeOrigin: true,
+          pathRewrite: {
+              '^/api': ''
+          }
+      }, */
+      // 尝试跨域
+      /* '/demo': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          pathRewrite: {
+              '^/demo': '/popsoul'
+          }
+      }, */
+      
+      // 测试服务器
+      /* '/demo': {
+          target: 'http://10.15.5.38:8088',
+          changeOrigin: true,
+          pathRewrite: {
+              '^/demo': '/'
+          }
+      }, */
+      
+      // 黄国庆的机器(测试通过)
+      /* '*': {
+        target: 'http://10.176.242.104:80',
+        changeOrigin: true,
+        pathRewrite: {
+          '^.': ''
+        }
+      }, */
+
+      // 本地的机器(测试通过)
+      '*': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^': '/popsoul'   // 在前边加url
+        }
+      },
     },
 
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
-    host: '10.176.242.148', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 // import MyComp from '@/components/MyComp'
 
-// import Login from '@/components/Login'
+import LoginTest from '@/components/LoginTest'
 import LoginWithVCode from '@/components/LoginWithVCode'
 
 import Chating from '@/components/Chating'
@@ -31,10 +31,17 @@ export default new Router({
     //   component: MyComp
     // },
 
-    {
+    // 正式环境使用
+    /* {
       path: '/login',
       name: 'Login',
       component: LoginWithVCode
+    }, */
+    // 测试环境使用
+    {
+      path: '/login',
+      name: 'Login',
+      component: LoginTest
     },
 
     {
@@ -55,7 +62,7 @@ export default new Router({
         name: 'ClassList',
         component: ClassList,
         meta: {
-          requireAuth: true
+          requireAuth: false
         }
       }, {
         path: 'class/:classCode/moments',

@@ -19,6 +19,7 @@
     "framework7-vue": "^3.5.2",
     "jquery": "^3.3.1",
     "jquery-weui": "^1.2.1",
+    "npm": "^6.9.0",
     "store": "^2.0.12",
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",

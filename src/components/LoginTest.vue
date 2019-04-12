@@ -41,16 +41,16 @@ export default {
     // 登陆方法
     login: function (event) {
       
-      // this.username = '18311021317'
-      // this.password = '123'
+      this.username = '18311021317'
+      this.password = '123'
       // 使用qs解决
       let postData = this.$qs.stringify({
         username: this.username,
         password: this.password
       })
 
-      // this.$axios.post('login', postData).then(res => {
-      this.$axios.post('login/teacherLoginTest', postData).then(res => {
+      this.$axios.post('login', postData).then(res => {
+      // this.$axios.post('login/teacherLoginTest', postData).then(res => {
         console.log('login Resp>>>', res)
         // 登陆成功
         if (res.status === 200 && res.data.status === 200) {
