@@ -100,7 +100,6 @@ export default {
       this.scrollLoading = true
       console.log('加载更多-加载中...')
       
-      
       let postData = this.$qs.stringify({
         classCode: this.classCode,                    // 班级code
         lastUpdateTime: this.oldestMomentCreateDate,  // 最旧一条动态的发布时间

@@ -1,10 +1,18 @@
 <template>
-  <div class="moment">
+  <div class="moment" v-show="!momentHasBeenDeleted">
     <!-- 标题块 -->
     <div class="title-row">
+      <!-- 伪删除按钮 -->
+      <a class="sub-color moment-btn" @click="deleteMoment" v-show="showDeleteBtn">
+        <i class="icon icon-x"></i>
+      </a>
+      
+      <!-- 头像 -->
       <img :src="momentItem.userPhoto" class="user-photo" v-once />
-      <a class="link-color font-size-l stronger display-ib margin-v3" v-once>{{ momentItem.createName }}</a>
-      <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }}</p>
+      <!-- 发布人姓名 -->
+      <a class="link-color font-size-l display-ib margin-v3 user-title" v-once>{{ momentItem.createName }} <span class="user-badge" v-show="!!momentItem.role">{{ momentItem.role }}</span></a>
+      <!-- 发布时间 -->
+      <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }} <span class="moment-badge" v-show="!!momentItem.type">{{ momentItem.type }}</span></p>
     </div>
 
     <!-- 状态详情块 -->
@@ -67,11 +75,12 @@
 
 <script>
   import _ from 'lodash'
+  import Global from '@/components/Global'
   
   // 弹出评论输入框
   function __popCommentInputBox() {
     $commentContainer.addClass('weui-actionsheet_toggle')
-    $commentMask.fadeIn(200)  // 这里必须有值，在为0的时候，会出现光标错位问题
+    $commentMask.fadeIn(180)  // 这里必须有值，在为0的时候，会出现光标错位问题
 
     // 输入框清空回复给用户的字样
     $input.removeAttr('placeholder')
@@ -85,13 +94,19 @@
   export default {
     name: 'MyComp',
     props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
+    beforeCreate: function () {
+      // 是否显示删除动态按钮
+      this.showDeleteBtn = (Global.userType.TEACHER === window.uls.get('userinfo', 'userType'))
+    },
     data() {
       return {
         momentItemUpdated: undefined,  // 用来存储更新后的momentItem
-        commentSubmitting: false       // 用来避免重复提交的变量
+        commentSubmitting: false,      // 用来避免重复提交的变量
+        momentHasBeenDeleted: false    // 临时删除用
       }
     },
     computed: {
+      // 合并动态数据
       momentItem: function() {
         let _momentItem = this.momentItemUpdated || this.momentItemBased
 
@@ -275,7 +290,7 @@
                 window.scrollTo(0, 500);
                 
                 $commentContainer.removeClass('weui-actionsheet_toggle')
-                $commentMask.fadeOut(200)
+                $commentMask.fadeOut(180)
                 
                 return Promise.resolve()
               }).catch(err => {
@@ -289,7 +304,7 @@
         })
       },
       
-      // 引导删除
+      // 引导删除评论
       __promptToDelete: function (commentId) {
         console.log('<<<__promptToDelete>>> ', commentId)
         
@@ -323,6 +338,45 @@
             className: 'weui-actionsheet-limit'
           }
         )
+      },
+      
+      // 删除本条动态
+      deleteMoment: function () {
+        window.vue.$weui.confirm('删除这条动态后家长将无法查看和评论，是否删除', {
+          className: 'xdf-confirm',
+          buttons: [{
+            label: '取消',
+            type: 'default',
+            onClick: function () {
+            }
+          }, {
+            label: '删除',
+            type: 'primary',
+            onClick: () => {
+              // 删除本条动态
+              let postData = this.$qs.stringify({
+                momentId: this.momentItem.momentId
+              })
+              
+              this.$axios.post('moments/deleteMoment', postData).then(res => {
+                console.log('deleteMoment>>>', res.data)
+                let deleteCount = res.data.data
+                if (deleteCount > 0) {
+                  window.weuiSuccess('删除成功')
+                  
+                  this.momentHasBeenDeleted = true
+                  
+                } else {
+                  window.weuiErr('删除失败...请刷新确认后重试')
+                }
+                return Promise.resolve()
+              }).catch(err => {
+                console.log('加载deleteMoment返回数据失败:', err)
+                return Promise.reject(err)
+              })
+            }
+          }]
+        })
       }
       /* ,
      ...mapMutations(['setPhotos', 'PBshow']) */
@@ -336,6 +390,13 @@
     padding: 0 15px 15px 15px;
     border-bottom: 1px solid #ccc;
   }
+  
+  .moment-btn {
+    float: right;
+  }
+  .moment-btn i {
+    margin-right: 0;
+  }
 
   .title-row {
     padding: 15px 0 6px;
@@ -348,8 +409,32 @@
     margin-right: 10px;
   }
 
-  .cname {
+  .user-title {
+    color: #039974;
     font-weight: 600;
+  }
+  
+  .user-badge {
+    background: #039974;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: 100;
+    font-size: 12px;
+    display: inline-block;
+    line-height: 18px;
+    padding: 0 5px 0 4px;
+    vertical-align: text-bottom;
+    margin-left: 5px;
+  }
+  
+  .moment-badge {
+    font-size: 10px;
+    color: #039974;
+    background: #ddd;
+    display: inline-block;
+    line-height: 16px;
+    padding: 1px 5px 1px 4px;
+    margin-left: 5px;
   }
 
   .thumbnails-row {
@@ -399,6 +484,11 @@
 
   .icon-comment {
     background: url('/static/imgs/icon-comment.png') no-repeat;
+    background-size: contain;
+  }
+  
+  .icon-x {
+    background: url('/static/imgs/icon-x.png') no-repeat;
     background-size: contain;
   }
 

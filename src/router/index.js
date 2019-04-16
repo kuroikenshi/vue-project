@@ -32,17 +32,17 @@ export default new Router({
     // },
 
     // 正式环境使用
-    /* {
-      path: '/login',
-      name: 'Login',
-      component: LoginWithVCode
-    }, */
-    // 测试环境使用
     {
       path: '/login',
       name: 'Login',
-      component: LoginTest
+      component: LoginWithVCode
     },
+    // 测试环境使用
+    /* {
+      path: '/login',
+      name: 'Login',
+      component: LoginTest
+    }, */
 
     {
       path: '/chating',
@@ -62,7 +62,7 @@ export default new Router({
         name: 'ClassList',
         component: ClassList,
         meta: {
-          requireAuth: false
+          requireAuth: true
         }
       }, {
         path: 'class/:classCode/moments',

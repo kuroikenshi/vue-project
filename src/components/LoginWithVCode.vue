@@ -44,6 +44,10 @@
           <div class="weui-btn-area">
             <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
           </div>
+          <div class="weui-btn-area">
+            <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="loginParentTest">loginParentTest</a>
+            <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="teacherLoginTest">teacherLoginTest</a>
+          </div>
         </div>
       </form>
       
@@ -65,6 +69,8 @@
 </template>
 
 <script>
+  import Global from '@/components/Global'
+  import _ from 'lodash'
   import weui from 'weui.js'
   
   // 报错提示
@@ -191,6 +197,101 @@
         }
       },
       
+      // TODEL: 绕过手机短信登陆，上线删除
+      loginParentTest: function (event) {
+        this.$axios.post('login/parentTest').then(res => {
+          console.log('login Resp>>>', res)
+          // 登陆成功
+          if (res.status === 200 && res.data.status === 200) {
+            // 保存用户信息状态
+            this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
+              expires: 'session'
+            })
+            console.log('get cookie:', this.$qs.parse(this.$cookie.get('user')))
+
+            if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+              // 加载指定用户的uls
+              window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
+              // 更新uls中存储的信息（中文名，userId）
+              window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
+              window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
+              window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              
+              // 测试用
+              let ut = window.uls.get('userinfo', 'userType')
+              console.log('登陆身份参数 >>>', ut)
+              if (!Array.isArray(ut)) {
+                ut = [ut]
+              }
+              ut.forEach(item => {
+                console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
+              })
+            }
+            // 万一没有username的情况
+            else {
+              window.weuiErr('Cookie中username为: ' + this.username + '')
+              return
+            }
+            
+            // 跳转回redirect地址
+            if (!!this.$route.query.redirect) {
+              this.$router.push(this.$route.query.redirect)
+            }
+            // 如果没有就默认跳转到用户信息页面
+            else {
+              this.$router.push('user/userInfo')
+            }
+          } else {
+            window.weuiErr(res.data.status + ': ' + res.data.msg)
+          }
+        })
+      },
+      
+      // TODEL: 绕过手机短信登陆，上线删除
+      teacherLoginTest: function (event) {
+        this.$axios.post('login/teacherLoginTest').then(res => {
+          console.log('login Resp>>>', res)
+          // 登陆成功
+          if (res.status === 200 && res.data.status === 200) {
+            // 保存用户信息状态
+            this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
+              expires: 'session'
+            })
+            console.log('get cookie:', this.$qs.parse(this.$cookie.get('user')))
+      
+            if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+              // 加载指定用户的uls
+              window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
+              // 更新uls中存储的信息（中文名，userId）
+              window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
+              window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
+              window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              
+              // 测试用
+              let ut = window.uls.get('userinfo', 'userType')
+              console.log('登陆身份参数 >>>', ut)
+              console.log(Global.userType.ADMIN === ut, Global.userType.PARENT === ut, Global.userType.TEACHER === ut)
+            }
+            // 万一没有username的情况
+            else {
+              window.weuiErr('Cookie中username为: ' + this.username + '')
+              return
+            }
+            
+            // 跳转回redirect地址
+            if (!!this.$route.query.redirect) {
+              this.$router.push(this.$route.query.redirect)
+            }
+            // 如果没有就默认跳转到用户信息页面
+            else {
+              this.$router.push('user/userInfo')
+            }
+          } else {
+            window.weuiErr(res.data.status + ': ' + res.data.msg)
+          }
+        })
+      },
+      
       // 登陆方法
       login: function (event) {
         // 使用qs解决
@@ -217,6 +318,16 @@
               window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
               window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
               window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              
+              // 测试用
+              /* let ut = window.uls.get('userinfo', 'userType')
+              console.log('登陆身份参数 >>>', ut)
+              if (!Array.isArray(ut)) {
+                ut = [ut]
+              }
+              ut.forEach(item => {
+                console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
+              }) */
             }
             // 万一没有username的情况
             else {

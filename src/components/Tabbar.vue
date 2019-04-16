@@ -13,8 +13,7 @@
 
         <div class="right">
           <a href="javascript: void(0);" class="tabbar-btn"
-              v-show="(new RegExp('\/class\/[^\/]*\/moments')).test($router.history.current.path)"
-              @click="momentAdd">
+              @click="momentAdd" v-show="showAddMoment">
             <i class="f7-icons">add</i>
           </a>
         </div>
@@ -44,68 +43,79 @@
 </template>
 
 <script>
-export default {
-  name: 'tabbar',
-  data () {
-    return {
-      // msg: 'This is my component',
-      navbarTitle: '----',
-      backPath: ''
-    }
-  },
-  methods: {
-    go: function (path) {
-      // console.log('>>>', this.$router.history.current.path + '/' + path)
-      this.$router.push(this.$router.history.current.path + '/' + path)
-    },
-    goBack: function () {
-      if (!this.backPath) {
-        this.$router.back()
-      } else {
-        let backPath = this.backPath
-        this.backPath = ''
-        this.$router.push(backPath)
+  import Global from '@/components/Global'
+
+  export default {
+    name: 'tabbar',
+    data () {
+      return {
+        // msg: 'This is my component',
+        navbarTitle: '----',
+        backPath: ''
       }
     },
-    // 是当前路径
-    isCurrent: function (path) {
-      return (this.$router.history.current.path.indexOf(path) > -1)
-    },
-    // 是否显示navbar
-    isNavShow: function () {
-      // console.log('params>>>', this.$route)
-      let hideNavPath = ['/user/userInfo']
-      return (hideNavPath.indexOf(this.$router.history.current.path) === -1)
-    },
-    // 是否显示navbar
-    isTabShow: function () {
-      // console.log('params>>>', this.$route)
-      let hideTabPath = ['/class/momentAdd']
-      return (hideTabPath.indexOf(this.$router.history.current.path) === -1)
-    },
-    // 更新一些值
-    updateSomeValue: function(data) {
-      // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
-      for (let key in data) {
-        this[key] = data[key]
+    computed: {
+      showAddMoment: function () {
+        let ut = window.uls.get('userinfo', 'userType')
+        // 是moments路径，且身份为老师或助教
+        console.log('>>> ut:', ut)
+        console.log(' -> 显示新增按钮:' + (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) + ' && ' + '(' + (ut === Global.userType.TEACHER) + ' || ' + (ut === Global.userType.ASSISTANT)+')')
+        return (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && ((ut === Global.userType.TEACHER) || (ut === Global.userType.ASSISTANT))
       }
     },
-    // 进入班级动态
-    momentAdd () {    
-      this.$router.push('/class/momentAdd')
+    methods: {
+      go: function (path) {
+        // console.log('>>>', this.$router.history.current.path + '/' + path)
+        this.$router.push(this.$router.history.current.path + '/' + path)
+      },
+      goBack: function () {
+        if (!this.backPath) {
+          this.$router.back()
+        } else {
+          let backPath = this.backPath
+          this.backPath = ''
+          this.$router.push(backPath)
+        }
+      },
+      // 是当前路径
+      isCurrent: function (path) {
+        return (this.$router.history.current.path.indexOf(path) > -1)
+      },
+      // 是否显示navbar
+      isNavShow: function () {
+        // console.log('params>>>', this.$route)
+        let hideNavPath = ['/user/userInfo']
+        return (hideNavPath.indexOf(this.$router.history.current.path) === -1)
+      },
+      // 是否显示navbar
+      isTabShow: function () {
+        // console.log('params>>>', this.$route)
+        let hideTabPath = ['/class/momentAdd']
+        return (hideTabPath.indexOf(this.$router.history.current.path) === -1)
+      },
+      // 更新一些值
+      updateSomeValue: function(data) {
+        // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
+        for (let key in data) {
+          this[key] = data[key]
+        }
+      },
+      // 进入班级动态
+      momentAdd () {    
+        this.$router.push('/class/momentAdd')
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-.tabbar-btn {
-  color: #333!important;
-}
-.tabbar-btn i.f7-icons {
-  font-size: 18px;
-}
-.right {
-  min-width: 18px;
-}
+  .tabbar-btn {
+    color: #333!important;
+  }
+  .tabbar-btn i.f7-icons {
+    font-size: 18px;
+  }
+  .right {
+    min-width: 18px;
+  }
 </style>

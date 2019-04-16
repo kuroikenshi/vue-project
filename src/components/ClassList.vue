@@ -32,85 +32,105 @@
 </template>
 
 <script>
-export default {
-  name: 'MyComp',
-  data () {
-    return {
-      classListLoaded: false,
-      classListErrMsg: '',
-      classList: []
-    }
-  },
-  created () {
-      // 更新tabbar参数
-      this.$emit('eventPop_updateTabbar', {
-        'navbarTitle': '班级列表'
-      })
-
-    // 加载classList
-    this.getClassList()
-  },
-  methods: {
-    // 进入班级动态
-    enterClassMoments (classCode) {
-      console.log('classCode:', classCode)
-
-      this.$router.push('/class/' + classCode + '/moments')
+  import Global from '@/components/Global'
+  
+  export default {
+    name: 'MyComp',
+    data () {
+      return {
+        classListLoaded: false,
+        classListErrMsg: '',
+        classList: []
+      }
     },
-
-    // 获取班级列表
-    getClassList () {
-      console.log('>>> 获取班级列表')
-
-      return this.$axios.post('classes/getClassList').then(res => {
-      // return this.$axios.post('classes/getClassListByTeachCodeTest').then(res => {
-        console.log('getClassList>>>', res.data)
-        this.classList = res.data.data
-        this.classListLoaded = true
-        return Promise.resolve()
-      }).catch(err => {
-        console.log('加载classList失败:', err)
-        this.classListLoaded = true
-        this.classListErrMsg = '-- 加载失败 --'
-        return Promise.reject(err)
-      })
-    }
-
-    // 获取班级最新消息个数
-    /* getEachClassNewsCount () {
-      console.log('获取班级最新消息个数:', this.classList[0].count)
-      let that = this
-
-      // 遍历加载新消息个数
-      this.classList.forEach(function (classItem) {
-        console.log('>>> 遍历加载新消息个数', classItem.classCode)
-        let postData = that.$qs.stringify({
-          classCode: classItem.classCode,
-          lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate') || new Date(2018).valueOf()
+    created () {
+        // 更新tabbar参数
+        this.$emit('eventPop_updateTabbar', {
+          'navbarTitle': '班级列表'
         })
 
-        console.log('postData>>>', postData)
+      // 加载classList
+      this.getClassList()
+    },
+    methods: {
+      // 进入班级动态
+      enterClassMoments (classCode) {
+        console.log('classCode:', classCode)
 
-        that.$axios.post('moments/getNewsCount', postData).then(res => {
-          console.log('getNewsCount>>>', res.data)
-          if (res.status === 200 && res.statusText === 'OK') {
-            console.log('    count:', res.data.data)
-            console.log('    classItem.count:', classItem.count)
-            classItem.count = res.data.data + '条新消息'
-            console.log('    >>>>>', that.classList[0].count)
-          } else {
-            alert('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
-          }
+        this.$router.push('/class/' + classCode + '/moments')
+      },
+
+      // 获取班级列表
+      getClassList () {
+        console.log('>>> 获取班级列表')
+        
+        /* let getClassListUrl = undefined
+        switch (window.uls.get('userinfo', 'userType')) {
+          case Global.userType.PARENT:
+            getClassListUrl = 'classes/getClassListByStuCodeTest'
+            break
+          
+          case Global.userType.ADMIN:
+          case Global.userType.TEACHER:
+            getClassListUrl = 'classes/getClassListByTeachCodeTest'
+            break
+          
+          default:
+            getClassListUrl = 'classes/getClassList'
+            break
+        }
+        
+        console.log('getClassListUrl >>>', getClassListUrl) */
+
+        // return this.$axios.post('classes/getClassList').then(res => {
+        return this.$axios.post('classes/getClassList').then(res => {
+          console.log('getClassList>>>', res.data)
+          this.classList = res.data.data
+          this.classListLoaded = true
           return Promise.resolve()
         }).catch(err => {
-          console.log('获取班级最新消息个数错误:', err)
-          classItem.count = '获取新消息个数失败'
+          console.log('加载classList失败:', err)
+          this.classListLoaded = true
+          this.classListErrMsg = '-- 加载失败 --'
           return Promise.reject(err)
         })
-      })
-    } */
+      }
+
+      // 获取班级最新消息个数
+      /* getEachClassNewsCount () {
+        console.log('获取班级最新消息个数:', this.classList[0].count)
+        let that = this
+
+        // 遍历加载新消息个数
+        this.classList.forEach(function (classItem) {
+          console.log('>>> 遍历加载新消息个数', classItem.classCode)
+          let postData = that.$qs.stringify({
+            classCode: classItem.classCode,
+            lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate') || new Date(2018).valueOf()
+          })
+
+          console.log('postData>>>', postData)
+
+          that.$axios.post('moments/getNewsCount', postData).then(res => {
+            console.log('getNewsCount>>>', res.data)
+            if (res.status === 200 && res.statusText === 'OK') {
+              console.log('    count:', res.data.data)
+              console.log('    classItem.count:', classItem.count)
+              classItem.count = res.data.data + '条新消息'
+              console.log('    >>>>>', that.classList[0].count)
+            } else {
+              alert('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
+            }
+            return Promise.resolve()
+          }).catch(err => {
+            console.log('获取班级最新消息个数错误:', err)
+            classItem.count = '获取新消息个数失败'
+            return Promise.reject(err)
+          })
+        })
+      } */
+    }
   }
-}
 </script>
 
 <style scoped>

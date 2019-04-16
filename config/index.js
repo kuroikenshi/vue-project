@@ -39,27 +39,24 @@ module.exports = {
       }, */
       
       // 黄国庆的机器(测试通过)
-      /* '*': {
+      '/': {
         target: 'http://10.176.242.104:80',
-        changeOrigin: true,
-        pathRewrite: {
-          '^.': ''
-        }
-      }, */
+        changeOrigin: true
+      },
 
       // 本地的机器(测试通过)
-      '*': {
+      /* '*': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         pathRewrite: {
           '^': '/popsoul'   // 在前边加url
         }
-      },
+      }, */
     },
 
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '10.176.242.148', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

@@ -222,6 +222,24 @@ body, html {
   opacity: 1;
   visibility: visible;
 }
+
+/* 对话框自定样式 */
+.xdf-confirm .weui-dialog {
+  width: 72%;
+}
+.xdf-confirm .weui-dialog__bd:first-child {
+  font-size: 16px;
+  padding: 15px 20px;
+  text-align: left;
+  line-height: 27px;
+}
+.xdf-confirm .weui-dialog__btn {
+  font-size: 17px;
+}
+.xdf-confirm .weui-dialog__btn.weui-dialog__btn_primary {
+  color: #09b78d;
+}
+
 /* .weui-toptips {
   z-index: 5000;
   opacity: 1;
