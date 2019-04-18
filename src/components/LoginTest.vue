@@ -65,9 +65,9 @@ export default {
             // 加载指定用户的uls
             window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
             // 更新uls中存储的信息（中文名，userId）
-            window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
-            window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
-            window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+            window.uls.set('userInfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
+            window.uls.set('userInfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
+            window.uls.set('userInfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
           }
           // 万一没有username的情况
           else {

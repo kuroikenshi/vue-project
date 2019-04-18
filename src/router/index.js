@@ -16,6 +16,8 @@ import MomentAdd from '@/components/MomentAdd'
 import ChatList from '@/components/ChatList'
 import UserInfo from '@/components/UserInfo'
 
+import Refresh from '@/components/Refresh'
+
 Vue.use(Router)
 
 export default new Router({
@@ -30,6 +32,13 @@ export default new Router({
     //   name: 'MyComp',
     //   component: MyComp
     // },
+    
+    // VueRouter刷新用
+    {
+      path: '/refresh',
+      name: 'Refresh',
+      component: Refresh
+    },
 
     // 正式环境使用
     {

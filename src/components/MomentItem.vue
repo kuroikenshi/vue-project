@@ -82,6 +82,7 @@
   
   // 弹出评论输入框
   function __popCommentInputBox() {
+    $commentContainer.show()
     $commentContainer.addClass('weui-actionsheet_toggle')
     $commentMask.fadeIn(180)  // 这里必须有值，在为0的时候，会出现光标错位问题
 
@@ -99,7 +100,7 @@
     props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
     beforeCreate: function () {
       // 是否显示删除动态按钮
-      this.showDeleteBtn = (Global.userType.TEACHER === window.uls.get('userinfo', 'userType'))
+      this.showDeleteBtn = (Global.userType.TEACHER === window.uls.get('userInfo', 'userType'))
     },
     data() {
       return {
@@ -164,8 +165,8 @@
             userIdArr.push(likedItem.userId)
           })
         }
-        // alert('已点赞>>>' + (userIdArr.indexOf(window.uls.get('userinfo', 'username')) != -1))
-        return (userIdArr.indexOf(window.uls.get('userinfo', 'id')) != -1)
+        // alert('已点赞>>>' + (userIdArr.indexOf(window.uls.get('userInfo', 'username')) != -1))
+        return (userIdArr.indexOf(window.uls.get('userInfo', 'id')) != -1)
       }
       /* ,
       ...mapGetters([
@@ -210,7 +211,7 @@
         
         let postData = this.$qs.stringify({
           momentId: this.momentItem.momentId,
-          userId: window.uls.get('userinfo', 'id')
+          userId: window.uls.get('userInfo', 'id')
         })
         
         this.$axios.post('moments/toggleLike', postData).then(res => {
@@ -253,8 +254,8 @@
         }, 600)
 
         // 如果点击的是自己的评论 -> 删除
-        console.log('作者id:', comment.authorId, '<->', window.uls.get('userinfo', 'id'))
-        if (comment.authorId === window.uls.get('userinfo', 'id')) {
+        console.log('作者id:', comment.authorId, '<->', window.uls.get('userInfo', 'id'))
+        if (comment.authorId === window.uls.get('userInfo', 'id')) {
           this.__promptToDelete(comment.commentId)
         }
         // 点击别人的评论 -> 回复
@@ -273,7 +274,7 @@
             let postData = this.$qs.stringify({
               momentId: this.momentItem.momentId,
               content: $input.val(),
-              authorId: window.uls.get('userinfo', 'username'),
+              authorId: window.uls.get('userInfo', 'username'),
               authorName: '华晨名',  // TODO
               toUserId: toUserId,
               toUserName: toUserName

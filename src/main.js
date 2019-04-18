@@ -124,10 +124,10 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     console.log('Going to:', to.path)
     console.log('    requireAuth:', to.meta.requireAuth)
-    console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), 'need login:', !VueCookie.get('user'))
+    console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), '需要登陆:', !(window.uls && window.uls.get('userInfo', 'id')))
 
     // 如果没有登录
-    if (!VueCookie.get('user')) {
+    if (!(window.uls && window.uls.get('userInfo', 'id'))) {
       console.log('没有登录')
       next({
         path: '/login',
@@ -136,15 +136,8 @@ router.beforeEach((to, from, next) => {
         } // 把要跳转的地址作为参数传到下一步
       })
     }
-    // 如果已登录，直接装载登录uls
+    // 如果已登录，继续
     else {
-      if (!window.uls.username) {
-        let username = qs.parse(VueCookie.get('user'))['username']
-        if (!username) {
-          alert('[ERR] Cookie中username为: ' + username + ', from>>> auto load in main.js')
-        }
-        window.uls.init(username)
-      }
       next()
     }
   } else {

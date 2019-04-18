@@ -65,7 +65,7 @@
         console.log('>>> 获取班级列表')
         
         /* let getClassListUrl = undefined
-        switch (window.uls.get('userinfo', 'userType')) {
+        switch (window.uls.get('userInfo', 'userType')) {
           case Global.userType.PARENT:
             getClassListUrl = 'classes/getClassListByStuCodeTest'
             break

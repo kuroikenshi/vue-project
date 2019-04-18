@@ -17,7 +17,7 @@
     <!-- 班级动态-评论框-遮罩层 -->
     <div class="weui-mask" id="commentMask" style="display: none"></div>
     <!-- 班级动态-评论框 -->
-    <div class="weui-actionsheet" id="commentContainer">
+    <div class="weui-actionsheet" id="commentContainer" style="display: none;">
       <div class="commentbar">
         <form>
           <input type="text" class="commentbar-input" id="commentInput" onkeypress="if(event.keyCode == 13) return false;">
@@ -94,13 +94,13 @@
       window.backgroundSubmit = function(param) {
         // 提示开始任务
         window.vue.$weui.topTips('发布中，请勿关闭此页...', {
-          duration: 5000,
+          duration: 60000,
           className: 'weui-toptips_visible xdf_orange',
         })
         
         // 批量上传图片
         let axiosList = []
-        let elementUrl = {}   // 这里用对象, 因为后边要根据idx排序输出values
+        window.elementUrl = {}   // 这里用对象, 因为后边要根据idx排序输出values
         Array.from(param.imageFiles).forEach((imgFile, idx) => {
           let formData = new FormData()
           formData.append('file', imgFile)
@@ -110,7 +110,13 @@
             if (res.status == 200 && res.data.status == 200) {
               console.log('图片上传成功')
               console.log(res, res.data)
-              elementUrl[idx] = res.data.data   // 传完图片后更新图片url
+              window.elementUrl[idx] = res.data.data   // 传完图片后更新图片url
+              
+              // 更新图片成功提示
+              window.vue.$weui.topTips('发布中(' + Object.keys(window.elementUrl).length + '/' + param.imageFiles.length + ')，请勿关闭此页...', {
+                duration: 60000,
+                className: 'weui-toptips_visible xdf_orange',
+              })
             } else {
               console.error("图片上传失败")
             }
@@ -138,24 +144,18 @@
             console.log('publishComment>>>', res.data)
             
             // 成功后提示
-            window.vue.$weui.topTips('发布成功！', {
-              duration: 3000,
-              className: 'weui-toptips_visible xdf_green',
-            })
+            window.weuiSuccess('发布成功！')
             setTimeout(function() {
               console.log('刷新')
-              window.location.reload()
-              window.vue.$router.push('/class/' + param.classCode + '/moments')
+              // 刷新页面(没法使用provide/inject方式实现)
+              window.vue.$router.push('/refresh')
               
-            }, 500)
+            }, 1000)
             
             return Promise.resolve()
           }).catch(err => {
             // 失败后提示
-            window.vue.$weui.topTips('发布失败！' + err.toString(), {
-              duration: 5000,
-              className: 'weui-toptips_visible',
-            })
+            window.weuiErr('发布失败！' + err.toString())
             return Promise.reject(err)
           })
         }))

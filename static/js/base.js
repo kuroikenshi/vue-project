@@ -39,7 +39,7 @@ window.weuiSuccess = function (tipText) {
 
 window.weuiErr = function (tipText) {
   window.vue.$weui.topTips(tipText, {
-    duration: 3000,
+    duration: 5000,
     className: 'weui-toptips_visible'
   })
 }

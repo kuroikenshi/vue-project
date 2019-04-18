@@ -207,18 +207,24 @@
             this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
               expires: 'session'
             })
-            console.log('get cookie:', this.$qs.parse(this.$cookie.get('user')))
+            
+            var userInfo = this.$qs.parse(this.$cookie.get('user'))
+            console.log('get cookie:', userInfo)
 
-            if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+            if (!!userInfo['username']) {
               // 加载指定用户的uls
-              window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
-              // 更新uls中存储的信息（中文名，userId）
-              window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
-              window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
-              window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              window.uls.init(userInfo['username'])
+              
+              console.log('userInfo:', userInfo)
+              
+              // 将值放入uls
+              let keys = Object.keys(userInfo)
+              for (let i = 0; i < keys.length; i++) {
+                window.uls.set('userInfo', keys[i], userInfo[keys[i]])
+              }
               
               // 测试用
-              let ut = window.uls.get('userinfo', 'userType')
+              let ut = window.uls.get('userInfo', 'userType')
               console.log('登陆身份参数 >>>', ut)
               if (!Array.isArray(ut)) {
                 ut = [ut]
@@ -257,18 +263,24 @@
             this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
               expires: 'session'
             })
-            console.log('get cookie:', this.$qs.parse(this.$cookie.get('user')))
-      
-            if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+            
+            let userInfo = this.$qs.parse(this.$cookie.get('user'))
+            console.log('get cookie:', userInfo)
+
+            if (!!userInfo['username']) {
               // 加载指定用户的uls
-              window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
-              // 更新uls中存储的信息（中文名，userId）
-              window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
-              window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
-              window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              window.uls.init(userInfo['username'])
+              
+              console.log('userInfo:', userInfo)
+              
+              // 将值放入uls
+              let keys = Object.keys(userInfo)
+              for (let i = 0; i < keys.length; i++) {
+                window.uls.set('userInfo', keys[i], userInfo[keys[i]])
+              }
               
               // 测试用
-              let ut = window.uls.get('userinfo', 'userType')
+              let ut = window.uls.get('userInfo', 'userType')
               console.log('登陆身份参数 >>>', ut)
               console.log(Global.userType.ADMIN === ut, Global.userType.PARENT === ut, Global.userType.TEACHER === ut)
             }
@@ -309,25 +321,31 @@
             this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
               expires: 'session'
             })
-            console.log('get cookie:', this.$qs.parse(this.$cookie.get('user')))
 
-            if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
+            let userInfo = this.$qs.parse(this.$cookie.get('user'))
+            console.log('get cookie:', userInfo)
+
+            if (!!userInfo['username']) {
               // 加载指定用户的uls
-              window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
-              // 更新uls中存储的信息（中文名，userId）
-              window.uls.set('userinfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
-              window.uls.set('userinfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
-              window.uls.set('userinfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+              window.uls.init(userInfo['username'])
+              
+              console.log('userInfo:', userInfo)
+              
+              // 将值放入uls
+              let keys = Object.keys(userInfo)
+              for (let i = 0; i < keys.length; i++) {
+                window.uls.set('userInfo', keys[i], userInfo[keys[i]])
+              }
               
               // 测试用
-              /* let ut = window.uls.get('userinfo', 'userType')
+              let ut = window.uls.get('userInfo', 'userType')
               console.log('登陆身份参数 >>>', ut)
               if (!Array.isArray(ut)) {
                 ut = [ut]
               }
               ut.forEach(item => {
                 console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
-              }) */
+              })
             }
             // 万一没有username的情况
             else {

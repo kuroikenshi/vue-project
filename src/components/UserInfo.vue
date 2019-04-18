@@ -74,24 +74,28 @@
         <div class="weui-cell__ft"></div>
       </a>
     </div>
-
+    
     <div class="weui-btn-area">
-      <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="testSession">测试登录状态</a>
+      <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="logout">退出登录</a>
     </div>
 
   </div>
 </template>
 
 <script>
+import VueCookie from 'vue-cookie'
+  
 export default {
   name: 'MyComp',
+  beforeCreate: function() {
+    this.user = {
+      name: window.uls.get('userInfo', 'username'),
+      userface: window.uls.get('userInfo', 'userface') || '/static/imgs/user-photo.png'
+    }
+  },
   data () {
     return {
-      fuser: this.$qs.parse(this.$cookie.get('user')),
-      user: {
-        name: '华晨明',
-        userface: '/static/imgs/user-photo.png'
-      }
+      // fuser: this.$qs.parse(this.$cookie.get('user'))
     }
   },
   methods: {
@@ -99,11 +103,18 @@ export default {
       console.log(this.$router)
       this.$router.back()
     },
-    testSession: function (event) {
-      this.$axios.post('api/moments/getMomentById/1', this.$qs.stringify({
-      })).then(res => {
-        console.log('return:', res.data)
-      })
+    // 登出方法
+    logout: function (event) {
+      this.$axios.post('login/logout').then(res => {
+          console.log('logout>>>', res.data)
+          sessionStorage.clear()
+          localStorage.clear()
+          window.location = res.data.data
+          return Promise.resolve()
+        }).catch(err => {
+          console.log('加载logout返回数据失败:', err)
+          return Promise.reject(err)
+        })
     }
   }
 }
