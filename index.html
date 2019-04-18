@@ -100,33 +100,37 @@
         
         // 批量上传图片
         let axiosList = []
-        let elementUrl = {}
+        let elementUrl = {}   // 这里用对象, 因为后边要根据idx排序输出values
         Array.from(param.imageFiles).forEach((imgFile, idx) => {
           let formData = new FormData()
-          console.log(imgFile, imgFile.name)
-          formData.append('name', imgFile.name)
-          formData.append('category', 47)
           formData.append('file', imgFile)
           
-          axiosList.push(window.vue.$axios.post('http://new.bj.xdf.cn/tupian/uploadImage.php', formData).then(res => {
-            if (res.code == 200) {
+          // 上传图片
+          axiosList.push(window.vue.$axios.post('moments/uploadPic', formData).then(res => {
+            if (res.status == 200 && res.data.status == 200) {
               console.log('图片上传成功')
               console.log(res, res.data)
-              elementUrl[idx] = res.data.data.url // TODO 修改成正确的
+              elementUrl[idx] = res.data.data   // 传完图片后更新图片url
             } else {
               console.error("图片上传失败")
             }
           }))
         })
+        
 
         // 图片上传完成后,发布班级动态
         window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
+          // 拼合图片url的数组字符串
+          let urlsString = '["'
+          urlsString += Object.values(elementUrl).join('","')
+          urlsString += '"]'
+          
           // 成功后,获取图片url,拼装数据
           let postData = window.vue.$qs.stringify({
             content: param.content,
             classCode: param.classCode,
             type: param.type,
-            elementUrl: Object.values(elementUrl)
+            elementUrl: urlsString
           })
           
           // 提交
@@ -140,7 +144,9 @@
             })
             setTimeout(function() {
               console.log('刷新')
+              window.location.reload()
               window.vue.$router.push('/class/' + param.classCode + '/moments')
+              
             }, 500)
             
             return Promise.resolve()

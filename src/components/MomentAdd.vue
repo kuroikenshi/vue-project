@@ -78,8 +78,8 @@ export default {
   data () {
     return {
       content: '',
-      classCode: 'PE19003',
-      classCodeOptions: ['PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005'],
+      classCode: 'GWC182021',
+      classCodeOptions: ['GWC182021', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005'],
       momentType: '通知',
       momentTypeOptions: ['通知', '作业', '其他'],
       images: [],

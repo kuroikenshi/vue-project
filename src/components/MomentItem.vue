@@ -10,7 +10,10 @@
       <!-- 头像 -->
       <img :src="momentItem.userPhoto" class="user-photo" v-once />
       <!-- 发布人姓名 -->
-      <a class="link-color font-size-l display-ib margin-v3 user-title" v-once>{{ momentItem.createName }} <span class="user-badge" v-show="!!momentItem.role">{{ momentItem.role }}</span></a>
+      <a class="link-color font-size-l display-ib margin-v3 user-title" v-once>
+        <span>{{ momentItem.createName }}</span>
+        <span><span class="user-badge" v-show="!!momentItem.role">{{ momentItem.role }}</span></span>
+      </a>
       <!-- 发布时间 -->
       <p class="sub-color font-size-xs" v-once>{{ createDateFormatted }} <span class="moment-badge" v-show="!!momentItem.type">{{ momentItem.type }}</span></p>
     </div>
@@ -61,9 +64,9 @@
               {{ !!comment.toUserName ? '回复' : '' }}
               <a href="javascript:void(0);" class="to-user font-size-m link-color" v-if="!!comment.toUserName" v-once>{{ comment.toUserName }}</a>
             </span>
-            <p class="comment-content">
+            <span class="comment-content">
               {{ comment.content }}
-            </p>
+            </span>
           </div><!-- END OF .comment -->
         </div>
       </div>
@@ -421,9 +424,12 @@
     font-weight: 100;
     font-size: 12px;
     display: inline-block;
-    line-height: 18px;
-    padding: 0 5px 0 4px;
-    vertical-align: text-bottom;
+    line-height: 17px;
+    height: 17px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: top;
+    margin-top: 4px;
     margin-left: 5px;
   }
   
