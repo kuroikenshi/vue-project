@@ -129,9 +129,12 @@
         // 图片上传完成后,发布班级动态
         window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
           // 拼合图片url的数组字符串
-          let urlsString = '["'
-          urlsString += Object.values(elementUrl).join('","')
-          urlsString += '"]'
+          let urlsString = ''
+          if (Object.values(elementUrl).length > 0) {
+            urlsString = '["'
+            urlsString += Object.values(elementUrl).join('","')
+            urlsString += '"]'
+          }
           
           // 成功后,获取图片url,拼装数据
           let postData = window.vue.$qs.stringify({
