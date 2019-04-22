@@ -165,9 +165,15 @@ export default {
       )
     },
     imageChanged: function() {
-      this.imageFiles = event.target.files
+      console.log('imageChanged>>>', event.target.files.length)
       
-      Array.from(this.imageFiles).forEach(img => {
+      Array.from(event.target.files).forEach(file => {
+        this.imageFiles.push(file)
+      })
+      console.log('当前准备上传文件个数:', this.imageFiles.length, this.imageFiles)
+      
+      this.images = []
+      this.imageFiles.forEach(img => {
         let url = window.URL.createObjectURL(img)
         if (this.images.indexOf(url) == -1) {
           this.images.push(url)

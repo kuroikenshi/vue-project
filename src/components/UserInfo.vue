@@ -33,7 +33,7 @@
         <div class="weui-cell__bd">
           <p>学员性别</p>
         </div>
-        <div class="weui-cell__ft">男</div>
+        <div class="weui-cell__ft">{{ user.stuSex }}</div>
       </div>
 
       <div class="weui-cell weui-cell-taller">
@@ -43,7 +43,7 @@
         <div class="weui-cell__bd">
           <p>联系电话</p>
         </div>
-        <div class="weui-cell__ft">13800138000</div>
+        <div class="weui-cell__ft">{{ user.mobile }}</div>
       </div>
 
       <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
@@ -92,7 +92,9 @@ export default {
   beforeCreate: function() {
     this.user = {
       name: window.uls.get('userInfo', 'username'),
-      userface: window.uls.get('userInfo', 'userface') || '/static/imgs/user-photo.png'
+      userface: window.uls.get('userInfo', 'userface') || '/static/imgs/user-photo.png',
+      stuSex: window.uls.get('userInfo', 'stuSex') || '-- 未设置 --',
+      mobile: window.uls.get('userInfo', 'mobile') || '-- 未设置 --',
     }
   },
   data () {
@@ -188,6 +190,10 @@ i.edit-icon {
   -webkit-transform: scaleY(.5);
   transform: scaleY(.5);
   z-index: 2;
+}
+
+.icon {
+  margin-right: 5px;
 }
 
 .margin-bottom-20 {
