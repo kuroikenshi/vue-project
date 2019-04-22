@@ -31,6 +31,8 @@
     <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
     <script src="static/vendor/jquery-weui/js/swiper.js"></script>
     
+    <script src="static/vendor/store/store.everything.min.js"></script>
+    
     <script src="static/js/base.js"></script>
     
     <script>
@@ -164,6 +166,93 @@
         window.vue.$router.push('/class/' + param.classCode + '/moments')
       }
       
+      // 绑定用户的localstorage
+      class UserLocalStorage {
+        constructor () {
+          // console.log('UserLocalStorage - constructor username:', username)
+          // this.username = username
+        }
+      
+        init (userid) {
+          this.userid = userid
+        }
+        
+        isReady () {
+          console.log('uls.isReady>>>',
+            '\n    this.userid:', (!!this.userid),
+            '\n     st.clastoo:', (typeof(store.get('clastoo')) === 'object'),
+            '\n      ct.userid:', (typeof(store.get('clastoo')[this.userid]) === 'object'),
+            '\n   keys.len > 0:', (Object.keys(store.get('clastoo')[this.userid]).length > 0),
+            '\n >>>', (
+              (!!this.userid) &&
+              (typeof(store.get('clastoo')) === 'object') &&
+              (typeof(store.get('clastoo')[this.userid]) === 'object') &&
+              (Object.keys(store.get('clastoo')[this.userid]).length > 0)
+            )
+          )
+          return (
+            (!!this.userid) &&
+            (typeof(store.get('clastoo')) === 'object') &&
+            (typeof(store.get('clastoo')[this.userid]) === 'object') &&
+            (Object.keys(store.get('clastoo')[this.userid]).length > 0)
+          )
+        }
+      
+        get (key1, key2) {
+          let ulsData = store.get('clastoo')
+          if (ulsData === undefined) {
+            return undefined
+          }
+          
+          let d = ulsData[this.userid]
+          if (d === undefined) {
+            return undefined
+          }
+          
+          let obj = d[key1]
+          if (obj === undefined) {
+            return undefined
+          }
+          
+          return obj[key2]
+        }
+      
+        set (key1, key2, val) {
+          let ulsData = store.get('clastoo')
+          if (ulsData === undefined) {
+            ulsData = {}
+          }
+          
+          if (ulsData[this.userid] === undefined) {
+            ulsData[this.userid] = {}
+          }
+          
+          if (ulsData[this.userid][key1] === undefined) {
+            ulsData[this.userid][key1] = {}
+          }
+          
+          ulsData[this.userid][key1][key2] = val
+          store.set('clastoo', ulsData)
+        }
+        
+        showAll () {
+          let ulsData = store.get('clastoo')
+          let d = ulsData[this.userid]
+          let keys = Object.keys(d)
+          for (let ki = 0; ki < keys.length; ki++) {
+            let key = keys[ki]
+            console.log(key + ':', d[key])
+          }
+        }
+      }
+      window.uls = new UserLocalStorage()
+      
+      // 如果store里有值,自动初始化uls,确保每次刷新时能继续加载当前用户的信息
+      if (store.get('clastooCurrentUser')) {
+        console.log('index方法……')
+        // debugger
+        window.uls.init(store.get('clastooCurrentUser'))
+      }
       
       /* 
         评论框相关事件 === END ===

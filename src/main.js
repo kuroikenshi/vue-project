@@ -6,11 +6,11 @@ import VueResource from 'vue-resource'
 import VueInfiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
-// import store from './store/store'
+// import store from './store/store'  // src/store/store.js
+import store from 'store'
 import axios from 'axios'
 import qs from 'qs'
 import _ from 'lodash'
-import ls from 'store'
 
 import weui from 'weui.js'
 import 'weui'
@@ -63,48 +63,6 @@ Vue.prototype.$weui = weui
 Vue.component('swipe', Swipe)
 Vue.component('swipe-item', SwipeItem)
 
-// 绑定用户的localstorage
-class UserLocalStorage {
-  constructor () {
-    // console.log('UserLocalStorage - constructor username:', username)
-    // this.username = username
-  }
-
-  init (username) {
-    this.username = username
-  }
-
-  get (key1, key2) {
-    let d = ls.get(this.username)
-    if (d === undefined) {
-      return undefined
-    }
-    let obj = d[key1]
-    if (obj === undefined) {
-      return undefined
-    }
-    return obj[key2]
-  }
-
-  set (key1, key2, val) {
-    let d = ls.get(this.username)
-    if (d === undefined) {
-      d = {}
-    }
-    if (d[key1] === undefined) {
-      d[key1] = {}
-    }
-    d[key1][key2] = val
-    ls.set(this.username, d)
-  }
-  
-  showAll () {
-    for (key in this) {
-      console.log(key + ':', this[key])
-    }
-  }
-}
-window.uls = new UserLocalStorage()
 
 // 路由过滤器
 router.beforeEach((to, from, next) => {
@@ -124,10 +82,11 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     console.log('Going to:', to.path)
     console.log('    requireAuth:', to.meta.requireAuth)
-    console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), '需要登陆:', !(window.uls && window.uls.get('userInfo', 'id')))
+    // console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), '需要登陆:', !(window.uls && window.uls.get('userInfo', 'id')))
+    console.log('    get JSESSIONID from cookie:', VueCookie.get('user'), '需要登陆:', !(store.get('clastooCurrentUser')))
 
     // 如果没有登录
-    if (!(window.uls && window.uls.get('userInfo', 'id'))) {
+    if (!(store.get('clastooCurrentUser'))) {
       console.log('没有登录')
       next({
         path: '/login',
@@ -175,12 +134,16 @@ axios.interceptors.response.use((response) => {
       response.data.msg &&
       response.data.msg === '未登录或登录超时，请重新登录!') {
     console.log('session过期')
+    store.remove('clastooCurrentUser')
     router.push('/login')
   }
   return response
 }, function (error) {
   // session过期处理
   if (error.response.status === 401) {
+    // 过期时去掉当前已登录用户标志
+    store.remove('clastooCurrentUser')
+    // 跳转到登陆页
     router.push('/login')
   } else {
     return Promise.reject(error)

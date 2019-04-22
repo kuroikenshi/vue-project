@@ -70,6 +70,7 @@
 
 <script>
   import Global from '@/components/Global'
+  import store from 'store'
   import _ from 'lodash'
   import weui from 'weui.js'
   
@@ -99,6 +100,11 @@
       }
     },
     created: function () {
+      // 先判断是否已经登录，但是误进入登陆页面
+      if (!!store.get('clastooCurrentUser') && window.uls.isReady()) {
+        this._goCallback()
+      }
+      
       this.getCaptcha()
     },
     beforeDestroy: function() {
@@ -182,6 +188,18 @@
         })
       },
       
+      // 步骤: 跳转callback
+      _goCallback: function () {        
+        // 跳转回redirect地址
+        if (!!this.$route.query.redirect) {
+          this.$router.push(this.$route.query.redirect)
+        }
+        // 如果没有就默认跳转到用户信息页面
+        else {
+          this.$router.push('user/userInfo')
+        }
+      },
+      
       // 发送按钮冷却// 验证码重发倒计时
       verifyCodeCountDown: function () {
         if (this.verifyCodeTimer === undefined) {
@@ -211,9 +229,11 @@
             var userInfo = this.$qs.parse(this.$cookie.get('user'))
             console.log('get cookie:', userInfo)
 
-            if (!!userInfo['username']) {
-              // 加载指定用户的uls
-              window.uls.init(userInfo['username'])
+            // if (!!userInfo['username']) {
+            if (!!userInfo['id']) {
+              // uls指定用户并初始化
+              store.set('clastooCurrentUser', userInfo['id'])
+              window.uls.init(userInfo['id'])
               
               console.log('userInfo:', userInfo)
               
@@ -240,13 +260,7 @@
             }
             
             // 跳转回redirect地址
-            if (!!this.$route.query.redirect) {
-              this.$router.push(this.$route.query.redirect)
-            }
-            // 如果没有就默认跳转到用户信息页面
-            else {
-              this.$router.push('user/userInfo')
-            }
+            this._goCallback()
           } else {
             window.weuiErr(res.data.status + ': ' + res.data.msg)
           }
@@ -267,9 +281,11 @@
             let userInfo = this.$qs.parse(this.$cookie.get('user'))
             console.log('get cookie:', userInfo)
 
-            if (!!userInfo['username']) {
-              // 加载指定用户的uls
-              window.uls.init(userInfo['username'])
+            // if (!!userInfo['username']) {
+            if (!!userInfo['id']) {
+              // uls指定用户并初始化
+              store.set('clastooCurrentUser', userInfo['id'])
+              window.uls.init(userInfo['id'])
               
               console.log('userInfo:', userInfo)
               
@@ -291,13 +307,7 @@
             }
             
             // 跳转回redirect地址
-            if (!!this.$route.query.redirect) {
-              this.$router.push(this.$route.query.redirect)
-            }
-            // 如果没有就默认跳转到用户信息页面
-            else {
-              this.$router.push('user/userInfo')
-            }
+            this._goCallback()
           } else {
             window.weuiErr(res.data.status + ': ' + res.data.msg)
           }
@@ -325,9 +335,10 @@
             let userInfo = this.$qs.parse(this.$cookie.get('user'))
             console.log('get cookie:', userInfo)
 
-            if (!!userInfo['username']) {
-              // 加载指定用户的uls
-              window.uls.init(userInfo['username'])
+            if (!!userInfo['id']) {
+              // uls指定用户并初始化
+              store.set('clastooCurrentUser', userInfo['id'])
+              window.uls.init(userInfo['id'])
               
               console.log('userInfo:', userInfo)
               
@@ -354,13 +365,7 @@
             }
             
             // 跳转回redirect地址
-            if (!!this.$route.query.redirect) {
-              this.$router.push(this.$route.query.redirect)
-            }
-            // 如果没有就默认跳转到用户信息页面
-            else {
-              this.$router.push('user/userInfo')
-            }
+            this._goCallback()
           } else {
             window.weuiErr(res.data.status + ': ' + res.data.msg)
           }

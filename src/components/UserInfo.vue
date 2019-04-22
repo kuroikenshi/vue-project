@@ -107,8 +107,8 @@ export default {
     logout: function (event) {
       this.$axios.post('login/logout').then(res => {
           console.log('logout>>>', res.data)
-          sessionStorage.clear()
-          localStorage.clear()
+          // 清除当前用户
+          store.remove('clastooCurrentUser')
           window.location = res.data.data
           return Promise.resolve()
         }).catch(err => {

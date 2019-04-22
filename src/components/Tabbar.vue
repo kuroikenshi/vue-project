@@ -51,17 +51,13 @@
       return {
         // msg: 'This is my component',
         navbarTitle: '----',
-        backPath: ''
+        backPath: '',
+        showAddMoment: false
       }
     },
-    computed: {
-      showAddMoment: function () {
-        let ut = window.uls.get('userInfo', 'userType')
-        // 是moments路径，且身份为老师或助教
-        console.log('>>> ut:', ut)
-        console.log(' -> 显示新增按钮:' + (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) + ' && ' + '(' + (ut === Global.userType.TEACHER) + ' || ' + (ut === Global.userType.ASSISTANT)+')')
-        return (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && ((ut === Global.userType.TEACHER) || (ut === Global.userType.ASSISTANT))
-      }
+    created () {
+      // 更新新增动态按钮的显示状态
+      this.updateShowAddMoment()
     },
     methods: {
       go: function (path) {
@@ -93,12 +89,24 @@
         let hideTabPath = ['/class/momentAdd']
         return (hideTabPath.indexOf(this.$router.history.current.path) === -1)
       },
+      
+      // 更新新增动态按钮的显示状态
+      updateShowAddMoment: function () {        
+        let ut = window.uls.get('userInfo', 'userType')
+        // 是moments路径，且身份为老师或助教
+        console.log('>>> ut:', ut)
+        console.log(' -> 显示新增按钮:' + (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) + ' && ' + '(' + (ut === Global.userType.TEACHER) + ' || ' + (ut === Global.userType.ASSISTANT)+')')
+        this.showAddMoment = (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && ((ut === Global.userType.TEACHER) || (ut === Global.userType.ASSISTANT))
+      },
+      
       // 更新一些值
       updateSomeValue: function(data) {
         // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
         for (let key in data) {
           this[key] = data[key]
         }
+        // 更新新增动态按钮的显示状态
+        this.updateShowAddMoment()
       },
       // 进入班级动态
       momentAdd () {    

@@ -58,16 +58,26 @@ export default {
           this.$cookie.set('user', this.$qs.stringify(res.data.data.user), {
             expires: 'session'
           })
-          console.log('get cookie:?????', this.$qs.parse(this.$cookie.get('user')))
+          
+          var userInfo = this.$qs.parse(this.$cookie.get('user'))
+          console.log('get cookie:?????', userInfo)
 
-          // if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
-          if (!!this.$qs.parse(this.$cookie.get('user'))['username']) {
-            // 加载指定用户的uls
-            window.uls.init(this.$qs.parse(this.$cookie.get('user'))['username'])
+          // if (!!userInfo['username']) {
+          if (!!userInfo['id']) {
+            // uls指定用户并初始化
+            store.set('clastooCurrentUser', userInfo['id'])
+            window.uls.init(userInfo['id'])
+            
+            // 将值放入uls
+            let keys = Object.keys(userInfo)
+            for (let i = 0; i < keys.length; i++) {
+              window.uls.set('userInfo', keys[i], userInfo[keys[i]])
+            }
+            
             // 更新uls中存储的信息（中文名，userId）
-            window.uls.set('userInfo', 'username', this.$qs.parse(this.$cookie.get('user'))['username'])
-            window.uls.set('userInfo', 'id', this.$qs.parse(this.$cookie.get('user'))['id'])
-            window.uls.set('userInfo', 'userType', this.$qs.parse(this.$cookie.get('user'))['userType'])
+            /* window.uls.set('userInfo', 'id', userInfo['id'])
+            window.uls.set('userInfo', 'username', userInfo['username'])
+            window.uls.set('userInfo', 'userType', userInfo['userType']) */
           }
           // 万一没有username的情况
           else {
@@ -80,37 +90,7 @@ export default {
           alert(res.data.status + ': ' + res.data.msg)
         }
       })
-    },
-
-    // TODEL: 测试方法，上线删除 <<<方法参数陈旧，需要用的时候记得更新
-    /* loginTestParent: function (event) {
-      this.username = '18311021317'
-      this.password = '123'
-      // 使用qs解决
-      let postData = this.$qs.stringify({
-        username: this.username,
-        password: this.password
-      })
-
-      this.$axios.post('api/login', postData).then(res => {
-        console.log('login>>>', res)
-        // 登陆成功
-        if (res.status === 200 && res.data.status === 200) {
-          // 保存用户信息状态
-          this.$cookie.set('user', this.$qs.stringify(res.data.data), {
-            expires: 'session'
-          })
-          console.log('get cookie:', this.$cookie.get('user'))
-
-          window.uls.init(res.data.data.username)
-
-          // 跳转
-          this.$router.push(this.$route.query.redirect)
-        } else {
-          alert(res.data.status + ': ' + res.data.msg)
-        }
-      })
-    } */
+    }
   }
 }
 </script>
