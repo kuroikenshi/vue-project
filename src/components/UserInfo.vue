@@ -1,13 +1,15 @@
 <template>
   <div class="page user-info">
-    <h1 class="user-title">个人中心</h1>
-    <router-link to="/user/edit" class="edit weui-tabbar__label">
-      <i class="edit-icon"></i>
-      <span class="edit-text">编辑</span>
-    </router-link>
-    <div class="card">
-      <img :src="user.userface" alt="" class="user-photo"/>
-      <p class="user-name">{{ user.name }}</p>
+    <div class="user-info-bg">
+      <h1 class="user-title">个人中心</h1>
+      <router-link to="/user/edit" class="edit weui-tabbar__label">
+        <i class="edit-icon"></i>
+        <span class="edit-text">编辑</span>
+      </router-link>
+      <div class="card">
+        <img :src="user.userface" alt="" class="user-photo"/>
+        <p class="user-name">{{ user.name }}</p>
+      </div>
     </div>
 
     <!--
@@ -75,7 +77,7 @@
       </a>
     </div>
     
-    <div class="weui-btn-area">
+    <div class="weui-btn-area margin-bottom-20">
       <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="logout">退出登录</a>
     </div>
 
@@ -121,9 +123,12 @@ export default {
 </script>
 
 <style scoped>
-.user-info {
+.user-info .user-info-bg {
+  padding-top: 1px;
   background: url('/static/imgs/bg-user.png') no-repeat;
-  background-size: contain;
+  background-size: 100% 100%;
+  background-position-x: center;
+  background-position-y: top;
 }
 .user-title {
   font-size: 18px;
@@ -183,6 +188,10 @@ i.edit-icon {
   -webkit-transform: scaleY(.5);
   transform: scaleY(.5);
   z-index: 2;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
 }
 
 /* 根据设计稿，行内字号重定义，已在app.css中加入 */
