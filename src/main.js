@@ -3,7 +3,8 @@
 import Vue from 'vue'
 import VueCookie from 'vue-cookie'
 import VueResource from 'vue-resource'
-import VueInfiniteScroll from 'vue-infinite-scroll'
+// import VueInfiniteScroll from 'vue-infinite-scroll'
+import VueScroller from 'vue-scroller'
 import App from './App'
 import router from './router'
 // import store from './store/store'  // src/store/store.js
@@ -25,7 +26,8 @@ import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
 
 Vue.use(VueCookie)
 Vue.use(VueResource)
-Vue.use(VueInfiniteScroll)
+// Vue.use(VueInfiniteScroll)
+Vue.use(VueScroller)
 
 Vue.mixin({
   data() {

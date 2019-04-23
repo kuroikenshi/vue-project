@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <scroller ref="scroller" class="scroller-adjust"
+      :on-refresh="refresh"
+      :on-infinite="infinite" >
     <!-- 每条动态 -->
     <moment-item v-for="momentItem in momentList" v-bind:key="momentItem.momentId" v-bind:momentItemBased="momentItem" />
     
-    <!-- TODO: 页面高度低于可现实高度的时候，不应该显示这个区域 -->
     <!-- 滚动加载提示 -->
-    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="scrollLoadDisabled" infinite-scroll-distance="-40" infinite-scroll-throttle-delay="200">
+    <!-- <div v-infinite-scroll="loadMore" infinite-scroll-disabled="scrollLoadDisabled" infinite-scroll-distance="-40" infinite-scroll-throttle-delay="200">
       <div class="loading-tips" v-show="scrollLoading">加载中...</div>
       <div class="loading-tips" v-show="noMoreData">-- 没有更多数据啦 --</div>
       <div class="loading-tips" v-show="!noMoreData && !scrollLoading">-- 下拉加载更多 --</div>
-    </div>
-  </div>
+    </div> -->
+  </scroller>
 </template>
 
 <script>
@@ -26,11 +27,12 @@ export default {
       classCode: this.$route.params.classCode,
       momentList: [],
       
-      loadMoreCD: 5,              // 加载更多失败时，等待秒数
-      scrollLoading: false,       // 正在滚动加载
+      loadCD: 0,               // 加载更多失败时，等待秒数
+      loadChance: 0,           // 加载更多可以失败的次数
+      /* scrollLoading: false,       // 正在滚动加载
       firstDataNotLoaded: true,   // 首批数据尚未装载，用来限制滚动加载
       firstDataLoadError: false,  // 首批数据加载失败
-      noMoreData: false           // 没有更多的数据了
+      noMoreData: false           // 没有更多的数据了 */
     }
   },
   computed: {
@@ -58,37 +60,84 @@ export default {
     })
     
     this.getFirstMoments()
+    
+    this._resetLoadParam()
   },
   methods: {
+    /**
+     * 下拉刷新
+     */
+    refresh () {
+      console.log('refresh')
+      // this.momentList = []
+      this.getFirstMoments()
+      setTimeout(() => {
+        // 手动触发scroller的结束刷新方法
+        this.$refs.scroller.finishPullToRefresh()
+      }, 10000)
+    },
+    
+    /**
+     * 上拉加载更多
+     */
+    infinite (loadMoreDone) {
+      console.log('infiniteinfinite', loadMoreDone)
+      
+      this.loadMore(loadMoreDone)
+      
+    },
+    
+    // 重试冷却和次数还原
+    _resetLoadParam () {
+      this.loadCD = 1
+      this.loadChance = 3
+    },
+    
+    // 处理加载失败子逻辑
+    _handleLoadFail (loadMoreDone) {
+      // 加载失败时，先等n秒钟
+      setTimeout(() => {
+        this.$refs.scroller.finishPullToRefresh()
+        if (this.loadChance > 0) {
+          !!loadMoreDone && loadMoreDone(false)
+          this.loadChance -= 1
+          this.loadCD += 2
+        } else {
+          !!loadMoreDone && loadMoreDone(true)
+          window.weuiErr('网络/服务可能暂时不可用，请晚些时候重试，或联系系统管理员')
+        }
+      }, 1000 * this.loadCD)
+    },
+    
     // 获取首次动态数据
     getFirstMoments () {
-      console.log('首次加载-加载中...')
+      console.log('加载中...')
       let postData = this.$qs.stringify({
         classCode: this.classCode,    // 班级code
         lastUpdateTime: window.uls.get('lastUpdateTime', this.classCode) || '',   // 提供上次更新时间戳，没有为空
         mode: 'new'   // 查找最新的
       })
       return this.$axios.post('moments/getMoments', postData).then(res => {
-        console.log('首次加载-加载成功>>>', res.data)
-        
-        // 加载新的，重置没有更多的开关
-        this.noMoreData = false
-        
+        console.log('加载成功>>>', res.data)
+        this.$refs.scroller.finishPullToRefresh()
         this.momentList = res.data.data
-        this.momentListLoaded = true
-        this.firstDataNotLoaded = false
+
+        // 重试冷却和次数还原
+        this._resetLoadParam ()
+        
         return Promise.resolve()
       }).catch(err => {
-        console.log('首次加载-加载失败:', err)
-        this.momentListLoaded = true
-        this.firstDataLoadError = true
-        this.momentListErrMsg = '-- 加载失败 --'
-        this.firstDataNotLoaded = false
+        window.weuiErr('加载失败:' + err)
+        
+        // 处理加载失败
+        this._handleLoadFail()
+        
         return Promise.reject(err)
       })
     },
     
-    loadMore: function() {
+    // 加载更多
+    loadMore: function(loadMoreDone) {
       this.scrollLoading = true
       console.log('加载更多-加载中...')
       
@@ -101,30 +150,27 @@ export default {
       return this.$axios.post('moments/getMoments', postData).then(res => {
         console.log('加载更多-加载成功>>>', res.data)
         
-        if (res.data.data.length == 0) {
-          console.log('没有更多数据了~')
-          this.noMoreData = true
-        }
-        
+        // 拼合数据
         this.momentList = [...this.momentList, ...res.data.data]
-        this.momentListLoaded = true
-        this.firstDataNotLoaded = false
+        
+        // 重试冷却和次数还原
+        this._resetLoadParam ()
         
         console.log('加载更多-结束!')
-        this.scrollLoading = false
+        
+        // 结束上拉加载更多(是否最底)
+        if (res.data.data.length == 0) {
+          loadMoreDone(true)
+        } else {
+          loadMoreDone(false)
+        }
         return Promise.resolve()
       }).catch(err => {
-        console.log('加载更多-加载失败:', err)
-        this.momentListLoaded = true
-        this.momentListErrMsg = '-- 加载失败 --'
-        this.firstDataNotLoaded = false
+        window.weuiErr('加载更多:' + err)
         
-        console.log('加载更多-结束!')
-        // 加载失败时，先等5秒钟，依次递增
-        let that = this
-        setTimeout(function() {
-          that.scrollLoading = false
-        }, 5000)
+        // 处理加载失败
+        this._handleLoadFail(loadMoreDone)
+        
         return Promise.reject(err)
       })
     },
@@ -133,6 +179,11 @@ export default {
 </script>
 
 <style>
+  .scroller-adjust {
+    margin-top: 44px;
+    height: calc(100% - 97px)!important;  /* 强行置换VueScroller容器样式 */
+  }
+  
   .loading-tips {
     text-align: center;
     padding: 20px;
