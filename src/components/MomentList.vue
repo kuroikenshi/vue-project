@@ -1,7 +1,9 @@
 <template>
   <div>
+    <!-- 每条动态 -->
     <moment-item v-for="momentItem in momentList" v-bind:key="momentItem.momentId" v-bind:momentItemBased="momentItem" />
     
+    <!-- TODO: 页面高度低于可现实高度的时候，不应该显示这个区域 -->
     <!-- 滚动加载提示 -->
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="scrollLoadDisabled" infinite-scroll-distance="-40" infinite-scroll-throttle-delay="200">
       <div class="loading-tips" v-show="scrollLoading">加载中...</div>
@@ -36,15 +38,7 @@ export default {
     scrollLoadDisabled: function () {
       return this.firstDataNotLoaded || this.firstDataLoadError || this.scrollLoading || this.noMoreData
     },
-    // 老的动态id
-    /* oldestMomentId: function () {
-      if (this.momentList.length > 0) {
-        return this.momentList[this.momentList.length - 1].momentId
-      }
-      else {
-        return ''
-      }
-    }, */
+    
     // 老的动态时间戳
     oldestMomentCreateDate: function () {
       if (this.momentList.length > 0) {
@@ -74,9 +68,6 @@ export default {
         lastUpdateTime: window.uls.get('lastUpdateTime', this.classCode) || '',   // 提供上次更新时间戳，没有为空
         mode: 'new'   // 查找最新的
       })
-      
-      // console.log('>>> 获取动态数据')
-      
       return this.$axios.post('moments/getMoments', postData).then(res => {
         console.log('首次加载-加载成功>>>', res.data)
         
@@ -96,6 +87,7 @@ export default {
         return Promise.reject(err)
       })
     },
+    
     loadMore: function() {
       this.scrollLoading = true
       console.log('加载更多-加载中...')
@@ -136,10 +128,6 @@ export default {
         return Promise.reject(err)
       })
     },
-    goback: function (event) {
-      console.log(this.$router)
-      this.$router.back()
-    }
   }
 }
 </script>

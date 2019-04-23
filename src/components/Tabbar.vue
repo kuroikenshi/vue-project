@@ -4,7 +4,8 @@
     <div :class="{'weui-navbar-hide': !isNavShow(), 'weui-navbar': isNavShow()}">
       <div class="weui-navbar-inner">
         <div class="left sliding">
-          <a href="javascript: void(0);" class="tabbar-btn" v-on:click="goBack">
+          <a href="javascript: void(0);" class="tabbar-btn"
+              @click="goBack" v-show="showBackBtn">
             <i class="f7-icons">chevron_left</i>
           </a>
         </div>
@@ -52,12 +53,15 @@
         // msg: 'This is my component',
         navbarTitle: '----',
         backPath: '',
-        showAddMoment: false
+        showAddMoment: false,
+        showBackBtn: true,
       }
     },
     created () {
       // 更新新增动态按钮的显示状态
       this.updateShowAddMoment()
+      // 更新返回按钮的显示状态
+      this.updateShowBackBtn()
     },
     methods: {
       go: function (path) {
@@ -99,6 +103,11 @@
         this.showAddMoment = (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && ((ut === Global.userType.TEACHER) || (ut === Global.userType.ASSISTANT))
       },
       
+      // 更新返回按钮的显示状态
+      updateShowBackBtn: function () {
+        this.showBackBtn = (this.$router.history.current.path !== '/class/classList')
+      },
+      
       // 更新一些值
       updateSomeValue: function(data) {
         // console.log('getNavbarTitle>>>>>>>>', this.navbarTitle, navbarTitle)
@@ -107,6 +116,8 @@
         }
         // 更新新增动态按钮的显示状态
         this.updateShowAddMoment()
+        // 更新返回按钮的显示状态
+        this.updateShowBackBtn()
       },
       // 进入班级动态
       momentAdd () {    
