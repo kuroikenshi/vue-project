@@ -5,6 +5,7 @@ import Router from 'vue-router'
 
 import LoginTest from '@/components/LoginTest'
 import LoginWithVCode from '@/components/LoginWithVCode'
+import E2Success from '@/components/E2Success'
 
 import Chating from '@/components/Chating'
 
@@ -52,6 +53,13 @@ export default new Router({
       name: 'Login',
       component: LoginTest
     }, */
+    
+    // 单点登陆成功后的回调地址
+    {
+      path: '/e2success',
+      name: 'E2Success',
+      component: E2Success
+    },
 
     {
       path: '/chating',

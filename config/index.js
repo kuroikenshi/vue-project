@@ -40,7 +40,7 @@ module.exports = {
       
       // 黄国庆的机器(测试通过)
       '/': {
-        target: 'http://10.176.242.104:80',
+        target: 'http://10.176.242.109:80',
         changeOrigin: true
       },
 
