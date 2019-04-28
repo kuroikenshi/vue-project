@@ -30,7 +30,10 @@
                     <div class="weui-uploader__file-content">50%</div>
                   </li> -->
                 </ul>
+                
+                <!-- 新增图片按钮 -->
                 <div class="weui-uploader__input-box"
+                    v-show="(this.imageFiles.length < this.imageLimit)"
                     :style="{width: thumbnailAddWidth, height: thumbnailAddWidth}">
                   <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple @change="imageChanged">
                 </div>
@@ -83,7 +86,8 @@ export default {
       momentType: '通知',
       momentTypeOptions: ['通知', '作业', '其他'],
       images: [],
-      imageFiles: []
+      imageFiles: [],
+      imageLimit: 9
     }
   },
   created () {
@@ -166,6 +170,12 @@ export default {
     },
     imageChanged: function() {
       console.log('imageChanged>>>', event.target.files.length)
+      
+      if ((this.imageFiles.length + Array.from(event.target.files).length) > this.imageLimit) {
+        window.weuiErr('发布图片不能超过' + this.imageLimit + '张，当前选择超出' + ((this.imageFiles.length + Array.from(event.target.files).length) - this.imageLimit) + '张')
+        event.target.files = []
+        return
+      }
       
       Array.from(event.target.files).forEach(file => {
         this.imageFiles.push(file)
