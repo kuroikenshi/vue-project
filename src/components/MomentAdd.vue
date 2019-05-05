@@ -143,7 +143,6 @@ export default {
     
     // 内容非空
     contentIsNotBlank: function () {
-      console.log('notBlank', this.content.length, this.imageFiles.length, (this.content.length > 0) || (this.imageFiles.length > 0))
       return (this.content.length > 0) || (this.imageFiles.length > 0)
     },
     
@@ -154,8 +153,7 @@ export default {
     
     // 提交可用
     submitDisabled: function () {
-      console.log('submitDisabled>>>', !this.classCodeIsReady, !this.contentIsNotBlank, !this.contentIsValid)
-      return !this.classCodeIsReady || !this.contentIsNotBlank || this.contentIsValid
+      return !this.classCodeIsReady || !this.contentIsNotBlank || !this.contentIsValid
     }
   },
   methods: {

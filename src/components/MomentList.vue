@@ -29,19 +29,21 @@ export default {
       
       loadCD: 0,               // 加载更多失败时，等待秒数
       loadChance: 0,           // 加载更多可以失败的次数
-      /* scrollLoading: false,       // 正在滚动加载
+      
       firstDataNotLoaded: true,   // 首批数据尚未装载，用来限制滚动加载
+      
+      /* scrollLoading: false,       // 正在滚动加载
       firstDataLoadError: false,  // 首批数据加载失败
       noMoreData: false           // 没有更多的数据了 */
     }
   },
   computed: {
     // 禁用滚动加载
-    scrollLoadDisabled: function () {
+    /* scrollLoadDisabled: function () {
       return this.firstDataNotLoaded || this.firstDataLoadError || this.scrollLoading || this.noMoreData
-    },
+    }, */
     
-    // 老的动态时间戳
+    // 最老的动态时间戳，用在加载更多时使用
     oldestMomentCreateDate: function () {
       if (this.momentList.length > 0) {
         return (new Date(this.momentList[this.momentList.length - 1].createDate)).Format('yyyy-MM-dd hh:mm:ss')
@@ -69,10 +71,12 @@ export default {
      */
     refresh () {
       console.log('refresh')
+      this.firstDataNotLoaded = true
       // this.momentList = []
       this.getFirstMoments()
       setTimeout(() => {
         // 手动触发scroller的结束刷新方法
+        console.log('手动触发scroller的结束刷新方法')
         this.$refs.scroller.finishPullToRefresh()
       }, 10000)
     },
@@ -83,6 +87,12 @@ export default {
     infinite (loadMoreDone) {
       console.log('infiniteinfinite', loadMoreDone)
       
+      // 注意：进infinite，必须执行loadMoreDone，否则机会一直运行，再也无法触发加载更多
+      if (this.firstDataNotLoaded) {
+        console.log('首次加载尚未完成，忽略加载更多')
+        loadMoreDone(true)
+        return
+      }
       this.loadMore(loadMoreDone)
       
     },
@@ -121,6 +131,8 @@ export default {
         console.log('加载成功>>>', res.data)
         this.$refs.scroller.finishPullToRefresh()
         this.momentList = res.data.data
+        
+        this.firstDataNotLoaded = false
 
         // 重试冷却和次数还原
         this._resetLoadParam ()
