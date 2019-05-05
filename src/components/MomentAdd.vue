@@ -40,7 +40,7 @@
               </div>
             </div>
           </div>
-          <!-- <div class="weui-cell__ft">男</div> -->
+          
         </div>
       
         <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);" @click="classCodeSelect">
@@ -69,7 +69,7 @@
       </div>
       
       <div class="weui-btn-area">
-        <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="submit">发布</a>
+        <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="submit()" v-bind:disabled="submitDisabled">发布</a>
       </div>
     </form>
   </div>
@@ -80,13 +80,16 @@ export default {
   name: 'MyComp',
   data () {
     return {
-      content: '',
-      classCode: 'GWC182021',
-      classCodeOptions: ['GWC182021', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005', 'PE19003', 'PE19004', 'PE19005'],
+      content: '',    // 要发布的内容
+      classCode: '',
+      classCodeMenu: [],
+      classCodeIsReady: true,
+      
       momentType: '通知',
       momentTypeOptions: ['通知', '作业', '其他'],
-      images: [],
-      imageFiles: [],
+      
+      images: [],     // 已选中图片的预览
+      imageFiles: [], // 要发布的图片
       imageLimit: 9
     }
   },
@@ -99,29 +102,30 @@ export default {
       'navbarTitle': '发布状态',
       'backPath': undefined
     })
+    
+    // 初始化发布班级列表
+    // 优先从uls中取得
+    let classList = window.uls.get('personalData', 'classList')
+    if (classList) {
+      this._setClassCodeParam(classList)
+    }
+    // 如果没有，尝试api取得
+    else {
+      this.$axios.post('classes/getClassList').then(res => {
+        console.log('getClassList>>>', res.data)
+        classList = res.data.data
+        window.uls.set('personalData', 'classList', classList)
+        this._setClassCodeParam(classList)
+        return Promise.resolve()
+      }).catch(err => {
+        window.weuiErr('加载班级列表失败:' + err)
+        this.classCodeIsReady = false
+        return Promise.reject(err)
+      })
+    }
+    
   },
   computed: {
-    bgImgs: function() {
-      let bgImgs = []
-      this.images.forEach(v => {
-        bgImgs.push('url(' + v + ')')
-      })
-      return bgImgs
-    },
-    classCodeMenu: function() {
-      let menuData = []
-      let that = this
-      this.classCodeOptions.forEach(item => {
-        menuData.push({
-          label: item,
-          onClick: () => {
-            console.log(item)
-            that.classCode = item
-          }
-        })
-      })
-      return menuData
-    },
     momentTypeMenu: function() {
       let menuData = []
       let that = this
@@ -135,11 +139,47 @@ export default {
         })
       })
       return menuData
+    },
+    
+    // 内容非空
+    contentIsNotBlank: function () {
+      console.log('notBlank', this.content.length, this.imageFiles.length, (this.content.length > 0) || (this.imageFiles.length > 0))
+      return (this.content.length > 0) || (this.imageFiles.length > 0)
+    },
+    
+    // 内容合法
+    contentIsValid: function () {
+      return this.content.length <= 2000 && this.imageFiles.length <= 9
+    },
+    
+    // 提交可用
+    submitDisabled: function () {
+      console.log('submitDisabled>>>', !this.classCodeIsReady, !this.contentIsNotBlank, !this.contentIsValid)
+      return !this.classCodeIsReady || !this.contentIsNotBlank || this.contentIsValid
     }
   },
   methods: {
+    // 设置班级列表参数
+    _setClassCodeParam: function (classList) {
+      let menuData = []
+      classList.forEach(item => {
+        menuData.push({
+          label: item.classCode,
+          onClick: () => {
+            this.classCode = item.classCode
+          }
+        })
+      })
+      
+      this.classCodeMenu = menuData
+      
+      // 设置已选中班级
+      console.log(this.$router)
+      this.classCode = menuData[0].label
+    },
+    
     // 选择班级
-    classCodeSelect: function() {
+    classCodeSelect: function () {
       this.weuijsPopedItem = this.$weui.actionSheet(
         this.classCodeMenu, 
         [{
@@ -168,6 +208,7 @@ export default {
         }
       )
     },
+    // 上传图片
     imageChanged: function() {
       console.log('imageChanged>>>', event.target.files.length)
       
@@ -193,6 +234,23 @@ export default {
     },
     // 提交动态
     submit: function() {
+      if (this.submitDisabled) {
+        if (!this.classCodeIsReady) {
+          window.weuiErr('班级列表获取失败，无法发布')
+          return
+        }
+        
+        if (!this.contentIsNotBlank) {
+          window.weuiErr('内容为空，无法发布')
+          return
+        }
+        
+        if (!this.contentIsValid) {
+          window.weuiErr('内容不合法(文字长度超过2000或图片超过9张)，无法发布')
+          return
+        }
+      }
+      
       let data = {
         content: this.content,
         classCode: this.classCode,

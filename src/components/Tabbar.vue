@@ -13,6 +13,7 @@
         <div class="center sliding stronger">{{navbarTitle}}</div>
 
         <div class="right">
+          <!-- 发布班级动态 -->
           <a href="javascript: void(0);" class="tabbar-btn"
               @click="momentAdd" v-show="showAddMoment">
             <i class="f7-icons">add</i>
