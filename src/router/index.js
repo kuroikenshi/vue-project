@@ -15,7 +15,9 @@ import MomentList from '@/components/MomentList'
 import MomentItem from '@/components/MomentItem'
 import MomentAdd from '@/components/MomentAdd'
 import ChatList from '@/components/ChatList'
+
 import UserInfo from '@/components/UserInfo'
+import ParentInfoList from '@/components/ParentInfoList'
 
 import Refresh from '@/components/Refresh'
 
@@ -106,6 +108,13 @@ export default new Router({
         path: 'user/userInfo',
         name: 'UserInfo',
         component: UserInfo,
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'user/parentInfoList',
+        name: 'ParentInfoList',
+        component: ParentInfoList,
         meta: {
           requireAuth: true
         }

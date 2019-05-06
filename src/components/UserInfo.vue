@@ -26,7 +26,7 @@
     -->
 
     <div class="weui-cells no-line">
-      <div class="weui-cell weui-cell-taller">
+      <div class="weui-cell weui-cell-taller" v-if="isParent">
         <div class="weui-cell__hd">
           <i class="icon icon-gender"></i>
         </div>
@@ -46,7 +46,8 @@
         <div class="weui-cell__ft">{{ user.mobile }}</div>
       </div>
 
-      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
+      <router-link class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);"
+          to="/user/parentInfoList" v-if="isParent">
         <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
         </div>
@@ -54,7 +55,7 @@
           <p>家长信息</p>
         </div>
         <div class="weui-cell__ft"></div>
-      </a>
+      </router-link>
 
       <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
         <div class="weui-cell__hd">
@@ -86,6 +87,7 @@
 
 <script>
 import VueCookie from 'vue-cookie'
+import Global from '@/components/Global'
   
 export default {
   name: 'MyComp',
@@ -96,6 +98,9 @@ export default {
       stuSex: window.uls.get('userInfo', 'stuSex') || '-- 未设置 --',
       mobile: window.uls.get('userInfo', 'mobile') || '-- 未设置 --',
     }
+    
+    // 是家长
+    this.isParent = (window.uls.get('userInfo', 'userType') === Global.userType.PARENT)
   },
   data () {
     return {

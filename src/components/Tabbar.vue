@@ -100,8 +100,8 @@
         let ut = window.uls.get('userInfo', 'userType')
         // 是moments路径，且身份为老师或助教
         console.log('>>> ut:', ut)
-        console.log(' -> 显示新增按钮:' + (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) + ' && ' + '(' + (ut === Global.userType.TEACHER) + ' || ' + (ut === Global.userType.ASSISTANT)+')')
-        this.showAddMoment = (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && ((ut === Global.userType.TEACHER) || (ut === Global.userType.ASSISTANT))
+        console.log(' -> 显示新增按钮:' + (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) + ' && ' + (ut === Global.userType.TEACHER))
+        this.showAddMoment = (new RegExp('\/class\/[^\/]*\/moments')).test(this.$router.history.current.path) && (ut === Global.userType.TEACHER)
       },
       
       // 更新返回按钮的显示状态

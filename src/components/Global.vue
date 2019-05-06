@@ -3,7 +3,7 @@
     'ADMIN': '1',
     'PARENT': '2',
     'TEACHER': '3',
-    'ASSISTANT': '4'
+    /* 'ASSISTANT': '4' */
   }
   
   /* const colorListLength = 20
