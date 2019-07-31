@@ -28,21 +28,27 @@ module.exports = {
               '^/demo': '/popsoul'
           }
       }, */
-      
+
       // 测试服务器
-      /* '/demo': {
+      '/': {
           target: 'http://10.15.5.38:8088',
-          changeOrigin: true,
+          changeOrigin: true/* ,
           pathRewrite: {
               '^/demo': '/'
-          }
-      }, */
-      
+          } */
+      },
+
       // 黄国庆的机器(测试通过)
-      '/': {
+      /* '/': {
         target: 'http://10.176.242.109:80',
         changeOrigin: true
-      },
+      }, */
+
+      // 毕老师的机器
+      /* '/': {
+        target: 'http://10.176.242.68:8088',
+        changeOrigin: true
+      }, */
 
       // 本地的机器(测试通过)
       /* '*': {

@@ -18,6 +18,7 @@ import ChatList from '@/components/ChatList'
 
 import UserInfo from '@/components/UserInfo'
 import ParentInfoList from '@/components/ParentInfoList'
+import ParentInfoAdd from '@/components/ParentInfoAdd'
 
 import Refresh from '@/components/Refresh'
 
@@ -35,7 +36,7 @@ export default new Router({
     //   name: 'MyComp',
     //   component: MyComp
     // },
-    
+
     // VueRouter刷新用
     {
       path: '/refresh',
@@ -55,7 +56,7 @@ export default new Router({
       name: 'Login',
       component: LoginTest
     }, */
-    
+
     // 单点登陆成功后的回调地址
     {
       path: '/e2success',
@@ -115,6 +116,13 @@ export default new Router({
         path: 'user/parentInfoList',
         name: 'ParentInfoList',
         component: ParentInfoList,
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'user/parentInfoAdd',
+        name: 'ParentInfoAdd',
+        component: ParentInfoAdd,
         meta: {
           requireAuth: true
         }

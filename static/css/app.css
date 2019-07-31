@@ -76,8 +76,8 @@ body, html {
 .weui-cell__bd {
   font-size: 15px;
 }
-.weui-cell__ft,
-.weui-cell__ft i {
+/*.weui-cell__ft i 去掉i标签的控制，否则污染报错提示标志的大小*/
+.weui-cell__ft {
   font-size: 14px;
 }
 
