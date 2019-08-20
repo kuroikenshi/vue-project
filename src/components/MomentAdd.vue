@@ -3,10 +3,10 @@
     <form>
       <div class="weui-cells no-line no-margin-top">
         <div class="weui-cell weui-cell-taller">
-          
+
           <div class="weui-cell__bd">
             <textarea class="weui-textarea" name="" placeholder="输入正文..." rows="3" v-model="content"></textarea>
-            
+
             <div class="weui-uploader">
               <!-- <div class="weui-uploader__hd">
                 <p class="weui-uploader__title">图片上传</p>
@@ -14,7 +14,7 @@
               </div> -->
               <div class="weui-uploader__bd">
                 <ul class="weui-uploader__files" id="uploaderFiles">
-                  <li class="weui-uploader__file" v-for="(imageUrl, key) in images" :key="key" 
+                  <li class="weui-uploader__file" v-for="(imageUrl, key) in images" :key="key"
                       :style="{backgroundImage:'url(' + imageUrl + ')', width: thumbnailWidth, height: thumbnailWidth}">
                     <!-- <img :src="imageUrl" alt=""> -->
                   </li>
@@ -30,7 +30,7 @@
                     <div class="weui-uploader__file-content">50%</div>
                   </li> -->
                 </ul>
-                
+
                 <!-- 新增图片按钮 -->
                 <div class="weui-uploader__input-box"
                     v-show="(this.imageFiles.length < this.imageLimit)"
@@ -40,9 +40,9 @@
               </div>
             </div>
           </div>
-          
+
         </div>
-      
+
         <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);" @click="classCodeSelect">
           <div class="weui-cell__hd">
             <i class="icon icon-book"></i>
@@ -54,7 +54,7 @@
             {{ classCode }}
           </div>
         </a>
-      
+
         <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);" @click="momentTypeSelect">
           <div class="weui-cell__hd">
             <i class="icon icon-schedule"></i>
@@ -67,7 +67,7 @@
           </div>
         </a>
       </div>
-      
+
       <div class="weui-btn-area">
         <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="submit()" v-bind:disabled="submitDisabled">发布</a>
       </div>
@@ -84,10 +84,10 @@ export default {
       classCode: '',
       classCodeMenu: [],
       classCodeIsReady: true,
-      
+
       momentType: '通知',
       momentTypeOptions: ['通知', '作业', '其他'],
-      
+
       images: [],     // 已选中图片的预览
       imageFiles: [], // 要发布的图片
       imageLimit: 9
@@ -96,13 +96,13 @@ export default {
   created () {
     this.thumbnailWidth = ((window.screen.width - 78) / 3).toFixed(2) + 'px'
     this.thumbnailAddWidth = ((window.screen.width - 78) / 3 - 2).toFixed(2) + 'px'
-    
+
     // 更新tabbar参数
     this.$emit('eventPop_updateTabbar', {
       'navbarTitle': '发布状态',
       'backPath': undefined
     })
-    
+
     // 初始化发布班级列表
     // 优先从uls中取得
     let classList = window.uls.get('personalData', 'classList')
@@ -123,7 +123,7 @@ export default {
         return Promise.reject(err)
       })
     }
-    
+
   },
   computed: {
     momentTypeMenu: function() {
@@ -140,17 +140,17 @@ export default {
       })
       return menuData
     },
-    
+
     // 内容非空
     contentIsNotBlank: function () {
       return (this.content.length > 0) || (this.imageFiles.length > 0)
     },
-    
+
     // 内容合法
     contentIsValid: function () {
       return this.content.length <= 2000 && this.imageFiles.length <= 9
     },
-    
+
     // 提交可用
     submitDisabled: function () {
       return !this.classCodeIsReady || !this.contentIsNotBlank || !this.contentIsValid
@@ -168,18 +168,18 @@ export default {
           }
         })
       })
-      
+
       this.classCodeMenu = menuData
-      
+
       // 设置已选中班级
       console.log(this.$router)
       this.classCode = menuData[0].label
     },
-    
+
     // 选择班级
     classCodeSelect: function () {
       this.weuijsPopedItem = this.$weui.actionSheet(
-        this.classCodeMenu, 
+        this.classCodeMenu,
         [{
           label: '取消',
           onClick: function() {
@@ -194,7 +194,7 @@ export default {
     // 选择类型
     momentTypeSelect: function() {
       this.weuijsPopedItem = this.$weui.actionSheet(
-        this.momentTypeMenu, 
+        this.momentTypeMenu,
         [{
           label: '取消',
           onClick: function() {
@@ -209,18 +209,18 @@ export default {
     // 上传图片
     imageChanged: function() {
       console.log('imageChanged>>>', event.target.files.length)
-      
+
       if ((this.imageFiles.length + Array.from(event.target.files).length) > this.imageLimit) {
         window.weuiErr('发布图片不能超过' + this.imageLimit + '张，当前选择超出' + ((this.imageFiles.length + Array.from(event.target.files).length) - this.imageLimit) + '张')
         event.target.files = []
         return
       }
-      
+
       Array.from(event.target.files).forEach(file => {
         this.imageFiles.push(file)
       })
       console.log('当前准备上传文件个数:', this.imageFiles.length, this.imageFiles)
-      
+
       this.images = []
       this.imageFiles.forEach(img => {
         let url = window.URL.createObjectURL(img)
@@ -237,18 +237,18 @@ export default {
           window.weuiErr('班级列表获取失败，无法发布')
           return
         }
-        
+
         if (!this.contentIsNotBlank) {
           window.weuiErr('内容为空，无法发布')
           return
         }
-        
+
         if (!this.contentIsValid) {
           window.weuiErr('内容不合法(文字长度超过2000或图片超过9张)，无法发布')
           return
         }
       }
-      
+
       let data = {
         content: this.content,
         classCode: this.classCode,
@@ -262,13 +262,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   /* 限制action-sheet的menu最大高度 */
   .weui-actionsheet-limit .weui-actionsheet__menu {
     max-height: 370px;
     overflow-y: auto;
   }
-  
+
   .weui-cell {
     padding: 10px 30px;
   }
@@ -276,7 +276,7 @@ export default {
     right: 30px;
     left: 30px;
   }
-  
+
   .weui-btn-area {
     margin-left: 30px;
     margin-right: 30px;

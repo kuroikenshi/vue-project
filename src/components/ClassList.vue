@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="weui-cells no-margin-top no-line">
+    <div class="weui-cells no-margin-top n o-line">
 
       <div v-show="classList.length <= 0" class="weui-cell weui-cell-taller">
         <div class="weui-cell__bd center">
@@ -16,9 +16,9 @@
 
       <a v-for="classItem in classList" v-bind:key="classItem.classCode" href="javascript: void(0);"
           class="weui-cell weui-cell_access weui-cell-taller" v-on:click="enterClassMoments(classItem.classCode)">
-        <div class="weui-cell__hd">
+        <!-- <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
-        </div>
+        </div> -->
         <div class="weui-cell__bd">
           <p>{{ classItem.classCode }}</p>
         </div>
@@ -33,7 +33,7 @@
 
 <script>
   import Global from '@/components/Global'
-  
+
   export default {
     name: 'MyComp',
     data () {
@@ -63,23 +63,23 @@
       // 获取班级列表
       getClassList () {
         console.log('>>> 获取班级列表')
-        
+
         /* let getClassListUrl = undefined
         switch (window.uls.get('userInfo', 'userType')) {
           case Global.userType.PARENT:
             getClassListUrl = 'classes/getClassListByStuCodeTest'
             break
-          
+
           case Global.userType.ADMIN:
           case Global.userType.TEACHER:
             getClassListUrl = 'classes/getClassListByTeachCodeTest'
             break
-          
+
           default:
             getClassListUrl = 'classes/getClassList'
             break
         }
-        
+
         console.log('getClassListUrl >>>', getClassListUrl) */
 
         // return this.$axios.post('classes/getClassList').then(res => {
@@ -135,7 +135,7 @@
 
 <style scoped>
 /* 最后一个.weui-cell加下划线 */
-.weui-cell:last-child:after {
+/* .weui-cell:last-child:after {
   content: " ";
   position: absolute;
   left: 15px;
@@ -149,7 +149,7 @@
   -webkit-transform: scaleY(.5);
   transform: scaleY(.5);
   z-index: 2;
-}
+} */
 
 .center {
   text-align: center;

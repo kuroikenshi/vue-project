@@ -46,7 +46,7 @@
         <div class="weui-cell__ft">{{ user.mobile }}</div>
       </div>
 
-      <router-link class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);"
+      <router-link class="weui-cell weui-cell_access weui-cell-taller"
           to="/user/parentInfoList" v-if="isParent">
         <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
@@ -57,7 +57,8 @@
         <div class="weui-cell__ft"></div>
       </router-link>
 
-      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
+      <router-link class="weui-cell weui-cell_access weui-cell-taller"
+          to="/user/classContacts">
         <div class="weui-cell__hd">
           <i class="icon icon-book"></i>
         </div>
@@ -65,7 +66,7 @@
           <p>班级通讯录</p>
         </div>
         <div class="weui-cell__ft"></div>
-      </a>
+      </router-link>
 
       <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
         <div class="weui-cell__hd">
@@ -77,7 +78,7 @@
         <div class="weui-cell__ft"></div>
       </a>
     </div>
-    
+
     <div class="weui-btn-area margin-bottom-20">
       <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="logout">退出登录</a>
     </div>
@@ -88,7 +89,7 @@
 <script>
 import VueCookie from 'vue-cookie'
 import Global from '@/components/Global'
-  
+
 export default {
   name: 'MyComp',
   beforeCreate: function() {
@@ -98,7 +99,7 @@ export default {
       stuSex: window.uls.get('userInfo', 'stuSex') || '-- 未设置 --',
       mobile: window.uls.get('userInfo', 'mobile') || '-- 未设置 --',
     }
-    
+
     // 是家长
     this.isParent = (window.uls.get('userInfo', 'userType') === Global.userType.PARENT)
   },
@@ -181,7 +182,7 @@ i.edit-icon {
 }
 
 /* 最后一个.weui-cell加下划线 */
-.weui-cell:last-child:after {
+/* .weui-cell:last-child:after {
   content: " ";
   position: absolute;
   left: 15px;
@@ -195,7 +196,7 @@ i.edit-icon {
   -webkit-transform: scaleY(.5);
   transform: scaleY(.5);
   z-index: 2;
-}
+} */
 
 .icon {
   margin-right: 5px;
