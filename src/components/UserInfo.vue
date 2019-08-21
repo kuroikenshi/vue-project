@@ -68,7 +68,8 @@
         <div class="weui-cell__ft"></div>
       </router-link>
 
-      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);">
+      <router-link class="weui-cell weui-cell_access weui-cell-taller"
+          to="/user/schedule">
         <div class="weui-cell__hd">
           <i class="icon icon-schedule"></i>
         </div>
@@ -76,7 +77,7 @@
           <p>班级课程表</p>
         </div>
         <div class="weui-cell__ft"></div>
-      </a>
+      </router-link>
     </div>
 
     <div class="weui-btn-area margin-bottom-20">

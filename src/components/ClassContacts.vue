@@ -356,32 +356,6 @@
 </script>
 
 <style scoped>
-  /* 固定到顶部 */
-  .page .fixed-top {
-    height: 41px;
-    margin-top: 0px;
-  }
-  .page .fixed-top.weui-cells:after {
-    content: none;
-  }
-  .page .fixed-top .weui-cell {
-    /* position: fixed; */
-    z-index: 510;
-    width: calc(100% - 30px);
-    height: 22px;
-    background: #f9f9f9;
-  }
-  .page .fixed-top .weui-cell:after {
-    content: " ";
-    width: 100%;
-    height: 1px;
-    background: #ddd;
-    /* box-shadow: 0 2px 15px 1px rgba(0, 0, 0, 0.1); */
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
   /* .weui-cells__title {
     background: #eee;
   } */
@@ -400,7 +374,7 @@
     left: 60px;
   }
 
-  .weui-filters {
+  /* .weui-filters {
     display: flex;
     position: relative;
     z-index: 500;
@@ -415,7 +389,7 @@
     text-align: center;
     font-size: 16px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  }
+  } */
 
   .weui-cells.thinner {
     width: calc(100% - 30px);
