@@ -12,11 +12,15 @@
                 <p class="weui-uploader__title">图片上传</p>
                 <div class="weui-uploader__info">0/2</div>
               </div> -->
-              <div class="weui-uploader__bd">
+              <div class="weui-uploader__bd allow-overflow">
                 <ul class="weui-uploader__files" id="uploaderFiles">
-                  <li class="weui-uploader__file" v-for="(imageUrl, key) in images" :key="key"
-                      :style="{backgroundImage:'url(' + imageUrl + ')', width: thumbnailWidth, height: thumbnailWidth}">
-                    <!-- <img :src="imageUrl" alt=""> -->
+                  <li class="weui-uploader__file touch-control" v-for="(imageUrl, key) in images" :key="key"
+                      :style="{width: thumbnailWidth, height: thumbnailWidth}"
+                      :class="{'touching': touching == key}"
+                      @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
+                    <div class="img-border">
+                      <img :src="imageUrl">
+                    </div>
                   </li>
                   <!-- <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
                   <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
@@ -76,6 +80,46 @@
 </template>
 
 <script>
+// 获取绝对偏移量
+function offset(curEle) {
+  var totalLeft = null,
+    totalTop = null,
+    par = curEle.offsetParent;
+  // 首先加自己本身的左偏移和上偏移
+  totalLeft += curEle.offsetLeft;
+  totalTop += curEle.offsetTop
+  // 只要没有找到body，我们就把父级参照物的边框和偏移也进行累加
+  while (par) {
+    if (navigator.userAgent.indexOf("MSIE 8.0") === -1) {
+      // 累加父级参照物的边框
+      totalLeft += par.clientLeft;
+      totalTop += par.clientTop
+    }
+
+    // 累加父级参照物本身的偏移
+    totalLeft += par.offsetLeft;
+    totalTop += par.offsetTop
+    par = par.offsetParent;
+  }
+
+  return {
+    left: totalLeft,
+    top: totalTop
+  }
+}
+
+function indexOfCoveringImg(x, y) {
+  var targets = document.getElementsByClassName('img-border');
+  for (var i = 0; i < targets.length; i++) {
+    var nodeOffset = offset(targets[i]);
+    // console.log(offset(node), node.offsetWidth, node.offsetHeight);
+    if (x > nodeOffset.left && y > nodeOffset.top && x < (nodeOffset.left + targets[i].offsetWidth) && y < (nodeOffset.top + targets[i].offsetHeight)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export default {
   name: 'MyComp',
   data () {
@@ -90,7 +134,10 @@ export default {
 
       images: [],     // 已选中图片的预览
       imageFiles: [], // 要发布的图片
-      imageLimit: 9
+      imageLimit: 9,
+
+      touching: undefined,
+      touchmoveEvent: undefined
     }
   },
   created () {
@@ -157,6 +204,37 @@ export default {
     }
   },
   methods: {
+    // 图片点住
+    touchstart: function (key) {
+      console.log('touchstart')
+      this.touching = key
+    },
+    // 图片松手
+    touchend: function (key) {
+      console.log('touchend')
+      this.touching = undefined
+
+      var idx = indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY);
+      if (idx != -1 && idx != key) {
+        // 替换图片顺序
+        var tmp = this.images[idx]
+        this.images[idx] = this.images[key]
+        this.images[key] = tmp
+
+        // 替换上传数组顺序
+        var tmpFile = this.imageFiles[idx]
+        this.imageFiles[idx] = this.imageFiles[key]
+        this.imageFiles[key] = tmpFile
+
+        console.log('changed: ', idx, '<->', key)
+      }
+    },
+    // 图片拖动
+    touchmove: function (key) {
+      this.touchmoveEvent = event;
+      console.log(key, event.touches[0].pageX, event.touches[0].pageY)
+    },
+
     // 设置班级列表参数
     _setClassCodeParam: function (classList) {
       let menuData = []
@@ -175,7 +253,6 @@ export default {
       console.log(this.$router)
       this.classCode = menuData[0].label
     },
-
     // 选择班级
     classCodeSelect: function () {
       this.weuijsPopedItem = this.$weui.actionSheet(
@@ -221,6 +298,7 @@ export default {
       })
       console.log('当前准备上传文件个数:', this.imageFiles.length, this.imageFiles)
 
+      // 根据要上传的文件，更新预览图
       this.images = []
       this.imageFiles.forEach(img => {
         let url = window.URL.createObjectURL(img)
@@ -280,5 +358,28 @@ export default {
   .weui-btn-area {
     margin-left: 30px;
     margin-right: 30px;
+  }
+
+  /* 触摸原地放大的实现 */
+  .allow-overflow {
+    overflow: visible;  /* 允许放大出界 */
+  }
+  .touch-control .img-border {
+    width: 100%;
+    height: 100%;
+    background: black;
+    overflow: hidden;   /* 裁剪图片 */
+    transition: all 1s;
+  }
+  .touch-control .img-border img {
+    height: 100%;                 /* 纵向居中 */
+    margin-left: 50%;             /* 横向居中 */
+    transform: translateX(-50%);  /* 横向居中 */
+  }
+  .touch-control.touching .img-border {
+    width: 120%;                  /* 放大相框 */
+    height: 120%;                 /* 放大相框 */
+    margin-top: -10%;             /* 居中处理 */
+    margin-left: -10%;            /* 居中处理 */
   }
 </style>
