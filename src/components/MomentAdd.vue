@@ -76,6 +76,10 @@
         <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="submit()" v-bind:disabled="submitDisabled">发布</a>
       </div>
     </form>
+
+    <div class="delete-area" :class="{show: touching != undefined, active: touchingToDelete}">
+      <div class="center">拖到此处删除图片</div>
+    </div>
   </div>
 </template>
 
@@ -137,7 +141,8 @@ export default {
       imageLimit: 9,
 
       touching: undefined,
-      touchmoveEvent: undefined
+      touchmoveEvent: undefined,
+      touchingToDelete: false,  // touching对象将要被删除
     }
   },
   created () {
@@ -208,31 +213,59 @@ export default {
     touchstart: function (key) {
       console.log('touchstart')
       this.touching = key
+      this.touchingToDelete = false
     },
     // 图片松手
     touchend: function (key) {
       console.log('touchend')
       this.touching = undefined
 
-      var idx = indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY);
-      if (idx != -1 && idx != key) {
-        // 替换图片顺序
-        var tmp = this.images[idx]
-        this.images[idx] = this.images[key]
-        this.images[key] = tmp
+      if (this.touchmoveEvent != undefined) {
+        // 删除模式
+        if (this.touchingToDelete) {
+          // 删掉预览图
+          this.images.splice(key, 1)
+          // 删掉准备上传的选中图
+          this.imageFiles.splice(key, 1)
+        }
+        // 位置改变
+        else {
+          var idx = indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY);
+          if (idx != -1 && idx != key) {
+            // 替换图片顺序
+            var tmp = this.images[idx]
+            this.images[idx] = this.images[key]
+            this.images[key] = tmp
 
-        // 替换上传数组顺序
-        var tmpFile = this.imageFiles[idx]
-        this.imageFiles[idx] = this.imageFiles[key]
-        this.imageFiles[key] = tmpFile
+            // 替换上传数组顺序
+            var tmpFile = this.imageFiles[idx]
+            this.imageFiles[idx] = this.imageFiles[key]
+            this.imageFiles[key] = tmpFile
 
-        console.log('changed: ', idx, '<->', key)
+            console.log('changed: ', idx, '<->', key)
+          }
+        }
       }
     },
     // 图片拖动
     touchmove: function (key) {
-      this.touchmoveEvent = event;
-      console.log(key, event.touches[0].pageX, event.touches[0].pageY)
+      // 避免拖动的时候整个页面跟着滚动
+      event.preventDefault();
+
+      if (this.touching != undefined) {
+        this.touchmoveEvent = event
+        console.log(key, event.touches[0].pageX, event.touches[0].pageY)
+
+        var deleteAreaOffset = offset(document.getElementsByClassName('delete-area')[0]);
+        if (event.touches[0].pageY > deleteAreaOffset.top) {
+          this.touchingToDelete = true
+        } else {
+          this.touchingToDelete = false
+        }
+
+      } else {
+        this.touchmoveEvent = undefined
+      }
     },
 
     // 设置班级列表参数
@@ -381,5 +414,26 @@ export default {
     height: 120%;                 /* 放大相框 */
     margin-top: -10%;             /* 居中处理 */
     margin-left: -10%;            /* 居中处理 */
+  }
+
+  .delete-area {
+    background: red;
+    color: white;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    line-height: 0px;
+    transition: all 0.3s;
+    opacity: 0;
+  }
+  .delete-area.show {
+    opacity: 1;
+    height: 45px;
+    line-height: 45px;
+  }
+  .delete-area.show.active {
+    height: 60px;
+    line-height: 60px;
   }
 </style>
