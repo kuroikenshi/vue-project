@@ -15,12 +15,20 @@
               <div class="weui-uploader__bd allow-overflow">
                 <ul class="weui-uploader__files" id="uploaderFiles">
                   <li class="weui-uploader__file touch-control" v-for="(imageUrl, key) in images" :key="key"
-                      :style="{width: thumbnailWidth, height: thumbnailWidth}"
+                      :style="{width: thumbnailWidth + 'px', height: thumbnailWidth + 'px'}"
                       :class="{'touching': touching == key}"
                       @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
-                    <div class="img-border">
+                    <div class="img-border" :class="{moving: (touching == key && touchmoveEvent != undefined)}"
+                        :style="{
+                          width: thumbnailWidth + 'px',
+                          height: thumbnailWidth + 'px',
+                          left: (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageX - thumbnailWidth / 2 + 'px' : 'unset',
+                          top: (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageY - thumbnailWidth / 2 + 'px' : 'unset'
+                        }">
                       <img :src="imageUrl">
                     </div>
+                    <!-- 移动中占位用 -->
+                    <div class="img-border-dummy" v-show="touching == key"></div>
                   </li>
                   <!-- <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
                   <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
@@ -38,7 +46,7 @@
                 <!-- 新增图片按钮 -->
                 <div class="weui-uploader__input-box"
                     v-show="(this.imageFiles.length < this.imageLimit)"
-                    :style="{width: thumbnailAddWidth, height: thumbnailAddWidth}">
+                    :style="{width: thumbnailAddWidthPX, height: thumbnailAddWidthPX}">
                   <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple @change="imageChanged">
                 </div>
               </div>
@@ -111,13 +119,19 @@ function offset(curEle) {
     top: totalTop
   }
 }
-
+// 返回当前xy坐标覆盖图片的序号
 function indexOfCoveringImg(x, y) {
   var targets = document.getElementsByClassName('img-border');
   for (var i = 0; i < targets.length; i++) {
     var nodeOffset = offset(targets[i]);
     // console.log(offset(node), node.offsetWidth, node.offsetHeight);
-    if (x > nodeOffset.left && y > nodeOffset.top && x < (nodeOffset.left + targets[i].offsetWidth) && y < (nodeOffset.top + targets[i].offsetHeight)) {
+    if (
+      x > nodeOffset.left &&
+      y > nodeOffset.top &&
+      x < (nodeOffset.left + targets[i].offsetWidth) &&
+      y < (nodeOffset.top + targets[i].offsetHeight) &&
+      targets[i].classList.value.indexOf('moving') == -1
+    ) {
       return i;
     }
   }
@@ -146,8 +160,8 @@ export default {
     }
   },
   created () {
-    this.thumbnailWidth = ((window.screen.width - 78) / 3).toFixed(2) + 'px'
-    this.thumbnailAddWidth = ((window.screen.width - 78) / 3 - 2).toFixed(2) + 'px'
+    this.thumbnailWidth = parseFloat(((window.screen.width - 78) / 3).toFixed(2))
+    this.thumbnailAddWidthPX = ((window.screen.width - 78) / 3 - 2).toFixed(2) + 'px'
 
     // 更新tabbar参数
     this.$emit('eventPop_updateTabbar', {
@@ -217,9 +231,6 @@ export default {
     },
     // 图片松手
     touchend: function (key) {
-      console.log('touchend')
-      this.touching = undefined
-
       if (this.touchmoveEvent != undefined) {
         // 删除模式
         if (this.touchingToDelete) {
@@ -246,6 +257,10 @@ export default {
           }
         }
       }
+
+      console.log('touchend')
+      this.touching = undefined
+      this.touchmoveEvent = undefined
     },
     // 图片拖动
     touchmove: function (key) {
@@ -256,13 +271,13 @@ export default {
         this.touchmoveEvent = event
         console.log(key, event.touches[0].pageX, event.touches[0].pageY)
 
+        // 判断是否要删除
         var deleteAreaOffset = offset(document.getElementsByClassName('delete-area')[0]);
         if (event.touches[0].pageY > deleteAreaOffset.top) {
           this.touchingToDelete = true
         } else {
           this.touchingToDelete = false
         }
-
       } else {
         this.touchmoveEvent = undefined
       }
@@ -410,10 +425,26 @@ export default {
     transform: translateX(-50%);  /* 横向居中 */
   }
   .touch-control.touching .img-border {
-    width: 120%;                  /* 放大相框 */
-    height: 120%;                 /* 放大相框 */
-    margin-top: -10%;             /* 居中处理 */
-    margin-left: -10%;            /* 居中处理 */
+    /* width: 120%;                  /* 放大相框 * / */
+    /* height: 120%;                 /* 放大相框 * / */
+    /* margin-top: -10%;             /* 居中处理 * / */
+    /* margin-left: -10%;            /* 居中处理 * / */
+  }
+  .touch-control .img-border-dummy {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;   /* 裁剪图片 */
+    transition: all 1s;
+  }
+  /* 移动中 */
+  .touch-control .img-border.moving {
+    background: red;
+    position: fixed;
+    transition-duration: 0s;
+  }
+  .touch-control .img-border.moving + .img-border-dummy {
+    width: 0%;
+    background: green;
   }
 
   .delete-area {
