@@ -12,41 +12,60 @@
                 <p class="weui-uploader__title">图片上传</p>
                 <div class="weui-uploader__info">0/2</div>
               </div> -->
-              <div class="weui-uploader__bd allow-overflow">
-                <ul class="weui-uploader__files" id="uploaderFiles">
-                  <li class="weui-uploader__file touch-control" v-for="(imageUrl, key) in images" :key="key"
-                      :style="{width: thumbnailWidth + 'px', height: thumbnailWidth + 'px'}"
-                      :class="{'touching': touching == key}"
-                      @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
-                    <div class="img-border" :class="{moving: (touching == key && touchmoveEvent != undefined)}"
-                        :style="{
-                          width: thumbnailWidth + 'px',
-                          height: thumbnailWidth + 'px',
-                          left: (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageX - thumbnailWidth / 2 + 'px' : 'unset',
-                          top: (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageY - thumbnailWidth / 2 + 'px' : 'unset'
-                        }">
-                      <img :src="imageUrl">
-                    </div>
-                    <!-- 移动中占位用 -->
-                    <div class="img-border-dummy" v-show="touching == key"></div>
-                  </li>
-                  <!-- <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                  <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                  <li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>
-                  <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
-                    <div class="weui-uploader__file-content">
-                      <i class="weui-icon-warn"></i>
-                    </div>
-                  </li>
-                  <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">
-                    <div class="weui-uploader__file-content">50%</div>
-                  </li> -->
-                </ul>
+              <div style="background: darkgray; color: white; line-height: initial; padding: 5px;">
+                {{coveringIndex}}
+                <br>
+                ({{ Math.round(images.length / 3) }} + <!-- {{ ((images.length % 3 != 0) ? 1 : 0) }} + --> {{ ([0, 3, 6].indexOf(images.length) != -1 ? 1 : 0) }})
+                *
+                {{ (thumbnailWidth + 10) }}
+                =
+                {{ (Math.round(images.length / 3) + ((images.length % 3 != 0) ? 1 : 0)) * (thumbnailWidth + 10) }}
+              </div>
+              <!-- ((images.length % 3 != 0) ? 1 : 0) + -->
+              <div class="weui-uploader__bd grid-thumbnails-container"
+                  :style="{
+                    height: (
+                      Math.round(images.length / 3) +
+
+                      ([0, 3, 6].indexOf(images.length) != -1 ? 1 : 0)
+                    ) * (thumbnailWidth + 10) + 'px'
+                  }">
+
+                <!-- 每个图片容器对象 -->
+                <div class="grid-thumbnails-item touch-control" v-for="(imageUrl, key) in images" :key="key"
+                    :style="{
+                      'width': thumbnailWidth + 'px',
+                      'height': thumbnailWidth + 'px',
+                      'left': (key % 3) * (thumbnailWidth + 10) + 'px',
+                      'top': (parseInt(key / 3)) * (thumbnailWidth + 10) + 'px',
+                    }"
+                    :class="{'touching': touching == key, 'moving': (touching == key && touchmoveEvent != undefined)}"
+                    @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
+
+                  <!-- 移动中占位用 -->
+                  <div class="img-border-dummy" :class="{'show': (touching == key || coveringIndex == key)}"></div>
+
+                  <div class="img-border"
+                      :style="{
+                        'width': thumbnailWidth + 'px',
+                        'height': thumbnailWidth + 'px',
+                        'left': (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageX - thumbnailWidth / 2 + 'px' : 'unset',
+                        'top': (touching == key && touchmoveEvent != undefined) ? touchmoveEvent.touches[0].pageY - thumbnailWidth / 2 + 'px' : 'unset'
+                      }">
+                    <img :src="imageUrl">
+                  </div>
+                </div>
 
                 <!-- 新增图片按钮 -->
-                <div class="weui-uploader__input-box"
+                <div class="weui-uploader__input-box grid-thumbnails-item"
                     v-show="(this.imageFiles.length < this.imageLimit)"
-                    :style="{width: thumbnailAddWidthPX, height: thumbnailAddWidthPX}">
+                    :style="{
+                      'width': thumbnailAddWidthPX,
+                      'height': thumbnailAddWidthPX,
+                      'left': (images.length % 3) * (thumbnailWidth + 10) + 'px',
+                      'top': (parseInt(images.length / 3)) * (thumbnailWidth + 10) + 'px'
+                      }
+                    ">
                   <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple @change="imageChanged">
                 </div>
               </div>
@@ -130,7 +149,7 @@ function indexOfCoveringImg(x, y) {
       y > nodeOffset.top &&
       x < (nodeOffset.left + targets[i].offsetWidth) &&
       y < (nodeOffset.top + targets[i].offsetHeight) &&
-      targets[i].classList.value.indexOf('moving') == -1
+      targets[i].parentNode.classList.value.indexOf('moving') == -1
     ) {
       return i;
     }
@@ -220,6 +239,16 @@ export default {
     // 提交可用
     submitDisabled: function () {
       return !this.classCodeIsReady || !this.contentIsNotBlank || !this.contentIsValid
+    },
+
+    // 当前移动对象与其他对象重合，如果重合返回其index
+    coveringIndex: function () {
+      if (this.touchmoveEvent != undefined) {
+        return indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY)
+      }
+      else {
+        return -1
+      }
     }
   },
   methods: {
@@ -278,6 +307,9 @@ export default {
         } else {
           this.touchingToDelete = false
         }
+
+        // 如果在某图片上，替换位置
+
       } else {
         this.touchmoveEvent = undefined
       }
@@ -408,9 +440,17 @@ export default {
     margin-right: 30px;
   }
 
-  /* 触摸原地放大的实现 */
-  .allow-overflow {
+  /* 表格式缩略图容器 */
+  .grid-thumbnails-container {
     overflow: visible;  /* 允许放大出界 */
+    position: relative;
+  }
+  .grid-thumbnails-container .grid-thumbnails-item {
+    position: absolute;
+  }
+  .touch-control {
+    transition: all 1s linear;
+    max-width: 100%;
   }
   .touch-control .img-border {
     width: 100%;
@@ -431,22 +471,32 @@ export default {
     /* margin-left: -10%;            /* 居中处理 * / */
   }
   .touch-control .img-border-dummy {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;   /* 裁剪图片 */
+    width: 0;
+    height: 0;
+    overflow: hidden;
     transition: all 1s;
   }
+  .touch-control .img-border-dummy.show {
+    width: 100%;
+    height: 100%;
+  }
   /* 移动中 */
-  .touch-control .img-border.moving {
+  .touch-control.moving {
+    max-width: 0;
+    margin-right: 0;
+  }
+  .touch-control.moving .img-border {
     background: red;
     position: fixed;
+    z-index: 1;
     transition-duration: 0s;
   }
-  .touch-control .img-border.moving + .img-border-dummy {
-    width: 0%;
+  .touch-control.moving .img-border + .img-border-dummy {
+    /* width: 0%; */
     background: green;
   }
 
+  /* 删除区域 */
   .delete-area {
     background: red;
     color: white;
