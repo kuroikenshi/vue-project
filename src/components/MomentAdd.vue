@@ -12,6 +12,8 @@
                 <p class="weui-uploader__title">图片上传</p>
                 <div class="weui-uploader__info">0/2</div>
               </div> -->
+
+              <!-- 测试信息 -->
               <div style="background: darkgray; color: white; line-height: initial; padding: 5px;">
                 {{coveringIndex}}
                 <br>
@@ -20,7 +22,11 @@
                 {{ (thumbnailWidth + 10) }}
                 =
                 {{ (Math.round(images.length / 3) + ((images.length % 3 != 0) ? 1 : 0)) * (thumbnailWidth + 10) }}
+
+                <hr>
+                coveringIndex: {{coveringIndex}}
               </div>
+
               <!-- ((images.length % 3 != 0) ? 1 : 0) + -->
               <div class="weui-uploader__bd grid-thumbnails-container"
                   :style="{
@@ -31,19 +37,24 @@
                     ) * (thumbnailWidth + 10) + 'px'
                   }">
 
+                <!--
+                  'left': (key % 3) * (thumbnailWidth + 10) + 'px',
+                  'top': (parseInt(key / 3)) * (thumbnailWidth + 10) + 'px',
+                -->
+
                 <!-- 每个图片容器对象 -->
                 <div class="grid-thumbnails-item touch-control" v-for="(imageUrl, key) in images" :key="key"
                     :style="{
-                      'width': thumbnailWidth + 'px',
-                      'height': thumbnailWidth + 'px',
-                      'left': (key % 3) * (thumbnailWidth + 10) + 'px',
-                      'top': (parseInt(key / 3)) * (thumbnailWidth + 10) + 'px',
+                      'width': gridThumbItemStyles[key]['width'],
+                      'height': gridThumbItemStyles[key]['height'],
+                      'left': gridThumbItemStyles[key]['left'],
+                      'top': gridThumbItemStyles[key]['top']
                     }"
                     :class="{'touching': touching == key, 'moving': (touching == key && touchmoveEvent != undefined)}"
                     @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
-
+                  <!-- {{ ((((coveringIndex !== -1) && (key > coveringIndex)) ? (key - 1) : key) % 3) * (thumbnailWidth + 10) }} -&gt; {{ key }} -->
                   <!-- 移动中占位用 -->
-                  <div class="img-border-dummy" :class="{'show': (touching == key || coveringIndex == key)}"></div>
+                  <!-- <div class="img-border-dummy" :class="{'show': (touching == key || coveringIndex == key)}"></div> -->
 
                   <div class="img-border"
                       :style="{
@@ -140,7 +151,7 @@ function offset(curEle) {
 }
 // 返回当前xy坐标覆盖图片的序号
 function indexOfCoveringImg(x, y) {
-  var targets = document.getElementsByClassName('img-border');
+  var targets = document.getElementsByClassName('touch-control');
   for (var i = 0; i < targets.length; i++) {
     var nodeOffset = offset(targets[i]);
     // console.log(offset(node), node.offsetWidth, node.offsetHeight);
@@ -149,12 +160,13 @@ function indexOfCoveringImg(x, y) {
       y > nodeOffset.top &&
       x < (nodeOffset.left + targets[i].offsetWidth) &&
       y < (nodeOffset.top + targets[i].offsetHeight) &&
-      targets[i].parentNode.classList.value.indexOf('moving') == -1
+      // targets[i].parentNode.classList.value.indexOf('moving') == -1
+      targets[i].classList.value.indexOf('moving') == -1
     ) {
       return i;
     }
   }
-  return -1;
+  return undefined;
 }
 
 export default {
@@ -173,9 +185,11 @@ export default {
       imageFiles: [], // 要发布的图片
       imageLimit: 9,
 
-      touching: undefined,
+      touching: undefined,  // 当前触摸的对象idx
       touchmoveEvent: undefined,
       touchingToDelete: false,  // touching对象将要被删除
+
+      imagesCtnAreas: [],   // 触摸开始瞬间，图片容器位置的绝对定位值和范围，用于计算touchmove中图片移动位置的动画
     }
   },
   created () {
@@ -243,11 +257,104 @@ export default {
 
     // 当前移动对象与其他对象重合，如果重合返回其index
     coveringIndex: function () {
+      let idx = undefined
+
       if (this.touchmoveEvent != undefined) {
-        return indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY)
+        let x = this.touchmoveEvent.touches[0].pageX
+        let y = this.touchmoveEvent.touches[0].pageY
+        // 找出所在区域的index
+        for (let i = 0; i < this.imagesCtnAreas.length; i++) {
+          let nodeOffset = this.imagesCtnAreas[i]
+          // 在区域内的计算方法
+          if (
+            x > nodeOffset.left &&
+            x < (nodeOffset.left + this.thumbnailWidth) &&
+            y > nodeOffset.top &&
+            y < (nodeOffset.top + this.thumbnailWidth) // &&
+            // targets[i].classList.value.indexOf('moving') == -1
+          ) {
+            idx = i
+          }
+        }
+      }
+
+      return idx
+    },
+
+    // 预览图片的样式数组
+    gridThumbItemStyles: function () {
+      console.log('touching ->', this.touching, 'coveringIndex ->', this.coveringIndex)
+      if (this.images.length > 0) {
+        let sArr = []
+        for (let idx = 0; idx < this.images.length; idx++) {
+          let stl = {}
+
+          // 没开始触摸 或 开始触摸，但是没重合
+          if (this.touching == undefined || (this.touching != undefined && this.coveringIndex == undefined)) {
+            stl['width'] = this.thumbnailWidth + 'px'
+            stl['height'] = this.thumbnailWidth + 'px'
+            stl['left'] = (idx % 3) * (this.thumbnailWidth + 10) + 'px'
+            stl['top'] = (parseInt(idx / 3)) * (this.thumbnailWidth + 10) + 'px'
+          }
+          // 重合覆盖
+          else {
+            // 大小
+            // 当前移动对象
+            if (this.touching == idx) {
+              stl['width'] = 0 + 'px'
+              stl['height'] = 0 + 'px'
+            }
+            // // 当前重合对象
+            // else if (this.coveringIndex == idx) {
+            //   stl['width'] = this.thumbnailWidth * 2 + 10  + 'px'
+            //   stl['height'] = this.thumbnailWidth + 'px'
+            // }
+            // 其他对象
+            else {
+              stl['width'] = this.thumbnailWidth + 'px'
+              stl['height'] = this.thumbnailWidth + 'px'
+            }
+
+            // 偏移量
+            // 移动对象向左移的情况
+            if (this.touching > this.coveringIndex) {
+              // 移动对象和插入点对象之间的对象（包括插入点）向右移动
+              if (idx >= this.coveringIndex && idx <= this.touching) {
+                let _idx = idx + 1
+
+                stl['left'] = (_idx % 3) * (this.thumbnailWidth + 10) + 'px'
+                stl['top'] = (parseInt(_idx / 3)) * (this.thumbnailWidth + 10) + 'px'
+              }
+              // 其他对象不变
+              else {
+                stl['left'] = (idx % 3) * (this.thumbnailWidth + 10) + 'px'
+                stl['top'] = (parseInt(idx / 3)) * (this.thumbnailWidth + 10) + 'px'
+              }
+            }
+            // 移动对象向右移的情况
+            else {
+              // 移动对象和插入点对象之间的对象（包括插入点）向左移动
+              if (idx >= this.touching && idx <= this.coveringIndex) {
+                let _idx = idx - 1
+
+                stl['left'] = (_idx % 3) * (this.thumbnailWidth + 10) + 'px'
+                stl['top'] = (parseInt(_idx / 3)) * (this.thumbnailWidth + 10) + 'px'
+              }
+              // 其他对象不变
+              else {
+                stl['left'] = (idx % 3) * (this.thumbnailWidth + 10) + 'px'
+                stl['top'] = (parseInt(idx / 3)) * (this.thumbnailWidth + 10) + 'px'
+              }
+            }
+          }
+          console.log(' ->', idx, JSON.stringify(stl))
+          sArr.push(stl)
+        }
+        // console.log('sArr', sArr)
+        return sArr
       }
       else {
-        return -1
+        return []
       }
     }
   },
@@ -257,6 +364,14 @@ export default {
       console.log('touchstart')
       this.touching = key
       this.touchingToDelete = false
+
+      // 点住开始瞬间，更新容器范围数组
+      this.imagesCtnAreas = []
+      let targets = document.getElementsByClassName('touch-control')
+      for (let i = 0; i < targets.length; i++) {
+        let nodeOffset = offset(targets[i])
+        this.imagesCtnAreas.push(nodeOffset)
+      }
     },
     // 图片松手
     touchend: function (key) {
@@ -449,8 +564,9 @@ export default {
     position: absolute;
   }
   .touch-control {
-    transition: all 1s linear;
+    transition: all 0.3s ease-in-out;
     max-width: 100%;
+    background: green;
   }
   .touch-control .img-border {
     width: 100%;
