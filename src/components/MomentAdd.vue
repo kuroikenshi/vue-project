@@ -14,10 +14,10 @@
               </div> -->
 
               <!-- 测试信息 -->
-              <div style="background: darkgray; color: white; line-height: initial; padding: 5px;">
+              <!-- <div style="background: darkgray; color: white; line-height: initial; padding: 5px;">
                 {{coveringIndex}}
                 <br>
-                ({{ Math.round(images.length / 3) }} + <!-- {{ ((images.length % 3 != 0) ? 1 : 0) }} + --> {{ ([0, 3, 6].indexOf(images.length) != -1 ? 1 : 0) }})
+                ({{ Math.round(images.length / 3) }} + {{ ([0, 3, 6].indexOf(images.length) != -1 ? 1 : 0) }})
                 *
                 {{ (thumbnailWidth + 10) }}
                 =
@@ -25,7 +25,7 @@
 
                 <hr>
                 coveringIndex: {{coveringIndex}}
-              </div>
+              </div> -->
 
               <!-- ((images.length % 3 != 0) ? 1 : 0) + -->
               <div class="weui-uploader__bd grid-thumbnails-container"
@@ -50,11 +50,8 @@
                       'left': gridThumbItemStyles[key]['left'],
                       'top': gridThumbItemStyles[key]['top']
                     }"
-                    :class="{'touching': touching == key, 'moving': (touching == key && touchmoveEvent != undefined)}"
+                    :class="{'touching': touching == key, 'moving': (touching == key && touchmoveEvent != undefined), 'no-transition': touching == undefined}"
                     @touchstart="touchstart(key)" @touchmove="touchmove(key)" @touchend="touchend(key)">
-                  <!-- {{ ((((coveringIndex !== -1) && (key > coveringIndex)) ? (key - 1) : key) % 3) * (thumbnailWidth + 10) }} -&gt; {{ key }} -->
-                  <!-- 移动中占位用 -->
-                  <!-- <div class="img-border-dummy" :class="{'show': (touching == key || coveringIndex == key)}"></div> -->
 
                   <div class="img-border"
                       :style="{
@@ -567,7 +564,10 @@ export default {
   .touch-control {
     transition: all 0.3s ease-in-out;
     max-width: 100%;
-    background: green;
+    /* background: green; */ /* 调试用 */
+  }
+  .touch-control.no-transition {
+    transition-duration: 0s;
   }
   .touch-control .img-border {
     width: 100%;
@@ -581,36 +581,22 @@ export default {
     margin-left: 50%;             /* 横向居中 */
     transform: translateX(-50%);  /* 横向居中 */
   }
-  .touch-control.touching .img-border {
-    /* width: 120%;                  /* 放大相框 * / */
-    /* height: 120%;                 /* 放大相框 * / */
-    /* margin-top: -10%;             /* 居中处理 * / */
-    /* margin-left: -10%;            /* 居中处理 * / */
-  }
-  .touch-control .img-border-dummy {
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all 1s;
-  }
-  .touch-control .img-border-dummy.show {
-    width: 100%;
-    height: 100%;
-  }
+  /* .touch-control.touching .img-border {
+    width: 120%;                  /* 放大相框 * /
+    height: 120%;                 /* 放大相框 * /
+    margin-top: -10%;             /* 居中处理 * /
+    margin-left: -10%;            /* 居中处理 * /
+  } */
   /* 移动中 */
   .touch-control.moving {
     max-width: 0;
     margin-right: 0;
   }
   .touch-control.moving .img-border {
-    background: red;
+    /* background: red; */ /* 调试用 */
     position: fixed;
     z-index: 1;
     transition-duration: 0s;
-  }
-  .touch-control.moving .img-border + .img-border-dummy {
-    /* width: 0%; */
-    background: green;
   }
 
   /* 删除区域 */
