@@ -385,19 +385,20 @@ export default {
         }
         // 位置改变
         else {
-          var idx = indexOfCoveringImg(this.touchmoveEvent.touches[0].pageX, this.touchmoveEvent.touches[0].pageY);
-          if (idx != -1 && idx != key) {
-            // 替换图片顺序
-            var tmp = this.images[idx]
-            this.images[idx] = this.images[key]
-            this.images[key] = tmp
-
-            // 替换上传数组顺序
-            var tmpFile = this.imageFiles[idx]
-            this.imageFiles[idx] = this.imageFiles[key]
-            this.imageFiles[key] = tmpFile
-
-            console.log('changed: ', idx, '<->', key)
+          if (this.coveringIndex != undefined) {
+            // 取出正在移动的图片文件
+            let movingFile = this.imageFiles.splice(this.touching, 1)[0]
+            let movingImg = this.images.splice(this.touching, 1)[0]
+            // 从左向右
+            if (this.touching < this.coveringIndex) {
+              this.imageFiles.splice(this.coveringIndex, 0, movingFile)
+              this.images.splice(this.coveringIndex, 0, movingImg)
+            }
+            // 从右向左
+            else {
+              this.imageFiles.splice(this.coveringIndex, 0, movingFile)
+              this.images.splice(this.coveringIndex, 0, movingImg)
+            }
           }
         }
       }
