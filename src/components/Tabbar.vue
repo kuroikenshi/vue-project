@@ -134,7 +134,7 @@
 
       // 进入添加动态页面
       momentAdd () {
-        this.$router.push('/class/momentAdd')
+        this.$router.push('/class/' + this.$route.params.classCode + '/momentAdd')
       },
 
       // 进入添加家长信息页面

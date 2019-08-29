@@ -443,7 +443,7 @@ export default {
 
       // 设置已选中班级
       console.log(this.$router)
-      this.classCode = menuData[0].label
+      this.classCode = this.$route.params.classCode || menuData[0].label
     },
     // 选择班级
     classCodeSelect: function () {
