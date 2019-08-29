@@ -19,6 +19,7 @@ import ChatList from '@/components/ChatList'
 import UserInfo from '@/components/UserInfo'
 import ParentInfoList from '@/components/ParentInfoList'
 import ParentInfoAdd from '@/components/ParentInfoAdd'
+import ParentInfoEdit from '@/components/ParentInfoEdit'
 import ClassContacts from '@/components/ClassContacts'
 import Schedule from '@/components/Schedule'
 
@@ -125,6 +126,13 @@ export default new Router({
         path: 'user/parentInfoAdd',
         name: 'ParentInfoAdd',
         component: ParentInfoAdd,
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'user/parentInfoEdit/:uid',
+        name: 'ParentInfoEdit',
+        component: ParentInfoEdit,
         meta: {
           requireAuth: true
         }

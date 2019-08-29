@@ -23,7 +23,8 @@
           <p>{{ classItem.classCode }}</p>
         </div>
         <div class="weui-cell__ft">
-          <span class="new-msg">{{ ((classItem.count === undefined || classItem.count === 0) ? "无新消息" : (classItem.count) + '条新消息') }}</span>
+          <!-- TODO: 新消息数接口 -->
+          <!-- <span class="new-msg">{{ ((classItem.count === undefined || classItem.count === 0) ? "无新消息" : (classItem.count) + '条新消息') }}</span> -->
         </div>
       </a>
 
@@ -87,6 +88,9 @@
           console.log('getClassList>>>', res.data)
           this.classList = res.data.data
           this.classListLoaded = true
+
+          // this.getEachClassNewsCount()
+
           return Promise.resolve()
         }).catch(err => {
           console.log('加载classList失败:', err)
@@ -94,7 +98,7 @@
           this.classListErrMsg = '-- 加载失败 --'
           return Promise.reject(err)
         })
-      }
+      },
 
       // 获取班级最新消息个数
       /* getEachClassNewsCount () {

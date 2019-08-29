@@ -66,7 +66,7 @@
             label: '修改',
             onClick: () => {
               // 修改家长信息
-              weuiSuccess('TODO: 修改家长信息')
+              this.$router.push('/user/parentInfoEdit/' + parentItem.id)
             }
           }, {
             label: '删除',
