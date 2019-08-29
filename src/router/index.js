@@ -94,7 +94,7 @@ export default new Router({
           requireAuth: true
         }
       }, {
-        path: 'class/momentAdd',
+        path: 'class/:classCode/momentAdd',
         name: 'MomentAdd',
         component: MomentAdd,
         meta: {
