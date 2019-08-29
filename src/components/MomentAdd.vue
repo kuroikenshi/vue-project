@@ -31,8 +31,7 @@
               <div class="weui-uploader__bd grid-thumbnails-container"
                   :style="{
                     height: (
-                      Math.round(images.length / 3) +
-
+                      Math.ceil(images.length / 3) +
                       ([0, 3, 6].indexOf(images.length) != -1 ? 1 : 0)
                     ) * (thumbnailWidth + 10) + 'px'
                   }">
