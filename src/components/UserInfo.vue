@@ -2,10 +2,10 @@
   <div class="page user-info">
     <div class="user-info-bg">
       <h1 class="user-title">个人中心</h1>
-      <router-link to="/user/edit" class="edit weui-tabbar__label">
+      <!-- <router-link to="/user/edit" class="edit weui-tabbar__label">
         <i class="edit-icon"></i>
         <span class="edit-text">编辑</span>
-      </router-link>
+      </router-link> -->
       <div class="card">
         <img :src="user.userface" alt="" class="user-photo"/>
         <p class="user-name">{{ user.name }}</p>
@@ -81,7 +81,7 @@
     </div>
 
     <div class="weui-btn-area margin-bottom-20">
-      <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="logout">退出登录</a>
+      <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="logout">退出登录</a>
     </div>
 
   </div>
@@ -201,10 +201,6 @@ i.edit-icon {
 
 .icon {
   margin-right: 5px;
-}
-
-.margin-bottom-20 {
-  margin-bottom: 20px;
 }
 
 /* 根据设计稿，行内字号重定义，已在app.css中加入 */

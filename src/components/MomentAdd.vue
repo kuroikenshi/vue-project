@@ -106,7 +106,7 @@
         </a>
       </div>
 
-      <div class="weui-btn-area">
+      <div class="weui-btn-area margin-bottom-20">
         <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="submit()" v-bind:disabled="submitDisabled">发布</a>
       </div>
     </form>
@@ -579,6 +579,7 @@ export default {
     height: 100%;                 /* 纵向居中 */
     margin-left: 50%;             /* 横向居中 */
     transform: translateX(-50%);  /* 横向居中 */
+    z-index: 10;
   }
   /* .touch-control.touching .img-border {
     width: 120%;                  /* 放大相框 * /
@@ -594,7 +595,7 @@ export default {
   .touch-control.moving .img-border {
     /* background: red; */ /* 调试用 */
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     transition-duration: 0s;
   }
 
@@ -609,14 +610,15 @@ export default {
     line-height: 0px;
     transition: all 0.3s;
     opacity: 0;
+    z-index: 510;
   }
   .delete-area.show {
     opacity: 1;
-    height: 45px;
-    line-height: 45px;
+    height: 53px;
+    line-height: 53px;
   }
   .delete-area.show.active {
-    height: 60px;
-    line-height: 60px;
+    height: 70px;
+    line-height: 70px;
   }
 </style>
