@@ -15,6 +15,7 @@
       </div>
 
       <a v-for="classItem in classList" v-bind:key="classItem.classCode" href="javascript: void(0);"
+          v-show="newsCountReqFinishCount == classList.length"
           class="weui-cell weui-cell_access weui-cell-taller" v-on:click="enterClassMoments(classItem.classCode)">
         <!-- <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
@@ -23,8 +24,8 @@
           <p>{{ classItem.classCode }}</p>
         </div>
         <div class="weui-cell__ft">
-          <!-- TODO: 新消息数接口 -->
-          <!-- <span class="new-msg">{{ ((classItem.count === undefined || classItem.count === 0) ? "无新消息" : (classItem.count) + '条新消息') }}</span> -->
+          <!-- 新消息数 -->
+          <span class="new-msg">{{ ((classItem.count === undefined || classItem.count === 0) ? "无新消息" : (classItem.count) + '条新消息') }}</span>
         </div>
       </a>
 
@@ -41,7 +42,8 @@
       return {
         classListLoaded: false,
         classListErrMsg: '',
-        classList: []
+        classList: [],
+        newsCountReqFinishCount: 0
       }
     },
     created () {
@@ -64,32 +66,14 @@
       // 获取班级列表
       getClassList () {
         console.log('>>> 获取班级列表')
-
-        /* let getClassListUrl = undefined
-        switch (window.uls.get('userInfo', 'userType')) {
-          case Global.userType.PARENT:
-            getClassListUrl = 'classes/getClassListByStuCodeTest'
-            break
-
-          case Global.userType.ADMIN:
-          case Global.userType.TEACHER:
-            getClassListUrl = 'classes/getClassListByTeachCodeTest'
-            break
-
-          default:
-            getClassListUrl = 'classes/getClassList'
-            break
-        }
-
-        console.log('getClassListUrl >>>', getClassListUrl) */
-
-        // return this.$axios.post('classes/getClassList').then(res => {
         return this.$axios.post('classes/getClassList').then(res => {
           console.log('getClassList>>>', res.data)
           this.classList = res.data.data
           this.classListLoaded = true
 
-          // this.getEachClassNewsCount()
+          return Promise.resolve()
+        }).then(() => {
+          this.getEachClassNewsCount()
 
           return Promise.resolve()
         }).catch(err => {
@@ -101,38 +85,55 @@
       },
 
       // 获取班级最新消息个数
-      /* getEachClassNewsCount () {
+      getEachClassNewsCount () {
+        this.newsCountReqFinishCount = 0
         console.log('获取班级最新消息个数:', this.classList[0].count)
         let that = this
 
         // 遍历加载新消息个数
-        this.classList.forEach(function (classItem) {
+        this.classList.forEach((classItem, idx) => {
           console.log('>>> 遍历加载新消息个数', classItem.classCode)
+
+          // 如果没有，给默认值
+          if (!window.uls.get(classItem.classCode, 'lastUpdate')) {
+            window.uls.set(classItem.classCode, 'lastUpdate', new Date().setYear(2018))
+          }
+
           let postData = that.$qs.stringify({
             classCode: classItem.classCode,
-            lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate') || new Date(2018).valueOf()
+            lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate')
           })
 
           console.log('postData>>>', postData)
 
-          that.$axios.post('moments/getNewsCount', postData).then(res => {
+          this.$axios.post('moments/getNewsCount', postData).then(res => {
             console.log('getNewsCount>>>', res.data)
+            this.classList[idx].count =  'n'
             if (res.status === 200 && res.statusText === 'OK') {
               console.log('    count:', res.data.data)
               console.log('    classItem.count:', classItem.count)
-              classItem.count = res.data.data + '条新消息'
-              console.log('    >>>>>', that.classList[0].count)
+              classItem.count = res.data.data
+              this.classList[idx].count = res.data.data
+              this.newsCountReqFinishCount += 1
+              console.log('    >>>>>', this.classList[idx].count)
             } else {
-              alert('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
+              // weuiErr('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
+              window.weuiErr(res.data.status + ': ' + res.data.msg)
+              this.classList[idx].count =  'n'
             }
             return Promise.resolve()
           }).catch(err => {
             console.log('获取班级最新消息个数错误:', err)
-            classItem.count = '获取新消息个数失败'
+            this.classList[idx].count =  'n'
             return Promise.reject(err)
           })
         })
-      } */
+
+        // 安全方法，预防加载新消息个数卡住的bug
+        setTimeout(() => {
+          this.newsCountReqFinishCount = this.classList.length
+        }, 5000)
+      }
     }
   }
 </script>
