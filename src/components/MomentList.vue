@@ -134,7 +134,7 @@ export default {
 
         this.firstDataNotLoaded = false
 
-        window.uls.set(this.classCode, 'lastUpdate', new Date().valueOf())
+        window.uls.set(this.classCode, 'lastUpdateTime', new Date().valueOf())
 
         // 重试冷却和次数还原
         this._resetLoadParam ()

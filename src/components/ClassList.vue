@@ -66,28 +66,44 @@
       // 获取班级列表
       getClassList () {
         console.log('>>> 获取班级列表')
-        return this.$axios.post('classes/getClassList').then(res => {
-          console.log('getClassList>>>', res.data)
-          this.classList = res.data.data
+        // 优先从缓存中取，否则再请求并更新到缓存
+        if (!!window.uls.get('personalData', 'classList')) {
+          this.classList = window.uls.get('personalData', 'classList')
           this.classListLoaded = true
 
-          return Promise.resolve()
-        }).then(() => {
           this.getEachClassNewsCount()
 
-          return Promise.resolve()
-        }).catch(err => {
-          console.log('加载classList失败:', err)
-          this.classListLoaded = true
-          this.classListErrMsg = '-- 加载失败 --'
-          return Promise.reject(err)
-        })
+          return true
+        }
+
+        else {
+          return this.$axios.post('classes/getClassList').then(res => {
+            console.log('getClassList>>>', res.data)
+            this.classList = res.data.data
+            this.classListLoaded = true
+
+            // 放入缓存
+            window.uls.set('personalData', 'classList', res.data.data)
+
+            return Promise.resolve()
+          }).then(() => {
+            this.getEachClassNewsCount()
+
+            return Promise.resolve()
+          }).catch(err => {
+            console.log('加载classList失败:', err)
+            this.classListLoaded = true
+            this.classListErrMsg = '-- 加载失败 --'
+            return Promise.reject(err)
+          })
+        }
+
+
       },
 
       // 获取班级最新消息个数
       getEachClassNewsCount () {
         this.newsCountReqFinishCount = 0
-        console.log('获取班级最新消息个数:', this.classList[0].count)
         let that = this
 
         // 遍历加载新消息个数
@@ -95,13 +111,13 @@
           console.log('>>> 遍历加载新消息个数', classItem.classCode)
 
           // 如果没有，给默认值
-          if (!window.uls.get(classItem.classCode, 'lastUpdate')) {
-            window.uls.set(classItem.classCode, 'lastUpdate', new Date().setYear(2018))
+          if (!window.uls.get(classItem.classCode, 'lastUpdateTime')) {
+            window.uls.set(classItem.classCode, 'lastUpdateTime', new Date().setYear(2018))
           }
 
           let postData = that.$qs.stringify({
             classCode: classItem.classCode,
-            lastUpdate: window.uls.get(classItem.classCode, 'lastUpdate')
+            lastUpdateTime: window.uls.get(classItem.classCode, 'lastUpdateTime')
           })
 
           console.log('postData>>>', postData)
@@ -117,7 +133,6 @@
               this.newsCountReqFinishCount += 1
               console.log('    >>>>>', this.classList[idx].count)
             } else {
-              // weuiErr('获取班级最新消息个数异常, status=' + res.status + ', statusText=' + res.statusText)
               window.weuiErr(res.data.status + ': ' + res.data.msg)
               this.classList[idx].count =  'n'
             }

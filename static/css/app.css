@@ -286,6 +286,11 @@ html {
   color: #999;
 }
 
+/* 单选菜单 最大高度限制 */
+.weui-actionsheet__menu {
+  max-height: 217px;
+  overflow-y: auto;
+}
 
 /* 各种图标 */
 .icon {

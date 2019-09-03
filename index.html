@@ -8,12 +8,12 @@
     <!-- WeUI -->
     <!-- <link rel="stylesheet" href="node_modules/weui/style/weui.min.css"/> -->
     <link rel="stylesheet" href="static/vendor/jquery-weui/css/jquery-weui.css"/>
-    
+
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    
+
     <!-- 班级动态-评论框-遮罩层 -->
     <div class="weui-mask" id="commentMask" style="display: none"></div>
     <!-- 班级动态-评论框 -->
@@ -25,36 +25,36 @@
         </form>
       </div>
     </div>
-    
+
     <!-- 引入各类jquery插件 -->
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
     <script src="static/vendor/jquery-weui/js/swiper.js"></script>
-    
+
     <script src="static/vendor/store/store.everything.min.js"></script>
-    
+
     <script src="static/js/base.js"></script>
-    
+
     <script>
       // TODO: 替换成原生js
       // 给点赞按钮加特效(玩)
       $('body').on('touchstart', '.act-button', function () {
         this.classList.add('active');
-        
+
         $(this).on('touchend', function () {
           this.classList.remove('active');
         });
       });
-      
-      
-      /* 
+
+
+      /*
         评论框相关事件 == START ==
       */
       window.$commentMask = $('#commentMask')             // 遮罩层
       window.$commentContainer = $('#commentContainer')   // 弹出输入框容器
       window.$input = $('#commentInput')                  // 评论输入框
       window.$submit = $('#commentSubmit')                // 评论提交按钮
-  
+
       // 给遮罩加点击事件
       $commentMask.on('click', function () {
         // 解决键盘收起来，画面键盘位置留白的问题
@@ -62,7 +62,7 @@
         $commentContainer.removeClass('weui-actionsheet_toggle');
         $commentMask.fadeOut(200);
       });
-      
+
       // 检查是否应该禁用提交
       function checkDisable($input) {
         if ($input.val().length == 0) {
@@ -88,7 +88,7 @@
           }, 0);
         }
       });
-      /* 
+      /*
         评论框相关事件 === END ===
       */
 
@@ -99,21 +99,21 @@
           duration: 60000,
           className: 'weui-toptips_visible xdf_orange',
         })
-        
+
         // 批量上传图片
         let axiosList = []
         window.elementUrl = {}   // 这里用对象, 因为后边要根据idx排序输出values
         Array.from(param.imageFiles).forEach((imgFile, idx) => {
           let formData = new FormData()
           formData.append('file', imgFile)
-          
+
           // 上传图片
           axiosList.push(window.vue.$axios.post('moments/uploadPic', formData).then(res => {
             if (res.status == 200 && res.data.status == 200) {
               console.log('图片上传成功')
               console.log(res, res.data)
               window.elementUrl[idx] = res.data.data   // 传完图片后更新图片url
-              
+
               // 更新图片成功提示
               window.vue.$weui.topTips('发布中(' + Object.keys(window.elementUrl).length + '/' + param.imageFiles.length + ')，请勿关闭此页...', {
                 duration: 60000,
@@ -124,7 +124,7 @@
             }
           }))
         })
-        
+
 
         // 图片上传完成后,发布班级动态
         window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
@@ -135,7 +135,7 @@
             urlsString += Object.values(elementUrl).join('","')
             urlsString += '"]'
           }
-          
+
           // 成功后,获取图片url,拼装数据
           let postData = window.vue.$qs.stringify({
             content: param.content,
@@ -143,20 +143,20 @@
             type: param.type,
             elementUrl: urlsString
           })
-          
+
           // 提交
           window.vue.$axios.post('/moments/publishMoment', postData).then(res => {
             console.log('publishComment>>>', res.data)
-            
+
             // 成功后提示
             window.weuiSuccess('发布成功！')
             setTimeout(function() {
               console.log('刷新')
               // 刷新页面(没法使用provide/inject方式实现)
               window.vue.$router.push('/refresh')
-              
+
             }, 1000)
-            
+
             return Promise.resolve()
           }).catch(err => {
             // 失败后提示
@@ -164,22 +164,22 @@
             return Promise.reject(err)
           })
         }))
-        
+
         // 跳转到指定班级动态页面
         window.vue.$router.push('/class/' + param.classCode + '/moments')
       }
-      
+
       // 绑定用户的localstorage
       class UserLocalStorage {
         constructor () {
           // console.log('UserLocalStorage - constructor username:', username)
           // this.username = username
         }
-      
+
         init (userid) {
           this.userid = userid
         }
-        
+
         isReady () {
           console.log('uls.isReady>>>',
             '\n    this.userid:', (!!this.userid),
@@ -200,44 +200,69 @@
             (Object.keys(store.get('clastoo')[this.userid]).length > 0)
           )
         }
-      
+
         get (key1, key2) {
           let ulsData = store.get('clastoo')
           if (ulsData === undefined) {
             return undefined
           }
-          
+
           let d = ulsData[this.userid]
           if (d === undefined) {
             return undefined
           }
-          
+
           let obj = d[key1]
           if (obj === undefined) {
             return undefined
           }
-          
+
           return obj[key2]
         }
-      
+
         set (key1, key2, val) {
           let ulsData = store.get('clastoo')
           if (ulsData === undefined) {
             ulsData = {}
           }
-          
+
           if (ulsData[this.userid] === undefined) {
             ulsData[this.userid] = {}
           }
-          
+
           if (ulsData[this.userid][key1] === undefined) {
             ulsData[this.userid][key1] = {}
           }
-          
+
           ulsData[this.userid][key1][key2] = val
           store.set('clastoo', ulsData)
         }
-        
+
+        del (key1, key2) {
+          let ulsData = store.get('clastoo')
+
+          let d = ulsData[this.userid]
+          if (d === undefined) {
+            console.error('uls.del 未找到当前ulsData, userid=' + this.userid)
+            return false
+          }
+
+          let result = undefined
+          if (key2 != undefined && key1 != undefined) {
+            result = delete d[key1][key2]
+          }
+          else if (key1 != undefined) {
+            result = delete d[key1]
+          }
+          else {
+            console.warn('uls.del 未输入key1, key2')
+            return false
+          }
+
+          store.set('clastoo', ulsData)
+          return result
+        }
+
         showAll () {
           let ulsData = store.get('clastoo')
           let d = ulsData[this.userid]
@@ -249,30 +274,30 @@
         }
       }
       window.uls = new UserLocalStorage()
-      
+
       // 如果store里有值,自动初始化uls,确保每次刷新时能继续加载当前用户的信息
       if (store.get('clastooCurrentUser')) {
         console.log('index方法……')
         // debugger
         window.uls.init(store.get('clastooCurrentUser'))
       }
-      
-      /* 
+
+      /*
         评论框相关事件 === END ===
       */
-      
+
       // ios软键盘收回后向 页面向下滑动500px(造成对提交按钮的阻塞，直接放到提交按钮上去)
       /* document.body.addEventListener('focusout', function () {
           window.scrollTo(0, 500);
       }); */
-      
+
       // 给String扩展按照urlParam方式获取key的value的方法 => 使用window.vue.$qs.parse替换
       /* String.prototype.getUrlParam = function (key) {
         var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         var r = this.match(reg);  //匹配目标参数
         if (r != null) return decodeURI(r[2]); return null; //返回参数值
       } */
-      
+
       /*window.onload = function(){
         if (document.documentElement.scrollHeight <= document.documentElement.clientHeight) {
           bodyTag = document.getElementsByTagName('body')[0];
@@ -282,15 +307,15 @@
           window.scrollTo(0, 1)
         }, 0);
       };*/
-      
+
 //       window.imgsWH = {}
-//       
+//
 //       function getWHs(urlList) {
 //         for (let i in urlList) {
 //           getWH(urlList[i])
 //         }
 //       }
-//       
+//
 //       function getWH(url) {
 //         if (window.imgsWH[url] === undefined) {
 //           let img = new Image()
@@ -301,7 +326,7 @@
 //           img.src = url
 //         }
 //       }
-//       
+//
 
       // 代码段A == START ==
       /* function setGesture(el) {
@@ -343,13 +368,13 @@
         }, false);
         return obj;
       };
-      
+
       function getDistance(p1, p2) {
         var x = p2.pageX - p1.pageX,
           y = p2.pageY - p1.pageY;
         return Math.sqrt((x * x) + (y * y));
       };
-      
+
       function getAngle(p1, p2) {
         var x = p1.pageX - p2.pageX,
           y = p1.pageY - p2.pageY;

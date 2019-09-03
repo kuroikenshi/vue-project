@@ -120,6 +120,10 @@ export default {
           console.log('logout>>>', res.data)
           // 清除当前用户
           store.remove('clastooCurrentUser')
+
+          // 登出时清除classList的缓存
+          window.uls.del('personalData', 'classList')
+
           window.location = res.data.data
           return Promise.resolve()
         }).catch(err => {
