@@ -226,25 +226,7 @@
       return {
         classCode: '',
         classContactDataIsReady: false,
-        classContactList: [
-          {
-            classCode: 'GWC182021',
-            contactList: [
-              {
-                username: '华晨明',
-                mobile: '13800138000'
-              }
-            ]
-          }, {
-            classCode: 'GWC182025',
-            contactList: [
-              {
-                username: '华晨明',
-                mobile: '13800138000'
-              }
-            ]
-          }
-        ]
+        classContactList: []
       }
     },
     computed: {
@@ -330,10 +312,22 @@
         })
         this.classCodeMenu = menuData
 
-        // 跟新菜单数据后，默认选中第一个
-        this.classCode = menuData[0].label
-        // 选中后获取当前班级联系信息
-        this.getClassContacts()
+        if (menuData.length != 0) {
+          // 跟新菜单数据后，默认选中第一个
+          this.classCode = menuData[0].label
+          // 选中后获取当前班级联系信息
+          this.getClassContacts()
+        }
+        else {
+          this.classCodeMenu = [{
+            'label': '-- 暂时无法查询 --',
+            onClick: () => {
+              weuiErr('暂时无法查询，请您尝试重新登录')
+            }
+          }]
+          this.classCode = this.classCodeMenu[0].label
+          this.classContactDataIsReady = true
+        }
       },
 
       // 选择班级
