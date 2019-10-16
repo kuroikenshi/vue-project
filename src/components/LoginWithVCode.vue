@@ -60,7 +60,7 @@
             </div>
             <div>
               <div class="placeholder">
-                <a class="link-color" href="/login/teacherLogin">教师登录</a></div>
+                <a class="link-color" href="/banji/login/teacherLogin">教师登录</a></div>
             </div>
         </div>
       </div>
