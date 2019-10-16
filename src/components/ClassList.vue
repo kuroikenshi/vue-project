@@ -77,7 +77,7 @@
         }
 
         else {
-          return this.$axios.post('classes/getClassList').then(res => {
+          return this.$axios.post('/banji/classes/getClassList').then(res => {
             console.log('getClassList>>>', res.data)
             this.classList = res.data.data
             this.classListLoaded = true
@@ -122,7 +122,7 @@
 
           console.log('postData>>>', postData)
 
-          this.$axios.post('moments/getNewsCount', postData).then(res => {
+          this.$axios.post('/banji/moments/getNewsCount', postData).then(res => {
             console.log('getNewsCount>>>', res.data)
             this.classList[idx].count =  'n'
             if (res.status === 200 && res.statusText === 'OK') {

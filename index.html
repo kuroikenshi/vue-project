@@ -7,7 +7,7 @@
 
     <!-- WeUI -->
     <!-- <link rel="stylesheet" href="node_modules/weui/style/weui.min.css"/> -->
-    <link rel="stylesheet" href="static/vendor/jquery-weui/css/jquery-weui.css"/>
+    <link rel="stylesheet" href="/banji/static/vendor/jquery-weui/css/jquery-weui.css"/>
 
   </head>
   <body>
@@ -27,13 +27,13 @@
     </div>
 
     <!-- 引入各类jquery插件 -->
-    <script src="static/vendor/jquery/jquery.min.js"></script>
-    <script src="static/vendor/jquery-weui/js/jquery-weui.js"></script>
-    <script src="static/vendor/jquery-weui/js/swiper.js"></script>
+    <script src="/banji/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/banji/static/vendor/jquery-weui/js/jquery-weui.js"></script>
+    <script src="/banji/static/vendor/jquery-weui/js/swiper.js"></script>
 
-    <script src="static/vendor/store/store.everything.min.js"></script>
+    <script src="/banji/static/vendor/store/store.everything.min.js"></script>
 
-    <script src="static/js/base.js"></script>
+    <script src="/banji/static/js/base.js"></script>
 
     <script>
       // TODO: 替换成原生js
@@ -108,7 +108,7 @@
           formData.append('file', imgFile)
 
           // 上传图片
-          axiosList.push(window.vue.$axios.post('moments/uploadPic', formData).then(res => {
+          axiosList.push(window.vue.$axios.post('/banji/moments/uploadPic', formData).then(res => {
             if (res.status == 200 && res.data.status == 200) {
               console.log('图片上传成功')
               console.log(res, res.data)
@@ -145,7 +145,7 @@
           })
 
           // 提交
-          window.vue.$axios.post('/moments/publishMoment', postData).then(res => {
+          window.vue.$axios.post('/banji/moments/publishMoment', postData).then(res => {
             console.log('publishComment>>>', res.data)
 
             // 成功后提示

@@ -127,7 +127,7 @@ export default {
         lastUpdateTime: window.uls.get('lastUpdateTime', this.classCode) || '',   // 提供上次更新时间戳，没有为空
         mode: 'new'   // 查找最新的
       })
-      return this.$axios.post('moments/getMoments', postData).then(res => {
+      return this.$axios.post('/banji/moments/getMoments', postData).then(res => {
         console.log('加载成功>>>', res.data)
         this.$refs.scroller.finishPullToRefresh()
         this.momentList = res.data.data
@@ -161,7 +161,7 @@ export default {
         mode: 'old'                                   // 查找之前的
       })
 
-      return this.$axios.post('moments/getMoments', postData).then(res => {
+      return this.$axios.post('/banji/moments/getMoments', postData).then(res => {
         console.log('加载更多-加载成功>>>', res.data)
 
         // 拼合数据

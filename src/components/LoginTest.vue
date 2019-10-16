@@ -3,7 +3,7 @@
     <div class="page__hd">
       <h1 class="page__title login-title-row">
         <span>登录</span>
-        <img src="/static/imgs/user-photo.png" class="pull-right login-user-img"/>
+        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img"/>
       </h1>
     </div>
     <div class="page__bd">
@@ -49,8 +49,8 @@ export default {
         password: this.password
       })
 
-      this.$axios.post('login', postData).then(res => {
-      // this.$axios.post('login/teacherLoginTest', postData).then(res => {
+      this.$axios.post('/banji/login', postData).then(res => {
+      // this.$axios.post('/banji/login/teacherLoginTest', postData).then(res => {
         console.log('login Resp>>>', res)
         // 登陆成功
         if (res.status === 200 && res.data.status === 200) {

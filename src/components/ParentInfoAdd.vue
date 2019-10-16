@@ -122,8 +122,8 @@
 
         // 信息提交
         let postData = this.$qs.stringify(this.formData)
-        this.$axios.post('/user/addParent', postData).then(res => {
-          console.log('/user/addParent resp>>>', res)
+        this.$axios.post('/banji/user/addParent', postData).then(res => {
+          console.log('/banji/user/addParent resp>>>', res)
           if (res.status === 200 && res.data.status === 200) {
             window.weuiSuccess('新增家长信息成功')
             this.$router.back()

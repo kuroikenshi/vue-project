@@ -98,8 +98,8 @@
       // 删除家长信息
       _deleteParentInfo(uid) {
         let postData = this.$qs.stringify({id: uid})
-        this.$axios.post('/user/delUserInfo', postData).then(res => {
-          console.log('/user/delUserInfo resp>>>', res)
+        this.$axios.post('/banji/user/delUserInfo', postData).then(res => {
+          console.log('/banji/user/delUserInfo resp>>>', res)
           if (res.status === 200 && res.data.status === 200) {
             window.weuiSuccess('删除成功')
             // 获取家长信息
@@ -114,7 +114,7 @@
       getParentInfoList () {
         console.log('>>> 获取家长信息')
 
-        return this.$axios.post('user/getUserList').then(res => {
+        return this.$axios.post('/banji/user/getUserList').then(res => {
           console.log('getUserList>>>', res.data)
           this.parentList = res.data.data
           return Promise.resolve()

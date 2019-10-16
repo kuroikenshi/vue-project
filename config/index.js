@@ -8,7 +8,7 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: 'banji/static',
     assetsPublicPath: '/',
     proxyTable: {
       // 尝试跨域
@@ -32,7 +32,10 @@ module.exports = {
       // 测试服务器
       '/': {
           target: 'http://10.15.5.38:8088',
-          changeOrigin: true
+          changeOrigin: true,
+          // pathRewrite: {
+          //   '^': '/banji'
+          // }
       },
 
       // 黄国庆的机器(测试通过)
@@ -91,11 +94,11 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../dist/banji/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsRoot: path.resolve(__dirname, '../dist/'),
+    assetsSubDirectory: 'banji/static',
     assetsPublicPath: '/',
 
     /**

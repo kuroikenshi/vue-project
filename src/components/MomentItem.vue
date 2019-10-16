@@ -6,7 +6,7 @@
       <a class="sub-color moment-btn" @click="deleteMoment" v-show="showDeleteBtn">
         <i class="icon icon-x"></i>
       </a>
-      
+
       <!-- 头像 -->
       <img :src="momentItem.userPhoto" class="user-photo" v-once />
       <!-- 发布人姓名 -->
@@ -27,7 +27,7 @@
 
       <!-- 图片行 -->
       <div class="thumbnails-row">
-        <span class="thumbnail" v-for="(val, key) in momentItem.elementUrl" :key="key" 
+        <span class="thumbnail" v-for="(val, key) in momentItem.elementUrl" :key="key"
              :style="{height: thumbnailWidth, width: thumbnailWidth}"
              @click="openPB(key)">
           <img :src="val" v-on:load="imageAdjust" />
@@ -70,7 +70,7 @@
           </div><!-- END OF .comment -->
         </div>
       </div>
-      
+
     </div>
 
   </div>
@@ -79,7 +79,7 @@
 <script>
   import _ from 'lodash'
   import Global from '@/components/Global'
-  
+
   // 弹出评论输入框
   function __popCommentInputBox() {
     $commentContainer.show()
@@ -94,7 +94,7 @@
       $input.focus()
     }, 600)
   }
-  
+
   export default {
     name: 'MyComp',
     props: ['momentItemBased'],   // 用来存储一进来的、旧的momentItem值
@@ -189,7 +189,7 @@
           img.style.textAlign = 'center'
         }
       },
-      
+
       // 打开PhotoBrowser
       openPB: function (idx) {
         let pb = $.photoBrowser({
@@ -200,23 +200,23 @@
             $('.weui-photo-browser-modal').remove()
           }
         })
-        
+
         pb.open()
-        
+
       },
-      
+
       // 点击喜欢
       toggleLiked: function () {
         console.log('toggleLiked')
-        
+
         let postData = this.$qs.stringify({
           momentId: this.momentItem.momentId,
           userId: window.uls.get('userInfo', 'id')
         })
-        
-        this.$axios.post('moments/toggleLike', postData).then(res => {
+
+        this.$axios.post('/banji/moments/toggleLike', postData).then(res => {
           console.log('toggleLike>>>', res.data)
-          
+
           this.momentItemUpdated = res.data.data
 //           this.momentList = res.data.data
 //           this.momentListLoaded = true
@@ -228,13 +228,13 @@
           return Promise.reject(err)
         })
       },
-      
+
       // 直接评论
       comment: function () {
         __popCommentInputBox()
         this.__initSubmit()
       },
-      
+
       // 回复某人
       __replyToUser: function (toUserId, toUserName) {
         // 稍后弹出输入框
@@ -242,7 +242,7 @@
         $input.attr('placeholder', '回复' + toUserName + ':')
         this.__initSubmit(toUserId, toUserName)
       },
-      
+
       // 点击了评论对象 -> 回复或删除
       clickedCommentItem: function (comment) {
         // 点击对象行加高亮
@@ -263,14 +263,14 @@
           this.__replyToUser(comment.authorId, comment.authorName)
         }
       },
-      
+
       // 初始化设置、绑定事件用来评论
       __initSubmit: function (toUserId, toUserName) {
         $submit.off('click')
         $submit.on('click', () => {
           if (!this.commentSubmitting) {
             console.log('>>>', this.momentItem.momentId)
-            
+
             let postData = this.$qs.stringify({
               momentId: this.momentItem.momentId,
               content: $input.val(),
@@ -279,23 +279,23 @@
               toUserId: toUserId,
               toUserName: toUserName
             })
-            
+
             if ($input.val().length > 0) {
               this.commentSubmitting = true
-        
-              this.$axios.post('comments/publishComment', postData).then(res => {
+
+              this.$axios.post('/banji/comments/publishComment', postData).then(res => {
                 console.log('publishComment>>>', res.data)
-                
+
                 this.momentItemUpdated = res.data.data
 
                 this.commentSubmitting = false
-                
+
                 // 解决键盘收起来，画面键盘位置留白的问题
                 window.scrollTo(0, 500);
-                
+
                 $commentContainer.removeClass('weui-actionsheet_toggle')
                 $commentMask.fadeOut(180)
-                
+
                 return Promise.resolve()
               }).catch(err => {
                 this.commentSubmitting = false
@@ -303,15 +303,15 @@
                 return Promise.reject(err)
               })
             }
-            
+
           }
         })
       },
-      
+
       // 引导删除评论
       __promptToDelete: function (commentId) {
         console.log('<<<__promptToDelete>>> ', commentId)
-        
+
         this.weuijsPopedItem = this.$weui.actionSheet(
           [{
             label: '删除',
@@ -321,8 +321,8 @@
                 momentId: this.momentItem.momentId,
                 commentId: commentId
               })
-              
-              this.$axios.post('comments/deleteComment', postData).then(res => {
+
+              this.$axios.post('/banji/comments/deleteComment', postData).then(res => {
                 console.log('deleteComment>>>', res.data)
                 this.momentItemUpdated = res.data.data
                 return Promise.resolve()
@@ -331,7 +331,7 @@
                 return Promise.reject(err)
               })
             }
-          }], 
+          }],
           [{
             label: '取消',
             onClick: function() {
@@ -343,7 +343,7 @@
           }
         )
       },
-      
+
       // 删除本条动态
       deleteMoment: function () {
         window.vue.$weui.confirm('删除这条动态后家长将无法查看和评论，是否删除', {
@@ -361,15 +361,15 @@
               let postData = this.$qs.stringify({
                 momentId: this.momentItem.momentId
               })
-              
-              this.$axios.post('moments/deleteMoment', postData).then(res => {
+
+              this.$axios.post('/banji/moments/deleteMoment', postData).then(res => {
                 console.log('deleteMoment>>>', res.data)
                 let deleteCount = res.data.data
                 if (deleteCount > 0) {
                   window.weuiSuccess('删除成功')
-                  
+
                   this.momentHasBeenDeleted = true
-                  
+
                 } else {
                   window.weuiErr('删除失败...请刷新确认后重试')
                 }
@@ -394,7 +394,7 @@
     padding: 0 15px 15px 15px;
     border-bottom: 1px solid #ccc;
   }
-  
+
   .moment-btn {
     float: right;
   }
@@ -417,7 +417,7 @@
     color: #039974;
     font-weight: 600;
   }
-  
+
   .user-badge {
     background: #039974;
     color: #fff;
@@ -433,7 +433,7 @@
     margin-top: 4px;
     margin-left: 5px;
   }
-  
+
   .moment-badge {
     font-size: 10px;
     color: #039974;
@@ -467,7 +467,7 @@
   .thumbnail img {
     width: 100%;
   }
-  
+
   .comment-block {
     background: #eee;
   }
@@ -480,22 +480,22 @@
   }
 
   .icon-heart {
-    background: url('/static/imgs/icon-heart.png') no-repeat;
+    background: url('/banji/static/imgs/icon-heart.png') no-repeat;
     background-size: contain;
   }
 
   .icon-heart-a {
-    background: url('/static/imgs/icon-heart-a.png') no-repeat;
+    background: url('/banji/static/imgs/icon-heart-a.png') no-repeat;
     background-size: contain;
   }
 
   .icon-comment {
-    background: url('/static/imgs/icon-comment.png') no-repeat;
+    background: url('/banji/static/imgs/icon-comment.png') no-repeat;
     background-size: contain;
   }
-  
+
   .icon-x {
-    background: url('/static/imgs/icon-x.png') no-repeat;
+    background: url('/banji/static/imgs/icon-x.png') no-repeat;
     background-size: contain;
   }
 

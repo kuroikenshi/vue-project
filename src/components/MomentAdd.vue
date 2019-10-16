@@ -206,7 +206,7 @@ export default {
     }
     // 如果没有，尝试api取得
     else {
-      this.$axios.post('classes/getClassList').then(res => {
+      this.$axios.post('/banji/classes/getClassList').then(res => {
         console.log('getClassList>>>', res.data)
         classList = res.data.data
         window.uls.set('personalData', 'classList', classList)

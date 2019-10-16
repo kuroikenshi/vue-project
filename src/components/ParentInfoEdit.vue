@@ -92,8 +92,8 @@
 
       // 获取原始信息
       let postData = this.$qs.stringify({id: this.$route.params.uid})
-      this.$axios.post('/user/getUserInfoById', postData).then(res => {
-        console.log('/user/getUserInfoById resp>>>', res)
+      this.$axios.post('/banji/user/getUserInfoById', postData).then(res => {
+        console.log('/banji/user/getUserInfoById resp>>>', res)
         if (res.status === 200 && res.data.status === 200) {
           this.formData['id'] = this.$route.params.uid
           this.formData['relation'] = res.data.data.relation
@@ -135,8 +135,8 @@
 
         // 信息提交
         let postData = this.$qs.stringify(this.formData)
-        this.$axios.post('/user/updateUserInfoById', postData).then(res => {
-          console.log('/user/updateUserInfoById resp>>>', res)
+        this.$axios.post('/banji/user/updateUserInfoById', postData).then(res => {
+          console.log('/banji/user/updateUserInfoById resp>>>', res)
           if (res.status === 200 && res.data.status === 200) {
             window.weuiSuccess('修改家长信息成功')
             this.$router.back()

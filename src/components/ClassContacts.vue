@@ -249,7 +249,7 @@
       }
       // 如果没有，尝试api取得
       else {
-        this.$axios.post('classes/getClassList').then(res => {
+        this.$axios.post('/banji/classes/getClassList').then(res => {
           console.log('getClassList>>>', res.data)
           classList = res.data.data
           window.uls.set('personalData', 'classList', classList)
@@ -272,7 +272,7 @@
         if (this.isParent) {
           console.log('>>> 获取班级通讯录 from 家长')
 
-          return this.$axios.post('/user/getClassTeacherInfo', postData).then(res => {
+          return this.$axios.post('/banji/user/getClassTeacherInfo', postData).then(res => {
             console.log('getClassTeacherInfo>>>', res.data)
             this.classContactList = res.data.data
             this.classContactDataIsReady = true
@@ -285,7 +285,7 @@
         else {
           console.log('>>> 获取班级通讯录 from 教师')
 
-          return this.$axios.post('/user/getClassAddressBook', postData).then(res => {
+          return this.$axios.post('/banji/user/getClassAddressBook', postData).then(res => {
             console.log('getClassAddressBook>>>', res.data)
             this.classContactList = res.data.data
             this.classContactDataIsReady = true

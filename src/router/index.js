@@ -55,8 +55,8 @@ export default new Router({
     },
     // 测试环境使用
     /* {
-      path: '/login',
-      name: 'Login',
+      path: '/loginTest',
+      name: 'LoginTest',
       component: LoginTest
     }, */
 

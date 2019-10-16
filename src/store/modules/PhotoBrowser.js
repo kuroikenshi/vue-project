@@ -3,9 +3,9 @@
 // 用户信息储存模块
 const state = {
   photos: [
-    { 'id': 0, 'url': '/static/imgs/th1.jpg' },
-    { 'id': 1, 'url': '/static/imgs/m3.jpg' },
-    { 'id': 2, 'url': '/static/imgs/sb1.jpg' }
+    { 'id': 0, 'url': '/banji/static/imgs/th1.jpg' },
+    { 'id': 1, 'url': '/banji/static/imgs/m3.jpg' },
+    { 'id': 2, 'url': '/banji/static/imgs/sb1.jpg' }
   ],
   showPB: false,
   activeIndex: 4
