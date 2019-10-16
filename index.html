@@ -248,11 +248,29 @@
           }
 
           let result = undefined
+          // 指定了key1, key2: 尝试删除d[key1][key2]
           if (key2 != undefined && key1 != undefined) {
-            result = delete d[key1][key2]
+            if (d[key1] === undefined) {
+              console.warn('d["' + key1 + '"] === undefined，忽略')
+              return false
+            }
+            else if (d[key1][key2] === undefined) {
+              console.warn('d["' + key1 + '"]["' + key2 + '"] === undefined，忽略')
+              return false
+            }
+            else {
+              result = delete d[key1][key2]
+            }
           }
+          // 只指定了key1: 尝试删除d[key1]
           else if (key1 != undefined) {
-            result = delete d[key1]
+            if (d[key1] === undefined) {
+              console.warn('d["' + key1 + '"] === undefined，忽略')
+              return false
+            }
+            else {
+              result = delete d[key1]
+            }
           }
           else {
             console.warn('uls.del 未输入key1, key2')

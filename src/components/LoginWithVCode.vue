@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <div class="weui-cell weui-cells__tips">新手机号首次登录会自动创建新账号</div>
+          <!-- <div class="weui-cell weui-cells__tips">新手机号首次登录会自动创建新账号</div> -->
 
           <div class="weui-btn-area">
             <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
