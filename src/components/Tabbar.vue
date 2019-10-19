@@ -152,6 +152,9 @@
   .tabbar-btn i.f7-icons {
     font-size: 18px;
   }
+  .left {
+    min-width: 18px;
+  }
   .right {
     min-width: 18px;
   }

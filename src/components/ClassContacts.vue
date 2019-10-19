@@ -252,7 +252,10 @@
         this.$axios.post('/banji/classes/getClassList').then(res => {
           console.log('getClassList>>>', res.data)
           classList = res.data.data
-          window.uls.set('personalData', 'classList', classList)
+
+          // 放入缓存
+          window.uls.set('personalData', 'classList', res.data.data)
+
           this._setClassCodeParam(classList)
           return Promise.resolve()
         }).catch(err => {

@@ -1,10 +1,10 @@
 <template>
   <div class="page">
-    <div class="weui-cells no-margin-top n o-line">
+    <div class="weui-cells no-margin-top" :class="{'no-line': (!classListErrMsg && classListLoaded)}">
 
       <div v-show="classList.length <= 0" class="weui-cell weui-cell-taller">
         <div class="weui-cell__bd center">
-          {{ !classListErrMsg ? (!classListLoaded ? "加载中..." : "-- 未找到绑定班级 --") : classListErrMsg }}
+          {{ !classListErrMsg ? (!classListLoaded ? "加载中..." : "") : classListErrMsg }}
           <!--
           <br/>
           已加载 > {{ !!classListLoaded }}<br/>
@@ -30,6 +30,9 @@
       </a>
 
     </div>
+
+    <!-- 没有找到班级单独提示 -->
+    <div v-show="(!classListErrMsg && classListLoaded)" class="no-class-data"></div>
   </div>
 </template>
 
@@ -170,6 +173,15 @@
   transform: scaleY(.5);
   z-index: 2;
 } */
+.no-class-data {
+  width: 231.5px;
+  height: 187.5px;
+  position: absolute;
+  left: calc(50% - 115.75px);
+  top: calc(50% - 93.75px);
+  background: url(/banji/static/imgs/no-class-data.png) no-repeat;
+  background-size: contain;
+}
 
 .center {
   text-align: center;
