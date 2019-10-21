@@ -17,7 +17,7 @@
     },
     methods: {
       backToLogin: function () {
-        this.$router.push('login')
+        this.$router.push('login', {query: {redirect: '/user/userInfo'}})
       }
     }
   }

@@ -41,7 +41,7 @@ Vue.mixin({
       this.weuijsPopedItem.hide()
       this.weuijsPopedItem = null
     }
-    
+
     //页面销毁时自动隐藏
     // this.mixin_weuijs_picker_actionsheet('actionsheet', 'hidden')
   }/* ,
@@ -72,12 +72,25 @@ router.beforeEach((to, from, next) => {
   // 如果是跳转到login页面，带上跳转回调
   if (to.fullPath === '/login' && _.isEmpty(to.query.redirect)) {
     console.log('跳转到login, 加上redirect')
-    next({
-      path: '/login',
-      query: {
-        redirect: from.fullPath
-      }
-    })
+
+    // 如果来自“不是教师页”，加userInfo页的跳转
+    if (from.fullPath == '/notTeacher') {
+      next({
+        path: '/login',
+        query: {
+          redirect: '/user/userInfo'
+        }
+      })
+    }
+    // 其他页面加来源为跳转回调
+    else {
+      next({
+        path: '/login',
+        query: {
+          redirect: from.fullPath
+        }
+      })
+    }
   }
 
   // 如果需要身份验证
@@ -162,4 +175,3 @@ window.vue = new Vue({
   components: { App },
   template: '<App/>'
 })
-
