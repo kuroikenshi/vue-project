@@ -6,6 +6,7 @@ import Router from 'vue-router'
 import LoginTest from '@/components/LoginTest'
 import LoginWithVCode from '@/components/LoginWithVCode'
 import E2Success from '@/components/E2Success'
+import NotTeacher from '@/components/NotTeacher'
 
 import Chating from '@/components/Chating'
 
@@ -65,6 +66,12 @@ export default new Router({
       path: '/e2success',
       name: 'E2Success',
       component: E2Success
+    },
+
+    {
+      path: '/notTeacher',  // 不是教师页面
+      name: 'NotTeacher',
+      component: NotTeacher
     },
 
     {
