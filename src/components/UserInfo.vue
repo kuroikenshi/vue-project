@@ -46,7 +46,7 @@
         <div class="weui-cell__ft">{{ user.mobile }}</div>
       </div>
 
-      <router-link class="weui-cell weui-cell_access weui-cell-taller"
+      <!-- <router-link class="weui-cell weui-cell_access weui-cell-taller"
           to="/user/parentInfoList" v-if="isParent">
         <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
@@ -55,7 +55,7 @@
           <p>家长信息</p>
         </div>
         <div class="weui-cell__ft"></div>
-      </router-link>
+      </router-link> -->
 
       <router-link class="weui-cell weui-cell_access weui-cell-taller"
           to="/user/classContacts">

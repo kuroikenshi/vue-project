@@ -5,6 +5,7 @@ import Router from 'vue-router'
 
 import LoginTest from '@/components/LoginTest'
 import LoginWithVCode from '@/components/LoginWithVCode'
+import LoginWithStuName from '@/components/LoginWithStuName'
 import E2Success from '@/components/E2Success'
 import NotTeacher from '@/components/NotTeacher'
 
@@ -18,9 +19,9 @@ import MomentAdd from '@/components/MomentAdd'
 import ChatList from '@/components/ChatList'
 
 import UserInfo from '@/components/UserInfo'
-import ParentInfoList from '@/components/ParentInfoList'
-import ParentInfoAdd from '@/components/ParentInfoAdd'
-import ParentInfoEdit from '@/components/ParentInfoEdit'
+// import ParentInfoList from '@/components/ParentInfoList'
+// import ParentInfoAdd from '@/components/ParentInfoAdd'
+// import ParentInfoEdit from '@/components/ParentInfoEdit'
 import ClassContacts from '@/components/ClassContacts'
 import Schedule from '@/components/Schedule'
 
@@ -52,7 +53,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: LoginWithVCode
+      component: LoginWithStuName
     },
     // 测试环境使用
     /* {
@@ -122,27 +123,27 @@ export default new Router({
         meta: {
           requireAuth: true
         }
-      }, {
-        path: 'user/parentInfoList',
-        name: 'ParentInfoList',
-        component: ParentInfoList,
-        meta: {
-          requireAuth: true
-        }
-      }, {
-        path: 'user/parentInfoAdd',
-        name: 'ParentInfoAdd',
-        component: ParentInfoAdd,
-        meta: {
-          requireAuth: true
-        }
-      }, {
-        path: 'user/parentInfoEdit/:uid',
-        name: 'ParentInfoEdit',
-        component: ParentInfoEdit,
-        meta: {
-          requireAuth: true
-        }
+      // }, {
+      //   path: 'user/parentInfoList',
+      //   name: 'ParentInfoList',
+      //   component: ParentInfoList,
+      //   meta: {
+      //     requireAuth: true
+      //   }
+      // }, {
+      //   path: 'user/parentInfoAdd',
+      //   name: 'ParentInfoAdd',
+      //   component: ParentInfoAdd,
+      //   meta: {
+      //     requireAuth: true
+      //   }
+      // }, {
+      //   path: 'user/parentInfoEdit/:uid',
+      //   name: 'ParentInfoEdit',
+      //   component: ParentInfoEdit,
+      //   meta: {
+      //     requireAuth: true
+      //   }
       }, {
         path: 'user/classContacts',
         name: 'ClassContacts',

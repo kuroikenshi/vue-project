@@ -32,7 +32,7 @@
     </div>
 
     <!-- 没有找到班级单独提示 -->
-    <div v-show="(!classListErrMsg && classListLoaded)" class="no-class-data"></div>
+    <div v-show="(!classListErrMsg && classListLoaded && classList.length <= 0)" class="no-class-data"></div>
   </div>
 </template>
 
