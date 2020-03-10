@@ -19,7 +19,7 @@
           <p>班级编号</p>
         </div>
         <div class="weui-cell__ft">
-          {{classCode}}
+          {{selectedClassName}}
         </div>
       </a>
     </div>
@@ -66,154 +66,6 @@
       </div>
     </div>
 
-    <!-- for test -->
-    <!-- <div class="weui-cells no-margin-top thinner">
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <span>username</span>
-          <span class="user-badge">role</span>
-        </div>
-        <div class="weui-cell__ft">
-          <a v-bind:href="'tel: 13800138000'"><i class="icon icon-phone"></i></a>
-        </div>
-      </div>
-    </div>
- -->
   </div>
 </template>
 
@@ -224,7 +76,8 @@
     name: 'ParentInfoList',
     data () {
       return {
-        classCode: '',
+        selectedClassCode: '',
+        selectedClassName: '',
         classContactDataIsReady: false,
         classContactList: []
       }
@@ -267,7 +120,7 @@
     methods: {
       // 获取班级通讯录
       getClassContacts () {
-        let postData = this.$qs.stringify({classCode: this.classCode})
+        let postData = this.$qs.stringify({classCode: this.selectedClassCode})
         this.classContactDataIsReady = false
         this.classContactList = []
 
@@ -306,9 +159,11 @@
         let menuData = []
         classList.forEach(item => {
           menuData.push({
-            label: item.classCode,
+            label: item.className,
+            value: item.classCode,
             onClick: () => {
-              this.classCode = item.classCode
+              this.selectedClassCode = item.classCode
+              this.selectedClassName = item.className
               this.getClassContacts()
             }
           })
@@ -317,18 +172,21 @@
 
         if (menuData.length != 0) {
           // 跟新菜单数据后，默认选中第一个
-          this.classCode = menuData[0].label
+          this.selectedClassCode = menuData[0].value
+          this.selectedClassName = menuData[0].label
           // 选中后获取当前班级联系信息
           this.getClassContacts()
         }
         else {
           this.classCodeMenu = [{
-            'label': '-- 暂时无法查询 --',
+            label: '-- 暂时无法查询 --',
+            value: '',
             onClick: () => {
               weuiErr('暂时无法查询，请您尝试重新登录')
             }
           }]
-          this.classCode = this.classCodeMenu[0].label
+          this.selectedClassCode = this.classCodeMenu[0].value
+          this.selectedClassName = this.classCodeMenu[0].label
           this.classContactDataIsReady = true
         }
       },

@@ -6,7 +6,7 @@
           <p>班级编号</p>
         </div>
         <div class="weui-cell__ft">
-          {{classCode}}
+          {{selectedClassName}}
         </div>
       </a>
     </div>
@@ -41,6 +41,9 @@
       return {
         scheduleImgSrc: undefined,
         scheduleImgSrcIsReady: false,
+        
+        selectedClassCode: '',
+        selectedClassName: '',
 
         choosedFile: undefined,
       }
@@ -75,7 +78,7 @@
     methods: {
       getSchedule: function () {
         this.scheduleImgSrcIsReady = false
-        let postData = this.$qs.stringify({classCode: this.classCode})
+        let postData = this.$qs.stringify({classCode: this.selectedClassCode})
 
         this.$axios.post('/banji/classes/getClassSchedule', postData).then(res => {
           console.log('getClassSchedule>>>', res.data)
@@ -97,7 +100,7 @@
       uploadSchedule: function () {
         let formData = new FormData()
         formData.append('file', this.choosedFile)
-        formData.append('classCode', this.classCode)
+        formData.append('classCode', this.selectedClassCode)
 
         this.$axios.post('/banji/classes/addClassSchedule', formData).then(res => {
           console.log('addClassSchedule>>>', res.data)
@@ -116,9 +119,11 @@
         let menuData = []
         classList.forEach(item => {
           menuData.push({
-            label: item.classCode,
+            label: item.className,
+            value: item.classCode,
             onClick: () => {
-              this.classCode = item.classCode
+              this.selectedClassCode = item.classCode
+              this.selectedClassName = item.className
               this.getSchedule()
             }
           })
@@ -126,7 +131,8 @@
         this.classCodeMenu = menuData
 
         // 跟新菜单数据后，默认选中第一个
-        this.classCode = menuData[0].label
+        this.selectedClassCode = menuData[0].value
+        this.selectedClassName = menuData[0].label
         // 选中后获取当前班级联系信息
         this.getSchedule()
       },
