@@ -20,8 +20,9 @@
         <!-- <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
         </div> -->
-        <div class="weui-cell__bd">
-          <p>{{ classItem.classCode }}</p>
+        <div class="weui-cell__bd ellipsis">
+          <!-- <p>{{ classItem.classCode }}</p> -->
+          <p>{{ classItem.className }}</p>
         </div>
         <div class="weui-cell__ft">
           <!-- 新消息数 -->

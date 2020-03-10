@@ -92,6 +92,16 @@ html {
 .weui-cell__ft {
   font-size: 14px;
 }
+/* 内容过长，省略号结尾 */
+.weui-cell__bd.ellipsis {
+  width: calc(100% - 75px);
+  padding-right: 5px;
+}
+.weui-cell__bd.ellipsis>p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* 按钮颜色 */
 .weui-btn_primary {
