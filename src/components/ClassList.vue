@@ -20,7 +20,7 @@
         <!-- <div class="weui-cell__hd">
           <i class="icon icon-mail-opened"></i>
         </div> -->
-        <div class="weui-cell__bd ellipsis">
+        <div class="weui-cell__bd padding-right-10">
           <!-- <p>{{ classItem.classCode }}</p> -->
           <p>{{ classItem.className }}</p>
         </div>
@@ -187,4 +187,9 @@
 .center {
   text-align: center;
 }
+
+.padding-right-10 {
+  padding-right: 10px;
+}
+
 </style>
