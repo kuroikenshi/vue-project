@@ -103,6 +103,27 @@ html {
   text-overflow: ellipsis;
 }
 
+/* 班级编码小标签样式 */
+.class-code {
+  font-size: 10px;
+  border: 1px solid #0b8;
+  border-radius: 5px;
+  padding: 3px 5px 3px 0px;
+  color: #0b8;
+  white-space: nowrap;
+}
+.class-code .class-code-label {
+  padding: 3px 5px;
+  background: #0b8;
+  color: #fff;
+  margin-right: 5px;
+}
+
+/* 班级选择器的特殊样式 */
+.class-selector .weui-cell__ft {
+  width: calc(100% - 120px);
+}
+
 /* 按钮颜色 */
 .weui-btn_primary {
     background-color: #09b78d;
@@ -367,4 +388,10 @@ html {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.auto-height,
+.auto-height.fixed-top,
+.auto-height.fixed-top .weui-cell {
+  height: auto;
 }

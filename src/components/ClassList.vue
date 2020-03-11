@@ -22,7 +22,7 @@
         </div> -->
         <div class="weui-cell__bd padding-right-10">
           <!-- <p>{{ classItem.classCode }}</p> -->
-          <p>{{ classItem.className }}</p>
+          <p>{{ classItem.className }} <span class="class-code"><span class="class-code-label">编码</span>{{ classItem.classCode }}</span></p>
         </div>
         <div class="weui-cell__ft">
           <!-- 新消息数 -->

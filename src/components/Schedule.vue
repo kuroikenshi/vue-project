@@ -1,12 +1,19 @@
 <template>
   <div class="page">
-    <div class="weui-cells fixed-top">
-      <a class="weui-cell weui-cell_access weui-cell-taller" href="javascript: void(0);" @click="classCodeSelect">
+    <div class="weui-cells fixed-top auto-height">
+      <a class="weui-cell weui-cell_access weui-cell-taller class-selector" href="javascript: void(0);" @click="classCodeSelect">
         <div class="weui-cell__bd">
-          <p>班级编号</p>
+          <p>班级</p>
         </div>
         <div class="weui-cell__ft">
-          {{selectedClassName}}
+          <span v-show="!!selectedClassCode">
+            {{selectedClassName}}
+            <span class="class-code">
+              <span class="class-code-label">编码</span>
+              {{selectedClassCode}}
+            </span>
+          </span>
+          <span v-show="!selectedClassCode">{{selectedClassName}}</span>
         </div>
       </a>
     </div>
