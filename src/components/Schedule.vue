@@ -21,7 +21,9 @@
     <div class="schedule-container">
       <div class="center" v-show="!scheduleImgSrc && !scheduleImgSrcIsReady">加载中...</div>
       <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady">-- 暂无数据 --</div>
-      <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady">
+      
+      <!-- 上传部分 -->
+      <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady && isTeacher">
         <div class="weui-btn-area margin-bottom-20">
           <span v-show="choosedFile === undefined">&lt;&lt;&lt; 上传课程表</span>
           <div class="weui-uploader__input-box" v-show="choosedFile === undefined">
@@ -48,6 +50,8 @@
       return {
         scheduleImgSrc: undefined,
         scheduleImgSrcIsReady: false,
+        
+        isTeacher: false,
         
         selectedClassCode: '',
         selectedClassName: '',
@@ -81,6 +85,8 @@
           return Promise.reject(err)
         })
       }
+      
+      this.isTeacher = (window.uls.get('userInfo', 'userType') === Global.userType.TEACHER)
     },
     methods: {
       getSchedule: function () {
