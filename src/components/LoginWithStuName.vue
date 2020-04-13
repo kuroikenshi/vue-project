@@ -327,16 +327,16 @@
               // 测试用
               let ut = window.uls.get('userInfo', 'userType')
               console.log('登陆身份参数 >>>', ut)
-              if (!Array.isArray(ut)) {
-                ut = [ut]
-              }
-              ut.forEach(item => {
-                console.log(Global.userType.ADMIN)
-                console.log(Global.userType.PARENT)
-                console.log(Global.userType.TEACHER)
-                console.log(parseInt(item))
-                console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
-              })
+              // if (!Array.isArray(ut)) {
+              //   ut = [ut]
+              // }
+              // ut.forEach(item => {
+              //   console.log(Global.userType.ADMIN)
+              //   console.log(Global.userType.PARENT)
+              //   console.log(Global.userType.TEACHER)
+              //   console.log(parseInt(item))
+              //   console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
+              // })
             }
             // 万一没有username的情况
             else {

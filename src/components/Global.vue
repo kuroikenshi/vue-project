@@ -1,8 +1,8 @@
 <script type="text/javascript">
   const userType = {
-    'ADMIN': 1,
-    'PARENT': 2,
-    'TEACHER': 3,
+    'ADMIN': '1',
+    'PARENT': '2',
+    'TEACHER': '3',
     /* 'ASSISTANT': '4' */
   }
   
