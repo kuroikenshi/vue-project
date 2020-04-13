@@ -69,6 +69,7 @@ Vue.component('swipe-item', SwipeItem)
 // 路由过滤器
 router.beforeEach((to, from, next) => {
   console.log('to', to)
+  
   // 如果是跳转到login页面，带上跳转回调
   if (to.fullPath === '/login' && _.isEmpty(to.query.redirect)) {
     console.log('跳转到login, 加上redirect')

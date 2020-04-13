@@ -3,7 +3,7 @@
     <div class="page__hd">
       <h1 class="page__title login-title-row">
         <span>请输入学生姓名和手机号登录</span>
-        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img"/>
+        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img" v-on:click="fillInfo" />
       </h1>
     </div>
     <div class="page__bd">
@@ -44,10 +44,11 @@
           <div class="weui-btn-area">
             <a href="javascript:void(0);" class="weui-btn weui-btn_primary" v-on:click="login">登录</a>
           </div>
-          <!-- <div class="weui-btn-area">
-            <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="loginParentTest">loginParentTest</a>
-            <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="teacherLoginTest">teacherLoginTest</a>
-          </div> -->
+          <div class="weui-btn-area">
+            <!-- <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="fillInfo">马小雅</a> -->
+            <!-- <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="loginParentTest">loginParentTest</a> -->
+            <!-- <a href="javascript:void(0);" class="weui-btn weui-btn_warn" v-on:click="teacherLoginTest">teacherLoginTest</a> -->
+          </div>
         </div>
       </form>
 
@@ -258,6 +259,21 @@
         })
       },
 
+      // TODEL: 填写马小雅信息，测试用，上线删除
+      fillInfo: function (event) {
+        if (window.fi_click_count == undefined) {
+          window.fi_click_count = 1;
+        } else {
+          window.fi_click_count += 1;
+        }
+        
+        if (window.fi_click_count == 20) {
+          this.name = '马小雅'
+          this.mobile = '13811118041'
+          window.fi_click_count = undefined
+        }
+      },
+
       // 登陆方法
       login: function (event) {
         let formData = {
@@ -315,6 +331,10 @@
                 ut = [ut]
               }
               ut.forEach(item => {
+                console.log(Global.userType.ADMIN)
+                console.log(Global.userType.PARENT)
+                console.log(Global.userType.TEACHER)
+                console.log(parseInt(item))
                 console.log(Global.userType.ADMIN === parseInt(item), Global.userType.PARENT === parseInt(item), Global.userType.TEACHER === parseInt(item))
               })
             }

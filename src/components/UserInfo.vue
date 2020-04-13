@@ -103,6 +103,7 @@ export default {
 
     // 是家长
     this.isParent = (window.uls.get('userInfo', 'userType') === Global.userType.PARENT)
+    console.log('UserInfo.vue: isParent: ' + (window.uls.get('userInfo', 'userType') === Global.userType.PARENT))
   },
   data () {
     return {

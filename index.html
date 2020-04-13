@@ -36,6 +36,8 @@
     <script src="/banji/static/js/base.js"></script>
 
     <script>
+      console.log('index.html中的script');
+      
       // TODO: 替换成原生js
       // 给点赞按钮加特效(玩)
       $('body').on('touchstart', '.act-button', function () {
@@ -178,6 +180,7 @@
 
         init (userid) {
           this.userid = userid
+          console.log('uls 初始化 userid:', userid)
         }
 
         isReady () {
@@ -291,13 +294,21 @@
           }
         }
       }
+      
       window.uls = new UserLocalStorage()
 
       // 如果store里有值,自动初始化uls,确保每次刷新时能继续加载当前用户的信息
-      if (store.get('clastooCurrentUser')) {
-        console.log('index方法……')
+      if (store.get('clastooCurrentUser') || store.getAll().clastooCurrentUser) {
+        let currentUserId = store.get('clastooCurrentUser') || store.getAll().clastooCurrentUser
+        console.log('刷新后触发，加载当前用户的uls数据')
         // debugger
-        window.uls.init(store.get('clastooCurrentUser'))
+        window.uls.init(currentUserId)
+      }
+      else {
+        console.error('store.get("clastooCurrentUser") =>', store.get('clastooCurrentUser'), '请检查');
+        console.info('  -- localStorage.getItem("clastooCurrentUser") =>', localStorage.getItem('clastooCurrentUser'));
+        console.info('  ------------- store.get("clastooCurrentUser") =>', store.get('clastooCurrentUser'));
+        console.info('  ------------------------------ store.getAll() =>', store.getAll().clastooCurrentUser);
       }
 
       /*
