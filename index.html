@@ -298,11 +298,16 @@
       window.uls = new UserLocalStorage()
 
       // 如果store里有值,自动初始化uls,确保每次刷新时能继续加载当前用户的信息
-      if (store.get('clastooCurrentUser') || store.getAll().clastooCurrentUser) {
-        let currentUserId = store.get('clastooCurrentUser') || store.getAll().clastooCurrentUser
-        console.log('刷新后触发，加载当前用户的uls数据')
+      if (!!store.getAll().clastooCurrentUser) {
+        let currentUserId = store.getAll().clastooCurrentUser;
+        console.log('刷新后触发，加载当前用户的uls数据');
+        
+        console.info('  -- localStorage.getItem("clastooCurrentUser") =>', localStorage.getItem('clastooCurrentUser'));
+        console.info('  ------------- store.get("clastooCurrentUser") =>', store.get('clastooCurrentUser'));
+        console.info('  ------------------------------ store.getAll() =>', store.getAll().clastooCurrentUser);
+        
         // debugger
-        window.uls.init(currentUserId)
+        window.uls.init(currentUserId);
       }
       else {
         console.error('store.get("clastooCurrentUser") =>', store.get('clastooCurrentUser'), '请检查');
