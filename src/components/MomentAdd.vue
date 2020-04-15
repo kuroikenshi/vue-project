@@ -479,11 +479,30 @@ export default {
     imageChanged: function() {
       console.log('imageChanged>>>', event.target.files.length)
 
+      // 限制图片张数
       if ((this.imageFiles.length + Array.from(event.target.files).length) > this.imageLimit) {
         window.weuiErr('发布图片不能超过' + this.imageLimit + '张，当前选择超出' + ((this.imageFiles.length + Array.from(event.target.files).length) - this.imageLimit) + '张')
         event.target.files = []
         return
       }
+      
+      // 限制单张图片大小，限制图片类型
+      var allowMimeType = [
+          "image/jpg", "image/jpeg", "image/pjpeg", 
+          "image/gif", "image/nbmp", "image/bmp", 
+          "image/png", "image/x-png"]
+      Array.from(event.target.files).forEach(file => {
+        if (file.size != undefined && file.size >  10 * 1024 * 1024) {
+          window.weuiErr('单张图片大小不能超过10M！检测到图片大小' + (file.size / 1024 / 1024).toFixed(3) + 'M，请重新选择！')
+          event.target.files = []
+          return
+        }
+        else if (file.type != undefined && allowMimeType.indexOf((file.type || '').toLowerCase()) == -1) {
+          window.weuiErr('只允许上传[' + allowMimeType.join('|') + ']类型的文件！"' + (file.type || '').toLowerCase() + '"不是合法类型，请重新选择！')
+          event.target.files = []
+          return
+        }
+      })
 
       Array.from(event.target.files).forEach(file => {
         this.imageFiles.push(file)

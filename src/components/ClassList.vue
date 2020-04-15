@@ -128,7 +128,7 @@
 
           this.$axios.post('/banji/moments/getNewsCount', postData).then(res => {
             console.log('getNewsCount>>>', res.data)
-            this.classList[idx].count =  'n'
+            this.classList[idx].count = 'n'
             if (res.status === 200) {
               console.log('    count:', res.data.data)
               console.log('    classItem.count:', classItem.count)

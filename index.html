@@ -105,6 +105,7 @@
         // 批量上传图片
         let axiosList = []
         window.elementUrl = {}   // 这里用对象, 因为后边要根据idx排序输出values
+        var uploadImagesIsFailed = false
         Array.from(param.imageFiles).forEach((imgFile, idx) => {
           let formData = new FormData()
           formData.append('file', imgFile)
@@ -123,50 +124,56 @@
               })
             } else {
               console.error("图片上传失败")
+              uploadImagesIsFailed = true
             }
           }))
         })
-
-
+        
         // 图片上传完成后,发布班级动态
         window.vue.$axios.all(axiosList).then(window.vue.$axios.spread(function (userResp, reposResp) {
-          // 拼合图片url的数组字符串
-          let urlsString = ''
-          if (Object.values(elementUrl).length > 0) {
-            urlsString = '["'
-            urlsString += Object.values(elementUrl).join('","')
-            urlsString += '"]'
+          if (uploadImagesIsFailed) {
+            window.weuiErr('发布失败！因为有图片上传不成功！')
+            uploadImagesIsFailed = false
           }
+          else {
+            // 拼合图片url的数组字符串
+            let urlsString = ''
+            if (Object.values(elementUrl).length > 0) {
+              urlsString = '["'
+              urlsString += Object.values(elementUrl).join('","')
+              urlsString += '"]'
+            }
 
-          // 成功后,获取图片url,拼装数据
-          let postData = window.vue.$qs.stringify({
-            content: param.content,
-            classCode: param.classCode,
-            type: param.type,
-            elementUrl: urlsString
-          })
+            // 成功后,获取图片url,拼装数据
+            let postData = window.vue.$qs.stringify({
+              content: param.content,
+              classCode: param.classCode,
+              type: param.type,
+              elementUrl: urlsString
+            })
 
-          // 提交
-          window.vue.$axios.post('/banji/moments/publishMoment', postData).then(res => {
-            console.log('publishComment>>>', res.data)
+            // 提交
+            window.vue.$axios.post('/banji/moments/publishMoment', postData).then(res => {
+              console.log('publishComment>>>', res.data)
 
-            // 成功后提示
-            window.weuiSuccess('发布成功！')
-            setTimeout(function() {
-              console.log('刷新')
-              // 刷新页面(没法使用provide/inject方式实现)
-              window.vue.$router.push('/refresh')
+              // 成功后提示
+              window.weuiSuccess('发布成功！')
+              setTimeout(function() {
+                console.log('刷新')
+                // 刷新页面(没法使用provide/inject方式实现)
+                window.vue.$router.push('/refresh')
 
-            }, 1000)
+              }, 1000)
 
-            return Promise.resolve()
-          }).catch(err => {
-            // 失败后提示
-            window.weuiErr('发布失败！' + err.toString())
-            return Promise.reject(err)
-          })
+              return Promise.resolve()
+            }).catch(err => {
+              // 失败后提示
+              window.weuiErr('发布失败！' + err.toString())
+              return Promise.reject(err)
+            })
+          }
         }))
-
+        
         // 跳转到指定班级动态页面
         window.vue.$router.push('/class/' + param.classCode + '/moments')
       }
