@@ -68,7 +68,9 @@ Vue.component('swipe-item', SwipeItem)
 
 // 路由过滤器
 router.beforeEach((to, from, next) => {
-  console.log('to', to)
+  console.log('from', from, 'to', to)
+  console.log('from.params', from.params)
+  console.log('from.query', from.query)
   
   // 如果是跳转到login页面，带上跳转回调
   if (to.fullPath === '/login' && _.isEmpty(to.query.redirect)) {
@@ -85,12 +87,25 @@ router.beforeEach((to, from, next) => {
     }
     // 其他页面加来源为跳转回调
     else {
-      next({
-        path: '/login',
-        query: {
-          redirect: from.fullPath
-        }
-      })
+      // 如果来源页或跳转到的页面包含大量redirect，跳转到userInfo
+      if ((from.query.redirect != undefined && from.query.redirect.match && from.query.redirect.match(/redirect/g) != null) ||
+          (to.query.redirect != undefined && to.query.redirect.match && to.query.redirect.match(/redirect/g) != null)) {
+        next({
+          path: '/login',
+          query: {
+            redirect: '/user/userInfo'
+          }
+        })
+      }
+      // 否则跳转到来源url
+      else {
+        next({
+          path: '/login',
+          query: {
+            redirect: from.fullPath
+          }
+        })
+      }
     }
   }
 
