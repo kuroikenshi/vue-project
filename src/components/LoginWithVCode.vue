@@ -216,7 +216,7 @@
       },
 
       // TODEL: 绕过手机短信登陆，上线删除
-      loginParentTest: function (event) {
+      /* loginParentTest: function (event) {
         this.$axios.post('/banji/login/parentTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
@@ -266,9 +266,9 @@
           }
         })
       },
-
+      */
       // TODEL: 绕过手机短信登陆，上线删除
-      teacherLoginTest: function (event) {
+      /* teacherLoginTest: function (event) {
         this.$axios.post('/banji/login/teacherLoginTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
@@ -313,7 +313,7 @@
           }
         })
       },
-
+      */
       // 登陆方法
       login: function (event) {
         let formData = {

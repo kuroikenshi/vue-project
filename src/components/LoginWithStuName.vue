@@ -3,7 +3,7 @@
     <div class="page__hd">
       <h1 class="page__title login-title-row">
         <span>请输入学生姓名和手机号登录</span>
-        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img" v-on:click="fillInfo" />
+        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img" />
       </h1>
     </div>
     <div class="page__bd">
@@ -160,8 +160,8 @@
         }
       },
 
-      // TODEL: 绕过手机短信登陆，上线删除
-      loginParentTest: function (event) {
+      // TO DEL: 绕过手机短信登陆，上线删除
+      /* loginParentTest: function (event) {
         this.$axios.post('/banji/login/parentTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
@@ -210,10 +210,11 @@
             window.weuiErr(res.data.status + ': ' + res.data.msg)
           }
         })
-      },
+      }, 
+      */
 
-      // TODEL: 绕过手机短信登陆，上线删除
-      teacherLoginTest: function (event) {
+      // TO DEL: 绕过手机短信登陆，上线删除
+      /* teacherLoginTest: function (event) {
         this.$axios.post('/banji/login/teacherLoginTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
@@ -257,10 +258,11 @@
             window.weuiErr(res.data.status + ': ' + res.data.msg)
           }
         })
-      },
+      }, 
+      */
 
-      // TODEL: 填写马小雅信息，测试用，上线删除
-      fillInfo: function (event) {
+      // TO DEL: 填写马小雅信息，测试用，上线删除
+      /* fillInfo: function (event) {
         if (window.fi_click_count == undefined) {
           window.fi_click_count = 1;
         } else {
@@ -272,7 +274,7 @@
           this.mobile = '13811118041'
           window.fi_click_count = undefined
         }
-      },
+      }, */
 
       // 登陆方法
       login: function (event) {
