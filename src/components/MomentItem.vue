@@ -8,7 +8,8 @@
       </a>
 
       <!-- 头像 -->
-      <img :src="momentItem.userPhoto" class="user-photo" v-once />
+      <!-- <img :src="momentItem.userPhoto" class="user-photo" v-once /> -->
+      <img src="/banji/static/imgs/bg-user.png" class="user-photo" v-once />
       <!-- 发布人姓名 -->
       <a class="link-color font-size-l display-ib margin-v3 user-title" v-once>
         <span>{{ momentItem.createName }}</span>
