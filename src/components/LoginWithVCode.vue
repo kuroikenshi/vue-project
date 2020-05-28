@@ -3,7 +3,7 @@
     <div class="page__hd">
       <h1 class="page__title login-title-row">
         <span>手机号验证码登录</span>
-        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img"/>
+        <img src="/static/imgs/user-photo.png" class="pull-right login-user-img"/>
       </h1>
     </div>
     <div class="page__bd">
@@ -60,7 +60,7 @@
             </div>
             <div>
               <div class="placeholder">
-                <a class="link-color" href="/banji/login/teacherLogin">教师登录</a></div>
+                <a class="link-color" href="/login/teacherLogin">教师登录</a></div>
             </div>
         </div>
       </div>
@@ -112,7 +112,7 @@
     },
     computed: {
       captchaUrl: function () {
-        return this.gotCaptchaUrl || "/banji/static/imgs/captcha-loading.gif"
+        return this.gotCaptchaUrl || "/static/imgs/captcha-loading.gif"
       },
       // 发送短信按钮是否可用
       sendSmsBtnEnable: function () {
@@ -140,13 +140,13 @@
       getCaptcha: function () {
         this.gotCaptchaUrl = undefined
         let img = new Image()
-        let url = '/banji/login/getkaptcha?_=' + (new Date()).valueOf() + Math.random()
+        let url = '/login/getkaptcha?_=' + (new Date()).valueOf() + Math.random()
         img.onload = () => {
           this.gotCaptchaUrl = url
           this.verifyCodeCD = 0
         }
         img.onerror = () => {
-          this.gotCaptchaUrl = "/banji/static/imgs/captcha-failed.png"
+          this.gotCaptchaUrl = "/static/imgs/captcha-failed.png"
           this.verifyCodeCD = 0
         }
         img.src = url
@@ -175,8 +175,8 @@
           mobile: this.mobile,
           kaptchaText: this.kaptchaText
         })
-        this.$axios.post('/banji/login/smsLogin/sendSmsCode', postData).then(res => {
-          console.log('/banji/login/smsLogin/sendSmsCode resp>>>', res)
+        this.$axios.post('/login/smsLogin/sendSmsCode', postData).then(res => {
+          console.log('/login/smsLogin/sendSmsCode resp>>>', res)
           if (res.status === 200 && res.data.status === 200) {
             window.vue.$weui.topTips('已发送短信到手机', {
               duration: 3000,
@@ -217,7 +217,7 @@
 
       // TODEL: 绕过手机短信登陆，上线删除
       /* loginParentTest: function (event) {
-        this.$axios.post('/banji/login/parentTest').then(res => {
+        this.$axios.post('/login/parentTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
           if (res.status === 200 && res.data.status === 200) {
@@ -269,7 +269,7 @@
       */
       // TODEL: 绕过手机短信登陆，上线删除
       /* teacherLoginTest: function (event) {
-        this.$axios.post('/banji/login/teacherLoginTest').then(res => {
+        this.$axios.post('/login/teacherLoginTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
           if (res.status === 200 && res.data.status === 200) {
@@ -338,7 +338,7 @@
         // 使用qs解决
         let postData = this.$qs.stringify(formData)
 
-        this.$axios.post('/banji/login/smsLogin/verifySmsCode', postData).then(res => {
+        this.$axios.post('/login/smsLogin/verifySmsCode', postData).then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
           if (res.status === 200 && res.data.status === 200) {

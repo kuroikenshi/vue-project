@@ -15,7 +15,7 @@
     created () {
       // e2登陆成功后，请求用户信息，初始化uls
       console.log('e2登陆成功后，请求用户信息，初始化uls')
-      this.$axios.post('/banji/login/getTeacherInfo').then(res => {
+      this.$axios.post('/login/getTeacherInfo').then(res => {
         console.log('login Resp>>>', res)
         // 成功
         if (res.status === 200 && res.data.status === 200) {

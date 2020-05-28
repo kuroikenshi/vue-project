@@ -1,0 +1,30 @@
+2020年5月28日10:28:52
+-------------------------
+发布地址由bj.xdf.cn/banji变为banji.bj.xdf.cn
+故进行修改静态文件和配置路径，修改了以下几项：
+
+1> 文件路径: {$projectBasePath}/banji/static -> {$projectBasePath}/static
+
+2> 配置文件: 
+    {$projectBasePath}/build/webpack.prod.conf.js>>>
+        ../banji/static -> ../static
+        
+    {$projectBasePath}/build/webpack.dev.conf.js>>>
+        ../banji/static -> ../static
+        
+    {$projectBasePath}/config/index.js>>>
+        assetsSubDirectory: 'banji/static', -> assetsSubDirectory: 'static',
+        //   '^': '/banji' -> //   '^': '/'
+        index: path.resolve(__dirname, '../dist/banji/index.html'), -> index: path.resolve(__dirname, '../dist/index.html'),
+        assetsSubDirectory: 'banji/static', -> assetsSubDirectory: 'static',
+        
+3> 源码替换:
+    {$projectBasePath}/src/*>>>
+        /banji -> (空字符串)
+        
+    {$projectBasePath}/index.html>>>
+        /banji -> (空字符串)
+        
+    {$projectBasePath}/static/css/app.css>>>
+        /banji -> (空字符串)
+        

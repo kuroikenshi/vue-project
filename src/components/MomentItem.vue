@@ -9,7 +9,7 @@
 
       <!-- 头像 -->
       <!-- <img :src="momentItem.userPhoto" class="user-photo" v-once /> -->
-      <img src="/banji/static/imgs/bg-user.png" class="user-photo" v-once />
+      <img src="/static/imgs/bg-user.png" class="user-photo" v-once />
       <!-- 发布人姓名 -->
       <a class="link-color font-size-l display-ib margin-v3 user-title" v-once>
         <span>{{ momentItem.createName }}</span>
@@ -215,7 +215,7 @@
           userId: window.uls.get('userInfo', 'id')
         })
 
-        this.$axios.post('/banji/moments/toggleLike', postData).then(res => {
+        this.$axios.post('/moments/toggleLike', postData).then(res => {
           console.log('toggleLike>>>', res.data)
 
           this.momentItemUpdated = res.data.data
@@ -284,7 +284,7 @@
             if ($input.val().length > 0) {
               this.commentSubmitting = true
 
-              this.$axios.post('/banji/comments/publishComment', postData).then(res => {
+              this.$axios.post('/comments/publishComment', postData).then(res => {
                 console.log('publishComment>>>', res.data)
 
                 this.momentItemUpdated = res.data.data
@@ -323,7 +323,7 @@
                 commentId: commentId
               })
 
-              this.$axios.post('/banji/comments/deleteComment', postData).then(res => {
+              this.$axios.post('/comments/deleteComment', postData).then(res => {
                 console.log('deleteComment>>>', res.data)
                 this.momentItemUpdated = res.data.data
                 return Promise.resolve()
@@ -363,7 +363,7 @@
                 momentId: this.momentItem.momentId
               })
 
-              this.$axios.post('/banji/moments/deleteMoment', postData).then(res => {
+              this.$axios.post('/moments/deleteMoment', postData).then(res => {
                 console.log('deleteMoment>>>', res.data)
                 let deleteCount = res.data.data
                 if (deleteCount > 0) {
@@ -481,22 +481,22 @@
   }
 
   .icon-heart {
-    background: url('/banji/static/imgs/icon-heart.png') no-repeat;
+    background: url('/static/imgs/icon-heart.png') no-repeat;
     background-size: contain;
   }
 
   .icon-heart-a {
-    background: url('/banji/static/imgs/icon-heart-a.png') no-repeat;
+    background: url('/static/imgs/icon-heart-a.png') no-repeat;
     background-size: contain;
   }
 
   .icon-comment {
-    background: url('/banji/static/imgs/icon-comment.png') no-repeat;
+    background: url('/static/imgs/icon-comment.png') no-repeat;
     background-size: contain;
   }
 
   .icon-x {
-    background: url('/banji/static/imgs/icon-x.png') no-repeat;
+    background: url('/static/imgs/icon-x.png') no-repeat;
     background-size: contain;
   }
 

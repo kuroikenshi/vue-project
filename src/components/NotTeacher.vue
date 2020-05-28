@@ -30,7 +30,7 @@
   position: absolute;
   left: calc(50% - 115.75px);
   top: calc(40% - 93.75px);
-  background: url(/banji/static/imgs/not-teacher.png) no-repeat;
+  background: url(/static/imgs/not-teacher.png) no-repeat;
   background-size: contain;
 }
 

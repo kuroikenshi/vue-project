@@ -17,12 +17,12 @@ import weui from 'weui.js'
 import 'weui'
 
 import 'weui/dist/style/weui.min.css'
-import '@/../banji/static/css/app.css'
+import '@/../static/css/app.css'
 
 import { Swipe, SwipeItem } from 'vue-swipe'
 import 'vue-swipe/dist/vue-swipe.css'
 
-import '@/../banji/static/vendor/framework7-icons/css/framework7-icons.css'
+import '@/../static/vendor/framework7-icons/css/framework7-icons.css'
 
 Vue.use(VueCookie)
 Vue.use(VueResource)

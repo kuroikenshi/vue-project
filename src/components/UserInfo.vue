@@ -96,7 +96,7 @@ export default {
   beforeCreate: function() {
     this.user = {
       name: window.uls.get('userInfo', 'username'),
-      userface: window.uls.get('userInfo', 'userface') || '/banji/static/imgs/user-photo.png',
+      userface: window.uls.get('userInfo', 'userface') || '/static/imgs/user-photo.png',
       stuSex: window.uls.get('userInfo', 'stuSex') || '-- 未设置 --',
       mobile: window.uls.get('userInfo', 'mobile') || '-- 未设置 --',
     }
@@ -117,7 +117,7 @@ export default {
     },
     // 登出方法
     logout: function (event) {
-      this.$axios.post('/banji/login/logout').then(res => {
+      this.$axios.post('/login/logout').then(res => {
           console.log('logout>>>', res.data)
           // 清除当前用户
           store.remove('clastooCurrentUser')
@@ -139,7 +139,7 @@ export default {
 <style scoped>
 .user-info .user-info-bg {
   padding-top: 1px;
-  background: url('/banji/static/imgs/bg-user.png') no-repeat;
+  background: url('/static/imgs/bg-user.png') no-repeat;
   background-size: 100% 100%;
   background-position-x: center;
   background-position-y: top;
@@ -179,7 +179,7 @@ i.edit-icon {
   width: 24px;
   height: 24px;
   display: block;
-  background: url('/banji/static/imgs/icon-edit.png') no-repeat;
+  background: url('/static/imgs/icon-edit.png') no-repeat;
   background-size: contain;
 }
 .edit-text {

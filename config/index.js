@@ -8,7 +8,7 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'banji/static',
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       // 尝试跨域
@@ -34,7 +34,7 @@ module.exports = {
           target: 'http://10.15.5.38:8088',
           changeOrigin: true,
           // pathRewrite: {
-          //   '^': '/banji'
+          //   '^': '/'
           // }
       },
 
@@ -94,11 +94,11 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/banji/index.html'),
+    index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist/'),
-    assetsSubDirectory: 'banji/static',
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
     /**

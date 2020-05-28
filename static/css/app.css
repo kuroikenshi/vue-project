@@ -149,22 +149,22 @@ html {
 	background-size: 100%!important;
 }
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon.icon-home {
-	background: url('/banji/static/imgs/icon-home-a.png');
+	background: url('/static/imgs/icon-home-a.png');
 }
 .weui-tabbar__item .weui-tabbar__icon.icon-home {
-	background: url('/banji/static/imgs/icon-home.png');
+	background: url('/static/imgs/icon-home.png');
 }
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon.icon-mail {
-	background: url('/banji/static/imgs/icon-mail-a.png');
+	background: url('/static/imgs/icon-mail-a.png');
 }
 .weui-tabbar__item .weui-tabbar__icon.icon-mail {
-	background: url('/banji/static/imgs/icon-mail.png');
+	background: url('/static/imgs/icon-mail.png');
 }
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon.icon-user {
-	background: url('/banji/static/imgs/icon-user-a.png');
+	background: url('/static/imgs/icon-user-a.png');
 }
 .weui-tabbar__item .weui-tabbar__icon.icon-user {
-	background: url('/banji/static/imgs/icon-user.png');
+	background: url('/static/imgs/icon-user.png');
 }
 
 .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon,
@@ -331,28 +331,28 @@ html {
   /* margin-right: 8px; */
 }
 .icon-gender {
-  background: url('/banji/static/imgs/icon-gender.png') no-repeat;
+  background: url('/static/imgs/icon-gender.png') no-repeat;
   background-size: contain;
 }
 .icon-smart-phone {
-  background: url('/banji/static/imgs/icon-smart-phone.png') no-repeat;
+  background: url('/static/imgs/icon-smart-phone.png') no-repeat;
   background-size: contain;
 }
 .icon-mail-opened {
-  background: url('/banji/static/imgs/icon-mail-opened.png') no-repeat;
+  background: url('/static/imgs/icon-mail-opened.png') no-repeat;
   background-size: contain;
 }
 .icon-book {
-  background: url('/banji/static/imgs/icon-book.png') no-repeat;
+  background: url('/static/imgs/icon-book.png') no-repeat;
   background-size: contain;
 }
 .icon-schedule {
-  background: url('/banji/static/imgs/icon-schedule.png') no-repeat;
+  background: url('/static/imgs/icon-schedule.png') no-repeat;
   background-size: contain;
 }
 
 .icon-phone {
-  background: url('/banji/static/imgs/icon-phone.png') no-repeat;
+  background: url('/static/imgs/icon-phone.png') no-repeat;
   background-size: contain;
 }
 

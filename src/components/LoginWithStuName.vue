@@ -3,7 +3,7 @@
     <div class="page__hd">
       <h1 class="page__title login-title-row">
         <span>请输入学生姓名和手机号登录</span>
-        <img src="/banji/static/imgs/user-photo.png" class="pull-right login-user-img" />
+        <img src="/static/imgs/user-photo.png" class="pull-right login-user-img" />
       </h1>
     </div>
     <div class="page__bd">
@@ -62,7 +62,7 @@
             </div>
             <div>
               <div class="placeholder">
-                <a class="link-color" href="/banji/login/teacherLogin">教师登录</a>
+                <a class="link-color" href="/login/teacherLogin">教师登录</a>
               </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
     },
     computed: {
       captchaUrl: function () {
-        return this.gotCaptchaUrl || "/banji/static/imgs/captcha-loading.gif"
+        return this.gotCaptchaUrl || "/static/imgs/captcha-loading.gif"
       },
     },
     methods: {
@@ -138,12 +138,12 @@
       getCaptcha: function () {
         this.gotCaptchaUrl = undefined
         let img = new Image()
-        let url = '/banji/login/getkaptcha?_=' + (new Date()).valueOf() + Math.random()
+        let url = '/login/getkaptcha?_=' + (new Date()).valueOf() + Math.random()
         img.onload = () => {
           this.gotCaptchaUrl = url
         }
         img.onerror = () => {
-          this.gotCaptchaUrl = "/banji/static/imgs/captcha-failed.png"
+          this.gotCaptchaUrl = "/static/imgs/captcha-failed.png"
         }
         img.src = url
       },
@@ -162,7 +162,7 @@
 
       // TO DEL: 绕过手机短信登陆，上线删除
       /* loginParentTest: function (event) {
-        this.$axios.post('/banji/login/parentTest').then(res => {
+        this.$axios.post('/login/parentTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
           if (res.status === 200 && res.data.status === 200) {
@@ -215,7 +215,7 @@
 
       // TO DEL: 绕过手机短信登陆，上线删除
       /* teacherLoginTest: function (event) {
-        this.$axios.post('/banji/login/teacherLoginTest').then(res => {
+        this.$axios.post('/login/teacherLoginTest').then(res => {
           console.log('login Resp>>>', res)
           // 登陆成功
           if (res.status === 200 && res.data.status === 200) {
@@ -300,7 +300,7 @@
         // 使用qs解决
         let postData = this.$qs.stringify(formData)
 
-        this.$axios.post('/banji/login/parentLogin', postData).then(res => {
+        this.$axios.post('/login/parentLogin', postData).then(res => {
           console.log('login Resp>>>', res)
           
           // 登陆成功

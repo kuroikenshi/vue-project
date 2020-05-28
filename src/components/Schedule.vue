@@ -74,7 +74,7 @@
       }
       // 如果没有，尝试api取得
       else {
-        this.$axios.post('/banji/classes/getClassList').then(res => {
+        this.$axios.post('/classes/getClassList').then(res => {
           console.log('getClassList>>>', res.data)
           classList = res.data.data
           window.uls.set('personalData', 'classList', classList)
@@ -93,7 +93,7 @@
         this.scheduleImgSrcIsReady = false
         let postData = this.$qs.stringify({classCode: this.selectedClassCode})
 
-        this.$axios.post('/banji/classes/getClassSchedule', postData).then(res => {
+        this.$axios.post('/classes/getClassSchedule', postData).then(res => {
           console.log('getClassSchedule>>>', res.data)
           this.scheduleImgSrc = res.data.data.classScheduleUrl
           this.scheduleImgSrcIsReady = true
@@ -115,7 +115,7 @@
         formData.append('file', this.choosedFile)
         formData.append('classCode', this.selectedClassCode)
 
-        this.$axios.post('/banji/classes/addClassSchedule', formData).then(res => {
+        this.$axios.post('/classes/addClassSchedule', formData).then(res => {
           console.log('addClassSchedule>>>', res.data)
           this.scheduleImgSrc = res.data.data.classScheduleUrl
           this.scheduleImgSrcIsReady = true
