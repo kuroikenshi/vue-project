@@ -23,7 +23,7 @@
       <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady">-- 暂无数据 --</div>
       
       <!-- 上传部分 -->
-      <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady && isTeacher">
+      <div class="center" v-show="!scheduleImgSrc && scheduleImgSrcIsReady && isTeacher && !!selectedClassCode">
         <div class="weui-btn-area margin-bottom-20">
           <span v-show="choosedFile === undefined">&lt;&lt;&lt; 上传课程表</span>
           <div class="weui-uploader__input-box" v-show="choosedFile === undefined">
