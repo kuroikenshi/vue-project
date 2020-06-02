@@ -70,8 +70,12 @@
       // 获取班级列表
       getClassList () {
         console.log('>>> 获取班级列表')
+        
+        // 优先从uls中取得
+        let classList = window.uls.get('personalData', 'classList')
+        
         // 优先从缓存中取，否则再请求并更新到缓存
-        if (!!window.uls.get('personalData', 'classList')) {
+        if (classList && classList.length && classList.length > 0) {
           this.classList = window.uls.get('personalData', 'classList')
           this.classListLoaded = true
 

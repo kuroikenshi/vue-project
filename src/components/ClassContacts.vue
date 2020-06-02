@@ -104,7 +104,7 @@
       // 初始化发布班级列表
       // 优先从uls中取得
       let classList = window.uls.get('personalData', 'classList')
-      if (classList) {
+      if (classList && classList.length && classList.length > 0) {
         this._setClassCodeParam(classList)
       }
       // 如果没有，尝试api取得
