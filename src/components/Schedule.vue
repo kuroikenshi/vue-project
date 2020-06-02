@@ -44,6 +44,8 @@
 </template>
 
 <script>
+  import Global from '@/components/Global'
+  
   export default {
     name: 'MyComp',
     data () {
