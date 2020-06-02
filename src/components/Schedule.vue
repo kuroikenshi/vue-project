@@ -143,11 +143,17 @@
         })
         this.classCodeMenu = menuData
 
-        // 跟新菜单数据后，默认选中第一个
-        this.selectedClassCode = menuData[0].value
-        this.selectedClassName = menuData[0].label
-        // 选中后获取当前班级联系信息
-        this.getSchedule()
+        // 更新菜单数据后，默认选中第一个
+        if (menuData.length && menuData.length > 0) {
+          this.selectedClassCode = menuData[0].value
+          this.selectedClassName = menuData[0].label
+          // 选中后获取当前班级联系信息
+          this.getSchedule()
+        }
+        // 没有菜单数据，直接提示无数据
+        else {
+          this.scheduleImgSrcIsReady = false
+        }
       },
 
       // 选择班级
