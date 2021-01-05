@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "framework7": "^3.5.2",
     "framework7-vue": "^3.5.2",
     "jquery": "^3.3.1",
